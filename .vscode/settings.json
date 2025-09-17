@@ -1,0 +1,7 @@
+{
+	"stylua.targetReleaseVersion": "latest",
+	"Lua.diagnostics.globals": [
+		"love",
+		"Client"
+	]
+}

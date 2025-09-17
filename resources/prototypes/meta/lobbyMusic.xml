@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LS13>
+	<BulkAttributes>
+		<PathMatch>/sound/music/</PathMatch>
+		<SoundMode>stream</SoundMode>
+		<Looping>true</Looping>
+	</BulkAttributes>
+
+	<FileMetadata Type="Audio">
+		<FileName>/sound/music/lobby/flip-flap.mod</FileName>
+		<Name>Flip-Flap</Name>
+		<Author>X-CEED</Author>
+	</FileMetadata>
+
+	<FileMetadata Type="Audio">
+		<FileName>/sound/music/lobby/leisurely_voice.xm</FileName>
+		<Name>Leisurely Voice</Name>
+		<Author>Drozerix</Author>
+	</FileMetadata>
+</LS13>
