@@ -1,0 +1,27 @@
+[submodule "lib/GameStateManager"]
+	path = lib/GameStateManager
+	url = https://github.com/GwyrddGlas/GameStateManager
+[submodule "lib/lurker"]
+	path = lib/lurker
+	url = https://github.com/rxi/lurker
+[submodule "lib/lovedbug"]
+	path = lib/lovedbug
+	url = https://github.com/flamendless/lovedebug
+[submodule "lib/lovedebug"]
+	path = lib/lovedebug
+	url = https://github.com/flamendless/lovedebug
+[submodule "lib/concord"]
+	path = lib/concord
+	url = https://github.com/Keyslam-Group/Concord
+[submodule "lib/lovernet"]
+	path = lib/lovernet
+	url = https://github.com/josefnpat/LoverNet
+[submodule "lib/lily"]
+	path = lib/lily
+	url = https://github.com/MikuAuahDark/lily
+[submodule "lib/clove"]
+	path = lib/clove
+	url = https://github.com/besnoi/clove
+[submodule "lib/lume"]
+	path = lib/lume
+	url = https://github.com/rxi/lume
