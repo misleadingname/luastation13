@@ -15,18 +15,18 @@ end
 function PrototypeManager.Parse(path)
 	local info = love.filesystem.getInfo(path, "file")
 	if not info or info.type ~= "file" then
-		return error("File not found or invalid: " .. path)
+		return error(string.format("File not found or invalid: %s", path))
 	end
 
 	local xmlString = love.filesystem.read(path)
 	local parsed = PrototypeManager.RawParse(xmlString)
 	if not parsed then
-		return error("Failed to parse prototype: " .. path)
+		return error(string.format("Failed to parse prototype: %s", path))
 	end
 
 	local ls13 = parsed.LS13
 	if not ls13 then
-		return error("Invalid prototype (root is not <LS13>): " .. path)
+		return error(string.format("Invalid prototype (root is not <LS13>): %s", path))
 	end
 
 	for nodeType, nodes in pairs(ls13) do
@@ -34,6 +34,8 @@ function PrototypeManager.Parse(path)
 			for i, node in ipairs(nodes) do
 				parsers[nodeType]:Parse(node)
 			end
+		else
+			LS13.Logging.PrintError(string.format("No parser for node type %s", nodeType))
 		end
 	end
 end
