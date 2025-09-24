@@ -3,7 +3,7 @@ local parsers = {
     -- Credit = require("shared/prototype/parsers/credit"),
 
     Sound = require("shared/prototype/parsers/sound"),
-    -- Font = require("shared/prototype/parsers/font"),
+    Font = require("shared/prototype/parsers/font"),
 }
 
 return parsers

@@ -4,6 +4,9 @@ local bg
 local lobbyMusic
 local music
 
+local defaultFont
+local bigFont
+
 local shuffledSongs = {}
 local function rollSong()
 	if #shuffledSongs == 0 then
@@ -17,6 +20,10 @@ end
 function MenuState:enter()
 	lobbyMusic = LS13.AssetManager.GetPrefixed("Music.Lobby")
 	bg = love.graphics.newImage("/resources/textures/core/pepper.png")
+
+	bigFont = LS13.AssetManager.Get("Font.DefaultLarge").font
+	defaultFont = LS13.AssetManager.Get("Font.Default").font
+
 	rollSong()
 end
 
@@ -39,8 +46,10 @@ function MenuState:draw()
 	end
 
 	love.graphics.setColor(1, 1, 1, 1)
+	love.graphics.setFont(defaultFont)
 	love.graphics.print(
 	"sry to burst ur bubble but for now there's like NOTHING to show!!! (rn all of it is just engine work) lol laugh at this user")
+	love.graphics.setFont(bigFont)
 	love.graphics.print("Music: " .. music.name .. " by " .. music.author, 0, 20)
 end
 

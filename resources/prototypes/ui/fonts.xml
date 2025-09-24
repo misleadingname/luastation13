@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LS13>
-	<Font Name="DefaultLarge">
-		<FileName>/fonts/verdana.ttf</FileName>
+	<Font Id="Font.DefaultLarge" Type="Font">
+		<FileName>/resources/fonts/verdana.ttf</FileName>
 		<Size>32</Size>
 	</Font>
 
-	<Font Name="DefaultMedium">
-		<FileName>/fonts/verdana.ttf</FileName>
+	<Font Id="Font.DefaultMedium" Type="Font">
+		<FileName>/resources/fonts/verdana.ttf</FileName>
 		<Size>24</Size>
 	</Font>
 
-	<Font Name="Default">
-		<FileName>/fonts/verdana.ttf</FileName>
+	<Font Id="Font.Default" Type="Font">
+		<FileName>/resources/fonts/verdana.ttf</FileName>
 		<Size>16</Size>
 	</Font>
+
+	<!-- <Font Id="Font.DefaultSmall" Type="Bitmap">
+		<FileName>/resources/fonts/test.png</FileName>
+		<Size>12</Size>
+
+		<Glyphs></Glyphs>
+		<Spacing>0</Spacing>
+	</Font> -->
 </LS13>

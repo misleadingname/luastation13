@@ -17,15 +17,14 @@ function shared.load(args)
 
 	LS13.PrototypeManager = require("shared/prototype")
 	LS13.AssetManager = require("shared/assetmanager")
+	LS13.Logging = require("shared/logging")
 	LS13.Util = require("shared/utilities")
+
+	LS13.Logging.PrintInfo("Starting in " .. (LS13.Role) .. " mode")
 end
 
 function shared.update(dt)
 	lurker.update()
-
-	if LS13.AssetManager.Loader then
-		LS13.AssetManager.Loader.Update(dt, 8)
-	end
 end
 
 return shared

@@ -10,10 +10,11 @@ function love.load(args, unfiltered)
 	end
 
 	_G.LS13 = runMode == "server" and serverInit or clientInit
+	LS13.Role = runMode
 
 	Shared.load(args)
 	LS13.load(args)
-end
+end	
 
 function love.update(dt)
 	Shared.update(dt)

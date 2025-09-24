@@ -2,6 +2,7 @@ local DebugState = {}
 
 local W = love.graphics.getWidth
 local H = love.graphics.getHeight
+local font = love.graphics.newFont(12)
 
 local lines = {
 	{
@@ -25,6 +26,7 @@ local lines = {
 }
 
 local function shadowText(text, x, y, align, color, shadowColor)
+	love.graphics.setFont(font)
 	local textSize = love.graphics.getFont():getWidth(text)
 
 	if align == "center" then
