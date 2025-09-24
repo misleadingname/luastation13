@@ -32,7 +32,11 @@ function PrototypeManager.Parse(path)
 	for nodeType, nodes in pairs(ls13) do
 		if parsers[nodeType] then
 			for i, node in ipairs(nodes) do
-				parsers[nodeType]:Parse(node)
+				local success, err = pcall(function() parsers[nodeType]:Parse(node) end)
+				if not success then
+					local id = node._attr and node._attr.Id and node._attr.Id or "unknown"
+					LS13.Logging.PrintError(string.format("Failed to parse %s (%s): %s", nodeType, id, err))
+				end
 			end
 		else
 			LS13.Logging.PrintError(string.format("No parser for node type %s", nodeType))
