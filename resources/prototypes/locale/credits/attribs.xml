@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LS13>
+	<Section Name="Libraries">
+		<Attribution>
+			<Name>LÖVE</Name>
+			<License>zlib</License>
+			<Copyright>Copyright (c) 2006-2025 LOVE Development Team</Copyright>
+			<Link>https://github.com/love2d/love/blob/main/license.txt</Link>
+		</Attribution>
+
+		<Attribution>
+			<Name>Concord</Name>
+			<License>MIT</License>
+			<Copyright>Copyright (c) 2018 Justin van der Leij</Copyright>
+			<Link>https://github.com/Keyslam-Group/Concord/blob/main/LICENSE</Link>
+		</Attribution>
+
+		<Attribution>
+			<Name>GameStateManager</Name>
+			<License>MIT</License>
+			<Copyright>Copyright (c) 2024 Lauryn</Copyright>
+			<Link>https://github.com/GwyrddGlas/GameStateManager/blob/main/LICENSE</Link>
+		</Attribution>
+
+		<Attribution>
+			<Name>Lurker</Name>
+			<License>MIT</License>
+			<Copyright>Copyright (c) 2018 rxi</Copyright>
+			<Link>https://github.com/rxi/lurker/blob/master/LICENSE</Link>
+		</Attribution>
+
+		<Attribution>
+			<Name>Inky</Name>
+			<License>MIT</License>
+			<Copyright>Copyright (c) 2025 Justin van der Leij</Copyright>
+			<Link>https://github.com/Keyslam/Inky/blob/develop/LICENSE</Link>
+		</Attribution>
+
+		<Attribution>
+			<Name>LoverNet</Name>
+			<License>zlib/isc</License>
+			<Copyright>Copyright (c) 2016 josefnpat / Copyright (c) 2016, Robin Wellner</Copyright>
+			<Link>https://github.com/josefnpat/LoverNet/blob/main/license.txt</Link>
+		</Attribution>
+
+		<Attribution>
+			<Name>lume</Name>
+			<License>MIT</License>
+			<Copyright>Copyright (c) 2020 rxi</Copyright>
+			<Link>https://github.com/rxi/lume/blob/master/LICENSE</Link>
+		</Attribution>
+
+		<Attribution>
+			<Name>xml2lua</Name>
+			<License>MIT</License>
+			<Copyright>Copyright (c) 2009-2010 Manoel Campos da Silva Filho</Copyright>
+			<Link>https://github.com/manoelcampos/xml2lua/blob/master/LICENSE</Link>
+		</Attribution>
+	</Section>
+</LS13>

@@ -1,0 +1,58 @@
+local xml2lua = require("lib/xml2lua/xml2lua")
+local parsers = require("shared/prototype/parsers")
+local handler = require("lib/xml2lua/xmlhandler/tree")
+
+local PrototypeManager = {}
+
+function PrototypeManager.RawParse(xmlString)
+	local tree = handler:new()
+	local parser = xml2lua.parser(tree)
+	parser:parse(xmlString)
+
+	return tree.root
+end
+
+function PrototypeManager.Parse(path)
+	local info = love.filesystem.getInfo(path, "file")
+	if not info or info.type ~= "file" then
+		return error("File not found or invalid: " .. path)
+	end
+
+	local xmlString = love.filesystem.read(path)
+	local parsed = PrototypeManager.RawParse(xmlString)
+	if not parsed then
+		return error("Failed to parse prototype: " .. path)
+	end
+
+	local ls13 = parsed.LS13
+	if not ls13 then
+		return error("Invalid prototype (root is not <LS13>): " .. path)
+	end
+
+	for nodeType, nodes in pairs(ls13) do
+		if parsers[nodeType] then
+			for i, node in ipairs(nodes) do
+				parsers[nodeType]:Parse(node)
+			end
+		end
+	end
+end
+
+function PrototypeManager.ParseAll()
+	local basePath = "/resources/prototypes"
+
+	local function recurse(path)
+		for _, file in ipairs(love.filesystem.getDirectoryItems(path)) do
+			local info = love.filesystem.getInfo(path .. "/" .. file)
+			if info.type == "directory" then
+				recurse(path .. "/" .. file)
+			elseif info.type == "file" and file:sub(-4) == ".xml" then
+				PrototypeManager.Parse(path .. "/" .. file)
+			end
+		end
+	end
+
+	recurse(basePath)
+end
+
+return PrototypeManager

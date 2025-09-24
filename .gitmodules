@@ -25,3 +25,9 @@
 [submodule "lib/lume"]
 	path = lib/lume
 	url = https://github.com/rxi/lume
+[submodule "lib/inky"]
+	path = lib/inky
+	url = https://github.com/Keyslam/Inky
+[submodule "lib/xml2lua"]
+	path = lib/xml2lua
+	url = https://github.com/manoelcampos/xml2lua

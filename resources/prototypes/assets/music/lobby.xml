@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LS13>
+	<Sound Id="Music.Lobby.FlipFlap">
+		<FileName>resources/sound/music/lobby/flip-flap.mod</FileName>
+		<SoundMode>stream</SoundMode>
+		<Looping>false</Looping>
+
+		<Name>Flip-Flap</Name>
+		<Author>X-CEED</Author>
+	</Sound>
+
+	<Sound Id="Music.Lobby.LeisurelyVoice">
+		<FileName>resources/sound/music/lobby/leisurely_voice.xm</FileName>
+		<SoundMode>stream</SoundMode>
+		<Looping>false</Looping>
+
+		<Name>Leisurely Voice</Name>
+		<Author>Drozerix</Author>
+	</Sound>
+
+	<Sound Id="Music.Lobby.Aggravated">
+		<FileName>resources/sound/music/lobby/aggravated.it</FileName>
+		<SoundMode>stream</SoundMode>
+		<Looping>false</Looping>
+
+		<Name>Aggravated Assault</Name>
+		<Author>MEL</Author>
+	</Sound>
+
+	<Sound Id="Music.Lobby.Title3">
+		<FileName>resources/sound/music/lobby/title3.ogg</FileName>
+		<SoundMode>stream</SoundMode>
+		<Looping>false</Looping>
+
+		<Name>Tintin on the Moon</Name>
+		<Author>RMX: ??? / OG: Jeroen Tel</Author>
+	</Sound>
+
+		<Sound Id="Music.Lobby.Thunderdome">
+		<FileName>resources/sound/music/lobby/thunderdome.ogg</FileName>
+		<SoundMode>stream</SoundMode>
+		<Looping>false</Looping>
+
+		<Name>THUNDERDOME</Name>
+		<Author>MashedByMachines</Author>
+	</Sound>
+</LS13>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LS13>
+	<Credit>
+		<Name>Various SS13 Maintainers</Name>
+		<Role>Lead Inspiration</Role>
+		<Link>https://spacestation13.com</Link>
+		<Description>SS13 is the evil game that inspired this.</Description>
+	</Credit>
+
+	<Credit>
+		<Name>MisleadingName</Name>
+		<Role>Lead Developer</Role>
+		<Link>https://misleadingname.cc</Link>
+		<Description>uhhhhhhhh....... I made the thing.</Description>
+	</Credit>
+
+	<Credit>
+		<Name>Lokachop</Name>
+		<Role>Good Friend</Role>
+		<Link>https://lokachop.github.io</Link>
+		<Description>Convinced me that SS13 is actually good nowadays, and is directly responsible for making me create my own BYOND account.</Description>
+	</Credit>
+
+	<Credit>
+		<Name>LÖVE</Name>
+		<Role>Game Engine</Role>
+		<Link>https://love2d.org</Link>
+		<Description>Amazing little framework.</Description>
+	</Credit>
+</LS13>

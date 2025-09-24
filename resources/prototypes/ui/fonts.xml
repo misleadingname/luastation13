@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LS13>
+	<Font Name="DefaultLarge">
+		<FileName>/fonts/verdana.ttf</FileName>
+		<Size>32</Size>
+	</Font>
+
+	<Font Name="DefaultMedium">
+		<FileName>/fonts/verdana.ttf</FileName>
+		<Size>24</Size>
+	</Font>
+
+	<Font Name="Default">
+		<FileName>/fonts/verdana.ttf</FileName>
+		<Size>16</Size>
+	</Font>
+</LS13>
