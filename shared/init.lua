@@ -9,7 +9,6 @@ function shared.load(args)
 
 	CLIENT = LS13.Role == "client"
 	SERVER = LS13.Role == "server"
-	DEBUG = args[2] == "debug"
 
 	if CLIENT and SERVER then -- let's prevent a disaster
 		error("what kind of evil ass magic did you manage to put on this cursed land to make this happen...")
@@ -20,6 +19,9 @@ function shared.load(args)
 	LS13.Logging = require("shared/logging")
 	LS13.Util = require("shared/utilities")
 
+	DEBUG = LS13.Util.GetArgument("debug")
+
+	LS13.Logging.PrintLevel = DEBUG and 0 or 1
 	LS13.Logging.PrintInfo("Starting in " .. (LS13.Role) .. " mode")
 end
 

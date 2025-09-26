@@ -1,7 +1,9 @@
-local label = LS13.UI.defineElement(function(self)
-	self.props.text = self.props.text or "Label"
+return LS13.UI.defineElement(function(self, props)
+	self.props = props or {}
+
+	self.props.text = self.props.text or "Label!"
 	self.props.font = self.props.font or love.graphics.getFont()
-	self.props.color = self.props.color or {1, 1, 1, 1}
+	self.props.color = self.props.color or { 1, 1, 1, 1 }
 	self.props.align = self.props.align or "left"
 	self.props.shadow = self.props.shadow or false
 
@@ -21,5 +23,3 @@ local label = LS13.UI.defineElement(function(self)
 		love.graphics.printf(text, x, y, w, align)
 	end
 end)
-
-return label

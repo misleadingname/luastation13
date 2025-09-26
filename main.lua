@@ -1,10 +1,24 @@
 require("conf")
 local shared = require("shared")
 
+local function help()
+	local name = (love.filesystem.getSource()):match("(%w+)/?$")
+
+	print(string.format("%s [help/server/client] [args]", name))
+	print("argument reference:")
+	print("\t--debug - runs in debug mode")
+
+	print()
+	love.event.quit(0)
+end
+
 function love.load(args, unfiltered)
 	local runMode = "client"
 	if args[1] == "server" then
 		runMode = "server"
+	elseif args[1] == "help" then
+		help()
+		return
 	end
 
 	if runMode == "client" then -- setup window
@@ -34,6 +48,7 @@ function love.load(args, unfiltered)
 
 	_G.LS13 = runMode == "server" and require("server") or require("client")
 	LS13.Role = runMode
+	LS13.LaunchArgs = args
 
 	shared.load(args)
 	LS13.load(args)
