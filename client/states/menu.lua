@@ -1,8 +1,8 @@
 local MenuState = {}
 
 local bg
-local lobbyMusic
 local music
+local lobbyMusic
 
 local defaultFont
 
@@ -21,20 +21,26 @@ function MenuState:enter()
 	bg = love.graphics.newImage("/resources/textures/core/pepper.png")
 
 	defaultFont = LS13.AssetManager.Get("Font.Default").font
-
-	-- Initialize UI system
-	LS13.UI.manager:setCurrentScene("menu")
-
 	rollSong()
+
+	local container = require("client/ui/elements/container")
+	local label = require("client/ui/elements/label")
+
+	local manager = LS13.UI.Manager("MenuTestScene")
+	local cont = container(manager.scene)
+
+	local lbl = label(manager.scene)
+	lbl.props.text = "Test Label"
+
+	cont:AddChild(lbl)
+	manager:SetRootElement(cont)
+	LS13.UI.PushManager(manager)
 end
 
 function MenuState:update(dt)
 	if not music.sound:isPlaying() then
 		rollSong()
 	end
-
-	-- Update UI system
-	LS13.UI.update(dt)
 end
 
 function MenuState:draw()
@@ -52,39 +58,11 @@ function MenuState:draw()
 
 	love.graphics.setColor(1, 1, 1, 1)
 
-	-- Render hierarchical UI
-	LS13.UI.render()
-
 	-- Debug info
 	love.graphics.setFont(defaultFont)
 	if music then
 		love.graphics.print("Music: " .. music.name .. " by " .. music.author, 10, sy - 40)
 	end
-end
-
--- Input handling for UI
-function MenuState:mousemoved(x, y)
-	LS13.UI.handleMouse(x, y)
-end
-
-function MenuState:mousepressed(x, y, button)
-	LS13.UI.handleMousePressed(x, y, button)
-end
-
-function MenuState:mousereleased(x, y, button)
-	LS13.UI.handleMouseReleased(x, y, button)
-end
-
-function MenuState:keypressed(key, scancode, isrepeat)
-	LS13.UI.handleKeyPressed(key, scancode, isrepeat)
-end
-
-function MenuState:keyreleased(key, scancode)
-	LS13.UI.handleKeyReleased(key, scancode)
-end
-
-function MenuState:textinput(text)
-	LS13.UI.handleTextInput(text)
 end
 
 return MenuState

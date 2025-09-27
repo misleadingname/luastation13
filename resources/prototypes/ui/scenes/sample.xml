@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LS13>
+	<UIMarkup>
+		<Container Layout="Vertical" Spacing="4">
+			<Label Text="Hello Station Crew!" />
+			<Container Layout="Horizontal" Spacing="4">
+				<Button Name="Button1" Text="Hello!" />
+				<Button Name="Button2" Text="Bye!" />
+			</Container>
+		</Container>
+	</UIMarkup>
+</LS13>

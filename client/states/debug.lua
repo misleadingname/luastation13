@@ -53,43 +53,6 @@ function DebugState:draw()
 	for i, line in ipairs(lines) do
 		shadowText(line.Text(), 16, 16 + i * 16, "right", line.Color())
 	end
-
-	local scene = LS13.UI.manager:getCurrentScene()
-	local elems = scene.elements
-
-	-- local txt = LS13.Util.PrintTable(elems, true)
-	-- local txtHeight = love.graphics.newText(love.graphics.getFont(), txt):getHeight()
-	-- local scroll = (love.mouse.getY() / H()) * txtHeight
-
-	-- shadowText(txt, 32, 32 - scroll)
-
-	shadowText("X", scene.pointer._internal._x - 4, scene.pointer._internal._y - 6)
-
-	for name, elem in pairs(elems) do
-		local hovering = scene.pointer:doesOverlapElement(elem)
-		local i = 1
-		shadowText(name, elem._internal._x or 0, (elem._internal._y or 0), "right")
-		if hovering then
-			-- background box
-			love.graphics.setColor(0, 1, 0, 0.5)
-			love.graphics.rectangle("fill", elem._internal._x or 0, elem._internal._y or 0, elem._internal._w or 0,
-				elem._internal._h or 0)
-			for k, v in pairs(elem.props) do
-				shadowText(string.format("%s = %s", k, v), scene.pointer._internal._x or 0,
-					(scene.pointer._internal._y or 0) + i * 16,
-					"left")
-				i = i + 1
-			end
-
-			i = 0
-			for k, v in pairs(elem._internal) do
-				shadowText(string.format("%s = %s", k, v), scene.pointer._internal._x or 0,
-					(scene.pointer._internal._y or 0) + i * 16,
-					"right")
-				i = i + 1
-			end
-		end
-	end
 end
 
 return DebugState

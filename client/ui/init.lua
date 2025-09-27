@@ -1,67 +1,44 @@
+local Inky = require("lib/Inky")
+local managers = require("client/ui/manager")
+
 local ui = {}
-ui.Inky = require("lib/Inky")
+ui.Inky = Inky
 
-ui.defineElement = ui.Inky.defineElement
+ui.managers = {}
 
--- Load UI components
-ui.Manager = require("client/ui/manager")
-ui.Scene = require("client/ui/controls/scene")
-ui.Panel = require("client/ui/controls/panel")
-ui.Container = require("client/ui/controls/container")
-ui.Button = require("client/ui/controls/button")
-ui.Label = require("client/ui/controls/label")
-
--- Load UI scenes
-ui.scenes = {
-	Menu = require("client/ui/scenes/menu")
-}
-
--- Create global UI manager instance
-ui.manager = ui.Manager:new()
-
--- Initialize with menu scene
-ui.manager:addScene("menu", ui.scenes.Menu())
-ui.manager:setCurrentScene("menu")
-
--- Convenience functions
-function ui.getCurrentScene()
-	return ui.manager:getCurrentScene()
+function ui.Manager(name)
+	return managers.new(name)
 end
 
-function ui.setCurrentScene(name)
-	return ui.manager:setCurrentScene(name)
+function ui.PopManager(manager)
+	ui.managers[manager.name] = nil
 end
 
-function ui.render(x, y, w, h)
-	ui.manager:render(x, y, w, h)
+function ui.PushManager(manager)
+	ui.managers[manager.name] = manager
 end
 
-function ui.update(dt)
-	ui.manager:update(dt)
+function ui.Update(dt)
+	for _, manager in pairs(ui.managers) do
+		manager:Update(dt)
+	end
 end
 
-function ui.handleMouse(x, y)
-	ui.manager:updateMouse(x, y)
+function ui.Draw()
+	for name, manager in pairs(ui.managers) do
+		local ok, error = pcall(function() manager:Draw() end)
+		if not ok then
+			LS13.Logging.PrintError(string.format("Failed to draw scene (%s): %s", name, error))
+		end
+	end
 end
 
-function ui.handleMousePressed(x, y, button)
-	ui.manager:handleMousePressed(x, y, button)
+function ui.MousePressed(x, y, button)
+	for name, manager in pairs(ui.managers) do manager:MousePressed(x, y, button) end
 end
 
-function ui.handleMouseReleased(x, y, button)
-	ui.manager:handleMouseReleased(x, y, button)
-end
-
-function ui.handleKeyPressed(key, scancode, isrepeat)
-	ui.manager:handleKeyPressed(key, scancode, isrepeat)
-end
-
-function ui.handleKeyReleased(key, scancode)
-	ui.manager:handleKeyReleased(key, scancode)
-end
-
-function ui.handleTextInput(text)
-	ui.manager:handleTextInput(text)
+function ui.MouseReleased(x, y, button)
+	for name, manager in pairs(ui.managers) do manager:MouseReleased(x, y, button) end
 end
 
 return ui

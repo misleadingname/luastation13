@@ -1,6 +1,4 @@
-local sound = {}
-
-function sound:Parse(node)
+return function(node)
 	local data = {
 		id = node._attr and node._attr.Id and node._attr.Id,
 		type = "font",
@@ -10,9 +8,7 @@ function sound:Parse(node)
 	}
 
 	local font = love.graphics.newFont(data.fileName, data.size)
-	
+
 	data.font = font
 	LS13.AssetManager.Push(data, data.id)
 end
-
-return sound
