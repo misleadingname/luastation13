@@ -5,7 +5,7 @@ local states = {
 }
 
 local function handleError(error)
-	LS13.Logging.PrintFatal(string.format("Unhandled error: %s %s", error, debug.traceback()))
+	LS13.Logging.LogFatal("Unhandled error: %s %s", error, debug.traceback())
 end
 
 local client = {}
@@ -39,6 +39,8 @@ function love.mousepressed(x, y, button)
 	xpcall(function()
 		LS13.UI.MousePressed(x, y, button)
 	end, handleError)
+
+	LS13.Util.PrintTable(LS13.Logging.Logs)
 end
 
 function love.mousereleased(x, y, button)

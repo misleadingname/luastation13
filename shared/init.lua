@@ -19,12 +19,12 @@ function shared.load(args)
 	LS13.ECSManager = require("lib.concord")
 	LS13.Logging = require("shared.logging")
 	LS13.Util = require("shared.utilities")
-	LS13.Logging.PrintDebug(LS13.Util.Gilb())
+	LS13.Logging.LogDebug(LS13.Util.Gilb())
 
 	DEBUG = LS13.Util.GetArgument("debug")
 
-	LS13.Logging.PrintLevel = DEBUG and 0 or 1
-	LS13.Logging.PrintInfo(string.format("Init done in %ss!", os.clock()))
+	LS13.Logging.LogLevel = DEBUG and 0 or 1
+	LS13.Logging.LogInfo("Init done in %ss!", os.clock())
 end
 
 function shared.update(dt)

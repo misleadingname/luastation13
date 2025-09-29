@@ -13,7 +13,7 @@ local function help()
 end
 
 local function handleError(error)
-	LS13.Logging.PrintFatal(string.format("Unhandled error: %s %s", error, debug.traceback()))
+	LS13.Logging.LogFatal("Unhandled error: %s %s", error, debug.traceback())
 end
 
 function love.load(args)

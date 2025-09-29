@@ -2,7 +2,7 @@
 -- https://github.com/lokachop/zvox/blob/main/gamemodes/zvox_classicbuild/gamemode/zvox/sh/sh_printing.lua
 
 local Logging = {}
-local log = {}
+local logs = {}
 
 local PRINTER_TYPE_DEBUG = 1
 local PRINTER_TYPE_INFO = 2
@@ -37,29 +37,46 @@ local function makePrinter(printerType)
 	local typeTreshold = printerLevelTresholdLUT[printerType]
 
 
-	return function(...)
+	return function(format, ...)
 		if Logging.PrintLevel > typeTreshold then
 			return
 		end
 
-		local appInfo = ""
+		local logOrigin = ""
+		local infoStruct = debug.getinfo(2, "lS")
+		local source = infoStruct.source
+		source = string.sub(source, 2)
+		logOrigin = source .. "::" .. tostring(infoStruct.currentline)
+
+		local message = string.format(format, ...)
+
+		local logText
 		if DEBUG then
-			local infoStruct = debug.getinfo(2, "lS")
-
-			local source = infoStruct.source
-			source = string.sub(source, 2)
-
-			appInfo = " " .. source .. "::" .. tostring(infoStruct.currentline)
+			logText = string.format("[%s] [%s] %s %s: %s",
+				os.date("%d/%m/%Y %H:%M:%S"),
+				CLIENT and "CLIENT" or "SERVER",
+				typeStr,
+				logOrigin,
+				message
+			)
+		else
+			logText = string.format("[%s] [%s] %s: %s",
+				os.date("%d/%m/%Y %H:%M:%S"),
+				CLIENT and "CLIENT" or "SERVER",
+				typeStr,
+				message
+			)
 		end
+		io.write(logText .. "\n")
 
-		local message = string.format("[%s] [%s] %s: %s%s",
-			os.date("%d/%m/%Y %H:%M:%S"),
-			CLIENT and "CLIENT" or "SERVER",
-			typeStr,
-			table.concat({ ... }, " "),
-			appInfo
-		)
-		io.write(message .. "\n")
+		table.insert(logs, 0, {
+			logText,
+			-- os.date("%d/%m/%Y %H:%M:%S"),
+			-- CLIENT,
+			-- typeStr,
+			-- logOrigin,
+			-- message
+		})
 	end
 end
 
@@ -68,12 +85,12 @@ local nfo = makePrinter(PRINTER_TYPE_INFO)
 local err = makePrinter(PRINTER_TYPE_ERROR)
 local ftl = makePrinter(PRINTER_TYPE_FATAL)
 
-Logging.Log = log
+Logging.Logs = logs
 Logging.PrintLevel = 0
 
-Logging.PrintDebug = dbg
-Logging.PrintInfo = nfo
-Logging.PrintError = err
-Logging.PrintFatal = ftl
+Logging.LogDebug = dbg
+Logging.LogInfo = nfo
+Logging.LogError = err
+Logging.LogFatal = ftl
 
 return Logging
