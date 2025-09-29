@@ -1,5 +1,5 @@
-require("conf")
 local shared = require("shared")
+require("conf")
 
 local function help()
 	local name = (love.filesystem.getSource()):match("(%w+)/?$")
@@ -23,14 +23,14 @@ function love.load(args, unfiltered)
 
 	if runMode == "client" then -- setup window
 		require("love.window")
-		local t = { modules = {}, audio = {}, window = {} }
+		local t = { modules = {}, audio = {}, window = {}, graphics = {} }
 		love.conf(t)
 
 		love.window.setMode(t.window.width, t.window.height, {
 			usedpiscale = t.window.usedpiscale,
 			fullscreen = t.window.fullscreen,
 			resizable = t.window.resizable,
-			display = t.window.display,
+			displayindex = t.window.displayindex,
 			depth = t.window.depth,
 			vsync = t.window.vsync,
 			stencil = t.window.stencil,

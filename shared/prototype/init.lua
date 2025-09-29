@@ -1,6 +1,6 @@
-local xml2lua = require("lib/xml2lua/xml2lua")
-local parsers = require("shared/prototype/parsers")
-local handler = require("lib/xml2lua/xmlhandler/tree")
+local xml2lua = require("lib.xml2lua.xml2lua")
+local parsers = require("shared.prototype/parsers")
+local handler = require("lib.xml2lua.xmlhandler.tree")
 
 local PrototypeManager = {}
 
