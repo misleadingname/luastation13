@@ -1,59 +1,69 @@
 local console = {}
 
-local initialized = false
-local console_font
+local init = false
+local font
 
--- local open_time = 1.0
--- local open = false
--- local openness = 0.0
+local fadeTime = 5
+local displayLogs = {}
 
 function console.init()
-    console_font = LS13.AssetManager.Get("Font.Default")
+	font = LS13.AssetManager.Get("Font.Monospace")
+	init = true
+end
 
-    initialized = true
+function console.Push(text, color)
+	table.insert(displayLogs, {
+		text = text,
+		color = color,
+		time = love.timer.getTime(),
+	})
 end
 
 function console.update(dt)
-    -- if open then
-    --     openness = math.min(openness + dt / open_time, 1.0)
-    -- else
-    --     openness = math.max(openness - dt / open_time, 0.0)
-    -- end
+	local now = love.timer.getTime()
+
+	for i = #displayLogs, 1, -1 do
+		if now - displayLogs[i].time > fadeTime then
+			table.remove(displayLogs, i)
+		end
+	end
+
+	while #displayLogs > 10 do
+		table.remove(displayLogs, 1)
+	end
 end
 
 function console.draw()
-    if not initialized then
-        return
-    end
+	if not init then return end
 
-    -- if openness > 0 then -- a bit of optimization i guess
-    --     love.graphics.setFont(console_font)
-    -- end
+	love.graphics.setFont(font.font)
 
-    love.graphics.setFont(console_font.font)
-    love.graphics.setColor(1, 1, 1)
+	local y = 0
+	local now = love.timer.getTime()
 
-    local textY = 200
+	for i = #displayLogs, 1, -1 do
+		local entry = displayLogs[i]
+		local age = now - entry.time
 
-    local i = 0
-    while textY > 0 do
-        local logThingy = LS13.Logging.Logs[i]
+		local alpha = 1.0 - (age / fadeTime)
+		if alpha < 0 then alpha = 0 end
 
-        if logThingy == nil then
-            break
-        end
+		love.graphics.setColor(1, 1, 1, alpha)
 
-        local _, numLines = string.gsub(logThingy[0], "\n", "\n")
-        numLines = numLines + 1
+		local _, numLines = string.gsub(entry.text, "\n", "\n")
+		numLines = numLines + 1
 
-        local logHeight = console_font.size * (numLines)
+		local logHeight = font.size * numLines
 
-        love.graphics.print(logThingy[0], 5, textY - logHeight)
+		love.graphics.setColor(0, 0, 0, 0.75)
+		love.graphics.print(entry.text, 7, y + logHeight + 2)
 
-        textY = textY - logHeight
+		love.graphics.setColor(entry.color.r, entry.color.g, entry.color.b, 1)
+		love.graphics.print(entry.text, 5, y + logHeight)
+		y = y + logHeight
+	end
 
-        i = i + 1
-    end
+	love.graphics.setColor(1, 1, 1, 1)
 end
 
 return console

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <LS13>
 	<Font Id="Font.DefaultLarge" Type="Font">
 		<FileName>/resources/fonts/verdana.ttf</FileName>
@@ -13,5 +13,11 @@
 	<Font Id="Font.Default" Type="Font">
 		<FileName>/resources/fonts/verdana.ttf</FileName>
 		<Size>16</Size>
+	</Font>
+
+	<Font Id="Font.Monospace" Type="Font">
+		<FileName>/resources/fonts/courier.ttf</FileName>
+		<Filter>nearest</Filter>
+		<Size>14</Size>
 	</Font>
 </LS13>

@@ -19,7 +19,6 @@ function shared.load(args)
 	LS13.ECSManager = require("lib.concord")
 	LS13.Logging = require("shared.logging")
 	LS13.Util = require("shared.utilities")
-	LS13.Logging.LogDebug(LS13.Util.Gilb())
 
 	require("shared.math")
 	require("shared.world")

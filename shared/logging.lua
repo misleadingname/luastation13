@@ -2,6 +2,7 @@
 -- https://github.com/lokachop/zvox/blob/main/gamemodes/zvox_classicbuild/gamemode/zvox/sh/sh_printing.lua
 
 local Logging = {}
+
 local logs = {}
 
 local PRINTER_TYPE_DEBUG = 1
@@ -16,11 +17,16 @@ local printerTypeStrLUT = {
 	[PRINTER_TYPE_FATAL] = "[FATAL]",
 }
 
+-- for some fuckass reason using Color here causes init to hang
 local printerTypeColLUT = {
-	[PRINTER_TYPE_DEBUG] = { 32, 32, 32 },
-	[PRINTER_TYPE_INFO] = { 135, 135, 230 },
-	[PRINTER_TYPE_ERROR] = { 220, 96, 96 },
-	[PRINTER_TYPE_FATAL] = { 255, 32, 32 },
+	-- [PRINTER_TYPE_DEBUG] = Color.new(32, 32, 32),
+	-- [PRINTER_TYPE_INFO] = Color.new(135, 135, 230),
+	-- [PRINTER_TYPE_ERROR] = Color.new(220, 96, 96),
+	-- [PRINTER_TYPE_FATAL] = Color.new(255, 32, 32),
+	[PRINTER_TYPE_DEBUG] = { r = 90 / 255, g = 90 / 255, b = 90 / 255 },
+	[PRINTER_TYPE_INFO] = { r = 135 / 255, g = 135 / 255, b = 230 / 255 },
+	[PRINTER_TYPE_ERROR] = { r = 220 / 255, g = 96 / 255, b = 96 / 255 },
+	[PRINTER_TYPE_FATAL] = { r = 255 / 255, g = 32 / 255, b = 32 / 255 },
 }
 
 local printerLevelTresholdLUT = {
@@ -35,7 +41,6 @@ local function makePrinter(printerType)
 	local typeStr = printerTypeStrLUT[printerType]
 	local typeCol = printerTypeColLUT[printerType]
 	local typeTreshold = printerLevelTresholdLUT[printerType]
-
 
 	return function(format, ...)
 		if Logging.PrintLevel > typeTreshold then
@@ -69,13 +74,9 @@ local function makePrinter(printerType)
 		end
 		io.write(logText .. "\n")
 
+		if CLIENT and LS13.Console then LS13.Console.Push(logText, typeCol) end
 		table.insert(logs, {
 			logText,
-			-- os.date("%d/%m/%Y %H:%M:%S"),
-			-- CLIENT,
-			-- typeStr,
-			-- logOrigin,
-			-- message
 		})
 	end
 end
