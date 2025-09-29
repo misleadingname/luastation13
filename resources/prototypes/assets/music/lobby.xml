@@ -88,4 +88,14 @@
 		<Name>Superposition</Name>
 		<Author>Amie Waters</Author>
 	</Sound>
+
+	<Sound Id="Music.Lobby.Conundrum">
+		<FileName>resources/sound/music/lobby/conundrum.it</FileName>
+		<SoundMode>stream</SoundMode>
+		<Looping>false</Looping>
+		<Volume>0.4</Volume>
+
+		<Name>Conundrum</Name>
+		<Author>???</Author>
+	</Sound>
 </LS13>
