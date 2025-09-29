@@ -13,6 +13,8 @@ local function rollSong()
 	end
 
 	music = table.remove(shuffledSongs)
+
+	LS13.Logging.PrintInfo(string.format("Playing lobby song %s (%s by %s)", music.id, music.name, music.author))
 	love.audio.play(music.sound)
 end
 
