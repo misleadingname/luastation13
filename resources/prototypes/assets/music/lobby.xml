@@ -54,7 +54,7 @@
 		<FileName>resources/sound/music/lobby/thepenis.it</FileName>
 		<SoundMode>stream</SoundMode>
 		<Looping>false</Looping>
-		<Volume>0.8</Volume>
+		<Volume>0.7</Volume>
 
 		<Name>The Penis (Eek!)</Name>
 		<Author>Surasshu</Author>
@@ -84,7 +84,7 @@
 		<FileName>resources/sound/music/lobby/superposition.ogg</FileName>
 		<SoundMode>stream</SoundMode>
 		<Looping>false</Looping>
-		<Volume>0.4</Volume>
+		<Volume>0.3</Volume>
 
 		<Name>Superposition</Name>
 		<Author>Amie Waters</Author>

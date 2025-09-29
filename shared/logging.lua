@@ -26,8 +26,8 @@ local printerTypeColLUT = {
 local printerLevelTresholdLUT = {
 	[PRINTER_TYPE_DEBUG] = 0,
 	[PRINTER_TYPE_INFO] = 1,
-	[PRINTER_TYPE_ERROR] = 1,
-	[PRINTER_TYPE_FATAL] = 1,
+	[PRINTER_TYPE_ERROR] = 2,
+	[PRINTER_TYPE_FATAL] = 3,
 }
 
 
@@ -69,7 +69,7 @@ local function makePrinter(printerType)
 		end
 		io.write(logText .. "\n")
 
-		table.insert(logs, 0, {
+		table.insert(logs, {
 			logText,
 			-- os.date("%d/%m/%Y %H:%M:%S"),
 			-- CLIENT,

@@ -12,6 +12,8 @@ function LoadingState:update(dt)
 
 	if loadTimer >= 0.1 then
 		LS13.PrototypeManager.ParseAll()
+
+		LS13.Console.init()
 		LS13.StateManager:setState(LS13.States.Menu)
 
 		local splashes = LS13.AssetManager.GetPrefixed("String.Splash")

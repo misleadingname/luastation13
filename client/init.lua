@@ -13,6 +13,7 @@ local client = {}
 function client.load(args)
 	LS13.States = states
 	LS13.UI = require("client.ui")
+	LS13.Console = require("client.console")
 	LS13.StateManager = require("lib.GameStateManager.gamestateManager")
 
 	LS13.StateManager:setState(states.Loading)
@@ -25,6 +26,8 @@ function client.update(dt)
 	-- client.UI.Update(dt)
 
 	if DEBUG then states.Debug:update(dt) end
+
+	LS13.Console.update(dt)
 end
 
 function love.draw()
@@ -33,14 +36,14 @@ function love.draw()
 	end, handleError)
 
 	if DEBUG then states.Debug:draw() end
+
+	LS13.Console.draw()
 end
 
 function love.mousepressed(x, y, button)
 	xpcall(function()
 		LS13.UI.MousePressed(x, y, button)
 	end, handleError)
-
-	LS13.Util.PrintTable(LS13.Logging.Logs)
 end
 
 function love.mousereleased(x, y, button)
