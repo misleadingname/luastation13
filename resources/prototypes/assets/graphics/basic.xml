@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LS13>
+	<Graphic Id="Graphic.Fallback" Type="Static">
+		<FileName>resources/textures/core/default.png</FileName>
+	</Graphic>
+
+	<Graphic Id="Graphic.FallbackObject" Type="Static">
+		<FileName>resources/textures/core/default_obj.png</FileName>
+	</Graphic>
+
+	<Graphic Id="Graphic.TestAnimated" Type="Animated">
+		<FileName>resources/textures/core/anim_test.png</FileName>
+		<FrameWidth>32</FrameWidth>
+		<FrameHeight>32</FrameHeight>
+		
+		<FrameCount>4</FrameCount>
+		<FrameRate>10</FrameRate>
+		<LoopDelay>0</LoopDelay>
+	</Graphic>
+</LS13>
