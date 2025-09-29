@@ -1,28 +1,15 @@
 local states = {
-<<<<<<< HEAD
 	Loading = require("client.states.loading"),
 	Debug = require("client.states.debug"),
 	Menu = require("client.states.menu"),
-=======
-    Loading = require("client/states/loading"),
-    Debug = require("client/states/debug"),
-    Menu = require("client/states/menu"),
->>>>>>> 403c37942b59204a3891300e7493602f2e5648a4
 }
 
 local client = {}
 
 function client.load(args)
-<<<<<<< HEAD
-	
 	LS13.States = states
 	LS13.UI = require("client.ui")
 	LS13.StateManager = require("lib.gamestatemanager.gameStateManager")
-=======
-    LS13.States = states
-    LS13.UI = require("client/ui")
-    LS13.StateManager = require("lib/gamestatemanager/gameStateManager")
->>>>>>> 403c37942b59204a3891300e7493602f2e5648a4
 
     LS13.StateManager:setState(states.Loading)
 
