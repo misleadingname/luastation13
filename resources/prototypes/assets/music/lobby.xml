@@ -78,4 +78,14 @@
 		<Name>Chollima On The Wing</Name>
 		<Author>Pochonbo Electronic Ensemble</Author>
 	</Sound>
+
+	<Sound Id="Music.Lobby.Superposition">
+		<FileName>resources/sound/music/lobby/superposition.ogg</FileName>
+		<SoundMode>stream</SoundMode>
+		<Looping>false</Looping>
+		<Volume>0.4</Volume>
+
+		<Name>Superposition</Name>
+		<Author>Amie Waters</Author>
+	</Sound>
 </LS13>
