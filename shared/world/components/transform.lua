@@ -1,8 +1,7 @@
 local ecs = LS13.ECSManager
 
-ecs.component("Transform", function(c, x, y, z, r, sx, sy)
-	c.x = x or 0
-	c.y = y or 0
+ecs.component("Transform", function(c, v, y, z, r, sx, sy)
+	c.v = v or Vector2.new(0, 0)
 	c.z = z or 0
 
 	c.r = r or 0

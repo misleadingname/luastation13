@@ -24,7 +24,7 @@ function shared.load(args)
 	require("shared.math")
 	require("shared.world")
 
-	LS13.Logging.PrintDebug(LS13.Util.Gilb())
+	LS13.Logging.LogDebug(LS13.Util.Gilb())
 	DEBUG = LS13.Util.GetArgument("debug")
 
 	LS13.Logging.LogLevel = DEBUG and 0 or 1
