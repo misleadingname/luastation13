@@ -10,6 +10,8 @@ end
 local client = {}
 
 function client.load(args)
+	love.window.setTitle(LS13.Info.Name)
+
 	LS13.States = states
 	LS13.UI = require("client.ui")
 	LS13.Console = require("client.console")

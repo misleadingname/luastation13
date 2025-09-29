@@ -51,9 +51,15 @@ function love.load(args)
 	end
 
 	_G.LS13 = runMode == "server" and require("server") or require("client")
+	LS13.Info = require("info")
 	LS13.Role = runMode
 	LS13.LaunchArgs = args
 
+	local head = love.filesystem.read(".git/ORIG_HEAD"):gsub("\n", "")
+	local branch = love.filesystem.read(".git/HEAD"):gsub("^ref: .*/", ""):gsub("\n", "")
+
+	print(string.format("Running %s/%s v%s%s", LS13.Info.Name, LS13.Info.Ident, LS13.Info.Version,
+		branch and " (" .. branch .. "/" .. head .. ")" or ""))
 	xpcall(function()
 		shared.load(args)
 		LS13.load(args)
