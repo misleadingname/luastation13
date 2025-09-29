@@ -28,7 +28,7 @@ function console.update(dt)
 		end
 	end
 
-	while #displayLogs > 10 do
+	while #displayLogs > 64 do
 		table.remove(displayLogs, 1)
 	end
 end
@@ -54,7 +54,7 @@ function console.draw()
 		local logHeight = font.size * numLines
 
 		love.graphics.setColor(0, 0, 0, 0.75 * alpha)
-		love.graphics.print(entry.text, 7, y + logHeight + 2)
+		love.graphics.print(entry.text, 6, y + logHeight + 1)
 
 		love.graphics.setColor(entry.color.r, entry.color.g, entry.color.b, alpha)
 		love.graphics.print(entry.text, 5, y + logHeight)
