@@ -24,6 +24,7 @@
 		<FileName>resources/sound/music/lobby/aggravated.it</FileName>
 		<SoundMode>stream</SoundMode>
 		<Looping>false</Looping>
+		<Volume>0.6</Volume>
 
 		<Name>Aggravated Assault</Name>
 		<Author>MEL</Author>
@@ -97,5 +98,15 @@
 
 		<Name>Conundrum</Name>
 		<Author>???</Author>
+	</Sound>
+
+	<Sound Id="Music.Lobby.EndlessSpace">
+		<FileName>resources/sound/music/lobby/endless_space.ogg</FileName>
+		<SoundMode>stream</SoundMode>
+		<Looping>false</Looping>
+		<Volume>0.4</Volume>
+
+		<Name>Endless Space</Name>
+		<Author>SolusLunes</Author>
 	</Sound>
 </LS13>
