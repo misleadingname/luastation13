@@ -48,17 +48,15 @@ function console.draw()
 		local alpha = 1.0 - (age / fadeTime)
 		if alpha < 0 then alpha = 0 end
 
-		love.graphics.setColor(1, 1, 1, alpha)
-
 		local _, numLines = string.gsub(entry.text, "\n", "\n")
 		numLines = numLines + 1
 
 		local logHeight = font.size * numLines
 
-		love.graphics.setColor(0, 0, 0, 0.75)
+		love.graphics.setColor(0, 0, 0, 0.75 * alpha)
 		love.graphics.print(entry.text, 7, y + logHeight + 2)
 
-		love.graphics.setColor(entry.color.r, entry.color.g, entry.color.b, 1)
+		love.graphics.setColor(entry.color.r, entry.color.g, entry.color.b, alpha)
 		love.graphics.print(entry.text, 5, y + logHeight)
 		y = y + logHeight
 	end
