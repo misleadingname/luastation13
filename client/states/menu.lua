@@ -8,7 +8,7 @@ local defaultFont
 
 local shuffledSongs = {}
 local function rollSong()
-	LS13.Logging.PrintInfo("Rolling lobby song...")
+	LS13.Logging.LogInfo("Rolling lobby song...")
 
 	if #shuffledSongs == 0 then
 		shuffledSongs = lume.shuffle(lume.clone(lobbyMusic))
@@ -16,7 +16,7 @@ local function rollSong()
 
 	music = table.remove(shuffledSongs)
 
-	LS13.Logging.PrintInfo(string.format("Rolled on lobby song %s (%s by %s)!", music.id, music.name, music.author))
+	LS13.Logging.LogInfo("Rolled on lobby song %s (%s by %s)!", music.id, music.name, music.author)
 	love.audio.play(music.sound)
 end
 

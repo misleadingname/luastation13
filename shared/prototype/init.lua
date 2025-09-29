@@ -30,7 +30,7 @@ function PrototypeManager.Parse(path, preload)
 	end
 
 	if preload and ls13._attr and ls13._attr.Preload and string.lower(ls13._attr.Preload) == "false" then
-		LS13.Logging.PrintDebug(string.format("Skipping preload of %s", path))
+		LS13.Logging.LogDebug("Skipping preload of %s", path)
 		return
 	end
 
@@ -41,11 +41,11 @@ function PrototypeManager.Parse(path, preload)
 				local success, err = pcall(function() parser(node) end)
 				if not success then
 					local id = node._attr and node._attr.Id and node._attr.Id or "unknown"
-					LS13.Logging.PrintError(string.format("Failed to parse %s (%s): %s", nodeType, id, err))
+					LS13.Logging.LogError("Failed to parse %s (%s): %s", nodeType, id, err)
 				end
 			end
 		else
-			LS13.Logging.PrintError(string.format("No parser for node type %s", nodeType))
+			LS13.Logging.LogError("No parser for node type %s", nodeType)
 		end
 	end
 end
