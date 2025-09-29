@@ -8,6 +8,7 @@ local displayLogs = {}
 
 function console.init()
 	font = LS13.AssetManager.Get("Font.Monospace")
+	print(font)
 	init = true
 end
 
