@@ -17,24 +17,10 @@ local function rollSong()
 end
 
 function MenuState:enter()
-	lobbyMusic = LS13.AssetManager.GetPrefixed("Music.Lobby")
 	bg = love.graphics.newImage("/resources/textures/core/pepper.png")
-
 	defaultFont = LS13.AssetManager.Get("Font.Default").font
+	lobbyMusic = LS13.AssetManager.GetPrefixed("Music.Lobby")
 	rollSong()
-
-	local container = require("client/ui/elements/container")
-	local label = require("client/ui/elements/label")
-
-	local manager = LS13.UI.Manager("MenuTestScene")
-	local cont = container(manager.scene)
-
-	local lbl = label(manager.scene)
-	lbl.props.text = "Test Label"
-
-	cont:AddChild(lbl)
-	manager:SetRootElement(cont)
-	LS13.UI.PushManager(manager)
 end
 
 function MenuState:update(dt)

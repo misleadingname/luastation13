@@ -12,7 +12,7 @@ function PrototypeManager.RawParse(xmlString)
 	return tree.root
 end
 
-function PrototypeManager.Parse(path)
+function PrototypeManager.Parse(path, preload)
 	local info = love.filesystem.getInfo(path, "file")
 	if not info or info.type ~= "file" then
 		return error(string.format("File not found or invalid: %s", path))
@@ -27,6 +27,11 @@ function PrototypeManager.Parse(path)
 	local ls13 = parsed.LS13
 	if not ls13 then
 		return error(string.format("Invalid prototype (root is not <LS13>): %s", path))
+	end
+
+	if preload and ls13._attr and ls13._attr.Preload and string.lower(ls13._attr.Preload) == "false" then
+		LS13.Logging.PrintDebug(string.format("Skipping preload of %s", path))
+		return
 	end
 
 	for nodeType, nodes in pairs(ls13) do
@@ -54,7 +59,7 @@ function PrototypeManager.ParseAll()
 			if info.type == "directory" then
 				recurse(path .. "/" .. file)
 			elseif info.type == "file" and file:sub(-4) == ".xml" then
-				PrototypeManager.Parse(path .. "/" .. file)
+				PrototypeManager.Parse(path .. "/" .. file, true)
 			end
 		end
 	end

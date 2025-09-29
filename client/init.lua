@@ -28,7 +28,7 @@ end
 
 function client.update(dt)
 	stateManager:update(dt)
-	client.UI.Update(dt)
+	-- client.UI.Update(dt)
 
 	if DEBUG then states.Debug:update(dt) end
 end
@@ -37,7 +37,7 @@ function love.draw()
 	stateManager:draw()
 
 	love.graphics.setColor(1, 1, 1, 1)
-	LS13.UI.Draw()
+	-- LS13.UI.Draw()
 
 	if DEBUG then states.Debug:draw() end
 end

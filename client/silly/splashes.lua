@@ -8,5 +8,7 @@ return {
 	"I'm running out of ideas!",
 	"Not so robust now, huh?",
 	"This is so dogshit.",
-	"You're telling me that you used SS14's launcher to play this, play SS14 instead!!"
+	"You're telling me that you used SS14's launcher to play this, play SS14 instead!!",
+	"I'm XMLing it good.",
+	"Gilb"
 }

@@ -1,4 +1,5 @@
 -- Thank you LOKAAAAAAAAAAAA for allowing me to BOOOOOORROW this!!!
+-- https://github.com/lokachop/zvox/blob/main/gamemodes/zvox_classicbuild/gamemode/zvox/sh/sh_printing.lua
 local Logging = {}
 local log = {}
 
