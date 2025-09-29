@@ -4,6 +4,7 @@
 		<FileName>resources/sound/music/lobby/flip-flap.mod</FileName>
 		<SoundMode>stream</SoundMode>
 		<Looping>false</Looping>
+		<Volume>0.7</Volume>
 
 		<Name>Flip-Flap</Name>
 		<Author>X-CEED</Author>
@@ -31,17 +32,28 @@
 		<FileName>resources/sound/music/lobby/title3.ogg</FileName>
 		<SoundMode>stream</SoundMode>
 		<Looping>false</Looping>
+		<Volume>0.5</Volume>
 
 		<Name>Tintin on the Moon</Name>
 		<Author>RMX: ??? / OG: Jeroen Tel</Author>
 	</Sound>
 
-		<Sound Id="Music.Lobby.Thunderdome">
+	<Sound Id="Music.Lobby.Thunderdome">
 		<FileName>resources/sound/music/lobby/thunderdome.ogg</FileName>
 		<SoundMode>stream</SoundMode>
 		<Looping>false</Looping>
+		<Volume>0.5</Volume>
 
 		<Name>THUNDERDOME</Name>
 		<Author>MashedByMachines</Author>
+	</Sound>
+
+	<Sound Id="Music.Lobby.ThePenis">
+		<FileName>resources/sound/music/lobby/thepenis.it</FileName>
+		<SoundMode>stream</SoundMode>
+		<Looping>false</Looping>
+
+		<Name>The Penis (Eek!)</Name>
+		<Author>Surasshu</Author>
 	</Sound>
 </LS13>
