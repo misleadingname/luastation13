@@ -4,7 +4,7 @@
 		<FileName>resources/sound/music/lobby/flip-flap.mod</FileName>
 		<SoundMode>stream</SoundMode>
 		<Looping>false</Looping>
-		<Volume>0.7</Volume>
+		<Volume>0.6</Volume>
 
 		<Name>Flip-Flap</Name>
 		<Author>X-CEED</Author>
@@ -14,6 +14,7 @@
 		<FileName>resources/sound/music/lobby/leisurely_voice.xm</FileName>
 		<SoundMode>stream</SoundMode>
 		<Looping>false</Looping>
+		<Volume>0.5</Volume>
 
 		<Name>Leisurely Voice</Name>
 		<Author>Drozerix</Author>
@@ -42,7 +43,7 @@
 		<FileName>resources/sound/music/lobby/thunderdome.ogg</FileName>
 		<SoundMode>stream</SoundMode>
 		<Looping>false</Looping>
-		<Volume>0.5</Volume>
+		<Volume>0.4</Volume>
 
 		<Name>THUNDERDOME</Name>
 		<Author>MashedByMachines</Author>
@@ -52,6 +53,7 @@
 		<FileName>resources/sound/music/lobby/thepenis.it</FileName>
 		<SoundMode>stream</SoundMode>
 		<Looping>false</Looping>
+		<Volume>0.8</Volume>
 
 		<Name>The Penis (Eek!)</Name>
 		<Author>Surasshu</Author>
