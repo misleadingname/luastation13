@@ -7,9 +7,6 @@
 [submodule "lib/lovedbug"]
 	path = lib/lovedbug
 	url = https://github.com/flamendless/lovedebug
-[submodule "lib/lovedebug"]
-	path = lib/lovedebug
-	url = https://github.com/flamendless/lovedebug
 [submodule "lib/concord"]
 	path = lib/concord
 	url = https://github.com/Keyslam-Group/Concord
@@ -25,9 +22,6 @@
 [submodule "lib/lume"]
 	path = lib/lume
 	url = https://github.com/rxi/lume
-[submodule "lib/inky"]
-	path = lib/inky
-	url = https://github.com/Keyslam/Inky
 [submodule "lib/xml2lua"]
 	path = lib/xml2lua
 	url = https://github.com/misleadingname/xml2lua-LS13
