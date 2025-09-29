@@ -13,6 +13,14 @@ function LoadingState:update(dt)
 	if loadTimer >= 0.1 then
 		LS13.PrototypeManager.ParseAll()
 		LS13.StateManager:setState(LS13.States.Menu)
+
+		local splashes = LS13.AssetManager.GetPrefixed("String.Splash")
+		local splash = splashes[math.random(1, #splashes)]
+		local title = love.window.getTitle()
+
+		love.window.setTitle(string.format("%s: %s", title, splash.value))
+
+		return
 	end
 end
 
