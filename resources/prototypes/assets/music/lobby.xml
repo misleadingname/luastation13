@@ -33,7 +33,7 @@
 		<FileName>resources/sound/music/lobby/title3.ogg</FileName>
 		<SoundMode>stream</SoundMode>
 		<Looping>false</Looping>
-		<Volume>0.5</Volume>
+		<Volume>0.4</Volume>
 
 		<Name>Tintin on the Moon</Name>
 		<Author>RMX: ??? / OG: Jeroen Tel</Author>

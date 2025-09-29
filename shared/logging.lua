@@ -1,5 +1,6 @@
 -- Thank you LOKAAAAAAAAAAAA for allowing me to BOOOOOORROW this!!!
 -- https://github.com/lokachop/zvox/blob/main/gamemodes/zvox_classicbuild/gamemode/zvox/sh/sh_printing.lua
+
 local Logging = {}
 local log = {}
 
@@ -10,21 +11,21 @@ local PRINTER_TYPE_FATAL = 4
 
 local printerTypeStrLUT = {
 	[PRINTER_TYPE_DEBUG] = "[DEBUG]",
-	[PRINTER_TYPE_INFO ] = "[INFO ]",
+	[PRINTER_TYPE_INFO] = "[INFO ]",
 	[PRINTER_TYPE_ERROR] = "[ERROR]",
 	[PRINTER_TYPE_FATAL] = "[FATAL]",
 }
 
 local printerTypeColLUT = {
-	[PRINTER_TYPE_DEBUG] = {32, 32, 32},
-	[PRINTER_TYPE_INFO ] = {135, 135, 230},
-	[PRINTER_TYPE_ERROR] = {220, 96, 96},
-	[PRINTER_TYPE_FATAL] = {255, 32, 32},
+	[PRINTER_TYPE_DEBUG] = { 32, 32, 32 },
+	[PRINTER_TYPE_INFO] = { 135, 135, 230 },
+	[PRINTER_TYPE_ERROR] = { 220, 96, 96 },
+	[PRINTER_TYPE_FATAL] = { 255, 32, 32 },
 }
 
 local printerLevelTresholdLUT = {
 	[PRINTER_TYPE_DEBUG] = 0,
-	[PRINTER_TYPE_INFO ] = 1,
+	[PRINTER_TYPE_INFO] = 1,
 	[PRINTER_TYPE_ERROR] = 1,
 	[PRINTER_TYPE_FATAL] = 1,
 }
@@ -51,7 +52,13 @@ local function makePrinter(printerType)
 			appInfo = " " .. source .. "::" .. tostring(infoStruct.currentline)
 		end
 
-		local message = string.format("[%s] %s %s: %s%s", CLIENT and "CLIENT" or "SERVER", typeStr, os.date("%H:%M:%S"), table.concat({...}, " "), appInfo)
+		local message = string.format("[%s] [%s] %s: %s%s",
+			os.date("%d/%m/%Y %H:%M:%S"),
+			CLIENT and "CLIENT" or "SERVER",
+			typeStr,
+			table.concat({ ... }, " "),
+			appInfo
+		)
 		io.write(message .. "\n")
 	end
 end
