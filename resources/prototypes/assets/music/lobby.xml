@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <LS13>
 	<Sound Id="Music.Lobby.FlipFlap">
 		<FileName>resources/sound/music/lobby/flip-flap.mod</FileName>
@@ -94,7 +94,7 @@
 		<FileName>resources/sound/music/lobby/conundrum.it</FileName>
 		<SoundMode>stream</SoundMode>
 		<Looping>false</Looping>
-		<Volume>0.4</Volume>
+		<Volume>0.8</Volume>
 
 		<Name>Conundrum</Name>
 		<Author>???</Author>

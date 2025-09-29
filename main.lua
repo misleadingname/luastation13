@@ -12,7 +12,11 @@ local function help()
 	love.event.quit(0)
 end
 
-function love.load(args, unfiltered)
+local function handleError(error)
+	LS13.Logging.PrintFatal(string.format("Unhandled error: %s %s", error, debug.traceback()))
+end
+
+function love.load(args)
 	local runMode = "client"
 	if args[1] == "server" then
 		runMode = "server"
@@ -50,11 +54,15 @@ function love.load(args, unfiltered)
 	LS13.Role = runMode
 	LS13.LaunchArgs = args
 
-	shared.load(args)
-	LS13.load(args)
+	xpcall(function()
+		shared.load(args)
+		LS13.load(args)
+	end, handleError)
 end
 
 function love.update(dt)
-	shared.update(dt)
-	LS13.update(dt)
+	xpcall(function()
+		shared.update(dt)
+		LS13.update(dt)
+	end, handleError)
 end
