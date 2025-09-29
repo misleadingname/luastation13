@@ -33,7 +33,7 @@
 		<FileName>resources/sound/music/lobby/title3.ogg</FileName>
 		<SoundMode>stream</SoundMode>
 		<Looping>false</Looping>
-		<Volume>0.4</Volume>
+		<Volume>0.3</Volume>
 
 		<Name>Tintin on the Moon</Name>
 		<Author>RMX: ??? / OG: Jeroen Tel</Author>
@@ -43,7 +43,7 @@
 		<FileName>resources/sound/music/lobby/thunderdome.ogg</FileName>
 		<SoundMode>stream</SoundMode>
 		<Looping>false</Looping>
-		<Volume>0.4</Volume>
+		<Volume>0.2</Volume>
 
 		<Name>THUNDERDOME</Name>
 		<Author>MashedByMachines</Author>
@@ -57,5 +57,25 @@
 
 		<Name>The Penis (Eek!)</Name>
 		<Author>Surasshu</Author>
+	</Sound>
+
+	<Sound Id="Music.Lobby.Title2">
+		<FileName>resources/sound/music/lobby/title2.ogg</FileName>
+		<SoundMode>stream</SoundMode>
+		<Looping>false</Looping>
+		<Volume>0.3</Volume>
+
+		<Name>Robocop</Name>
+		<Author>Chef Boyardee</Author>
+	</Sound>
+
+	<Sound Id="Music.Lobby.Chollima">
+		<FileName>resources/sound/music/lobby/chollima.ogg</FileName>
+		<SoundMode>stream</SoundMode>
+		<Looping>false</Looping>
+		<Volume>0.2</Volume>
+
+		<Name>Chollima On The Wing</Name>
+		<Author>Pochonbo Electronic Ensemble</Author>
 	</Sound>
 </LS13>
