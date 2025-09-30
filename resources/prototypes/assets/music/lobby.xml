@@ -7,7 +7,7 @@
 
 	<Sound Id="Music.Lobby.FlipFlap" Parent="Music.BaseLobby">
 		<FileName>resources/sound/music/lobby/flip-flap.mod</FileName>
-		<Volume>0.6</Volume>
+		<Volume>0.5</Volume>
 
 		<Name>Flip-Flap</Name>
 		<Author>X-CEED</Author>
@@ -15,7 +15,7 @@
 
 	<Sound Id="Music.Lobby.LeisurelyVoice" Parent="Music.BaseLobby">
 		<FileName>resources/sound/music/lobby/leisurely_voice.xm</FileName>
-		<Volume>0.5</Volume>
+		<Volume>0.4</Volume>
 
 		<Name>Leisurely Voice</Name>
 		<Author>Drozerix</Author>
@@ -31,7 +31,7 @@
 
 	<Sound Id="Music.Lobby.Title3" Parent="Music.BaseLobby">
 		<FileName>resources/sound/music/lobby/title3.ogg</FileName>
-		<Volume>0.3</Volume>
+		<Volume>0.2</Volume>
 
 		<Name>Tintin on the Moon</Name>
 		<Author>RMX: ??? / OG: Jeroen Tel</Author>

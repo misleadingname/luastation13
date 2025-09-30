@@ -12,5 +12,6 @@
 	<String Id="String.Splash.10">You're telling me that you used SS14's launcher to play this, play SS14 instead!!</String>
 	<String Id="String.Splash.11">I'm XMLing it good.</String>
 	<String Id="String.Splash.12">Gilb</String>
-	<String Id="String.Splash.13">The submodules worked!!</String>
+	<String Id="String.Splash.13">The XML submodule worked!</String>
+	<String Id="String.Splash.14">Now with orphans!</String>
 </LS13>

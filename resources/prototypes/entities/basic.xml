@@ -13,14 +13,14 @@
 		</Components>
 	</Entity>
 
-	<Entity Id="Entity.Thingy" Parent="Entity.BaseItem">
-		<Name>Thingy</Name>
-		<Description>A thingy</Description>
+	<Entity Id="Entity.Gilb" Parent="Entity.BaseItem">
+		<Name>Gilb</Name>
+		<Description>Gilb it. Now.</Description>
 
 		<Components>
-			<GraphicComponent>
-				<Graphic>Graphic.Items.Thingy</Graphic>
-			</GraphicComponent>
+			<Graphic>
+				<Graphic>Graphic.Gilb</Graphic>
+			</Graphic>
 		</Components>
 	</Entity>
 </LS13>

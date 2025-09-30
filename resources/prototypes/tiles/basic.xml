@@ -3,8 +3,6 @@
 	<Tile Id="Tile.Test">
 		<Graphic>Graphic.Fallback</Graphic>
 	</Tile>
-	<Tile Id="Tile.Test2" Parent="Tile.Test">
-	</Tile>
 	<Tile Id="Tile.Grass">
 		<Graphic>Graphic.Tiles.Grass</Graphic>
 	</Tile>

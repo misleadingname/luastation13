@@ -15,6 +15,6 @@
 		
 		<FrameCount>4</FrameCount>
 		<FrameRate>10</FrameRate>
-		<LoopDelay>0</LoopDelay>
+		<LoopDelay>0</LoopDelay> <!--Is this really required?-->
 	</Graphic>
 </LS13>
