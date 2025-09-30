@@ -1,4 +1,4 @@
-local MenuState = {}
+local MenuState = { name = "menu" }
 
 local bg
 local music

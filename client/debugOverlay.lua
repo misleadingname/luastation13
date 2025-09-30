@@ -9,7 +9,7 @@ local font
 local lines = {
 	{
 		Text = function()
-			return love.timer.getFPS() .. " FPS"
+			return string.format("%s FPS", love.timer.getFPS())
 		end,
 		Color = function()
 			local g = love.timer.getFPS() / 60
@@ -19,7 +19,16 @@ local lines = {
 
 	{
 		Text = function()
-			return love.timer.getTime() .. " s"
+			return string.format("%ss", love.timer.getTime())
+		end,
+		Color = function()
+			return { 1, 1, 1, 1 }
+		end
+	},
+
+	{
+		Text = function()
+			return string.format("state: %s", LS13.StateManager:getState().name)
 		end,
 		Color = function()
 			return { 1, 1, 1, 1 }

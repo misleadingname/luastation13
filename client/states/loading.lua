@@ -1,4 +1,4 @@
-local LoadingState = {}
+local LoadingState = { name = "loading" }
 
 local splash = love.graphics.newImage("/resources/textures/core/splash.png")
 local frame = false
