@@ -17,9 +17,8 @@ function client.load(args)
 	LS13.Console = require("client.console")
 	LS13.StateManager = require("lib.GameStateManager.gamestateManager")
 
-	LS13.StateManager:setState(states.Loading)
-
 	if DEBUG then LS13.DebugOverlay = require("client.debugOverlay") end
+	LS13.StateManager:setState(states.Loading)
 end
 
 function client.update(dt)
@@ -28,7 +27,7 @@ function client.update(dt)
 		LS13.Console.update(dt)
 		-- client.UI.Update(dt)
 
-		if DEBUG then LS13.DebugOverlay.update(dt) end
+		if DEBUG and LS13.DebugOverlay then LS13.DebugOverlay.update(dt) end
 	end, handleError)
 end
 
@@ -36,7 +35,7 @@ function love.draw()
 	xpcall(function()
 		LS13.Console.draw()
 		LS13.StateManager:draw()
-		if DEBUG then LS13.DebugOverlay.draw() end
+		if DEBUG and LS13.DebugOverlay then LS13.DebugOverlay.draw() end
 	end, handleError)
 end
 

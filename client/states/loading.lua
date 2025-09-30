@@ -1,32 +1,30 @@
 local LoadingState = {}
 
 local splash = love.graphics.newImage("/resources/textures/core/splash.png")
-
-local loadTimer = 0
+local frame = false
 
 function LoadingState:enter()
 end
 
 function LoadingState:update(dt)
-	loadTimer = loadTimer + dt
-
-	if loadTimer >= 0.1 then
+	if frame then
 		LS13.PrototypeManager.ParseAll()
 
 		if DEBUG then
 			LS13.Console.init()
 			LS13.DebugOverlay.init()
 		end
-		LS13.StateManager:setState(LS13.States.Menu)
 
 		local splashes = LS13.AssetManager.GetPrefixed("String.Splash")
 		local splash = splashes[math.random(1, #splashes)]
 		local title = love.window.getTitle()
 
 		love.window.setTitle(string.format("%s: %s", title, splash.value))
-
+		LS13.StateManager:setState(LS13.States.Menu)
 		return
 	end
+
+	frame = true
 end
 
 function LoadingState:draw()
