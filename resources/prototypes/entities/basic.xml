@@ -12,7 +12,8 @@
             </Graphic>
         </Components>
 	</Entity>
-	<Entity Id="Entity.Thingy", Parent="Entity.BaseItem">
+
+	<Entity Id="Entity.Thingy" Parent="Entity.BaseItem">
 		<Name>Thingy</Name>
 		<Description>A thingy</Description>
 
