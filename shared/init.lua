@@ -15,7 +15,7 @@ function shared.load()
 	end
 
 	LS13.PrototypeManager = require("shared.prototype")
-	LS13.AssetManager = require("shared.assetmanager")
+	LS13.AssetManager = require("shared.assets.manager")
 	LS13.ECSManager = require("lib.concord")
 	LS13.Logging = require("shared.logging")
 	LS13.Util = require("shared.utilities")
