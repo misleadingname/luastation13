@@ -84,19 +84,13 @@ local function makePrinter(printerType)
 	end
 end
 
-local dbg = makePrinter(PRINTER_TYPE_DEBUG)
-local nfo = makePrinter(PRINTER_TYPE_INFO)
-local wrn = makePrinter(PRINTER_TYPE_WARN)
-local err = makePrinter(PRINTER_TYPE_ERROR)
-local ftl = makePrinter(PRINTER_TYPE_FATAL)
-
 Logging.Logs = logs
 Logging.PrintLevel = 0
 
-Logging.LogDebug = dbg
-Logging.LogInfo = nfo
-Logging.LogWarn = wrn
-Logging.LogError = err
-Logging.LogFatal = ftl
+Logging.LogDebug = makePrinter(PRINTER_TYPE_DEBUG)
+Logging.LogInfo = makePrinter(PRINTER_TYPE_INFO)
+Logging.LogWarn = makePrinter(PRINTER_TYPE_WARN)
+Logging.LogError = makePrinter(PRINTER_TYPE_ERROR)
+Logging.LogFatal = makePrinter(PRINTER_TYPE_FATAL)
 
 return Logging

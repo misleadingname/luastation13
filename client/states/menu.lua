@@ -1,13 +1,14 @@
 local MenuState = { name = "menu" }
 
-local bg
+-- local bg
 local music
 local lobbyMusic
 
 local defaultFont
 
 local shuffledSongs = {}
-local function rollSong()
+
+function MenuState:rollSong()
 	LS13.Logging.LogInfo("Rolling lobby song...")
 	if music and music.sound:isPlaying() then music.sound:stop() end
 
@@ -22,15 +23,15 @@ local function rollSong()
 end
 
 function MenuState:enter()
-	bg = love.graphics.newImage("/resources/textures/core/pepper.png")
+	-- bg = love.graphics.newImage("/resources/textures/core/pepper.png")
 	defaultFont = LS13.AssetManager.Get("Font.Default").font
 	lobbyMusic = LS13.AssetManager.GetPrefixed("Music.Lobby")
-	rollSong()
+	MenuState:rollSong()
 end
 
 function MenuState:update(dt)
 	if not music.sound:isPlaying() then
-		rollSong()
+		MenuState:rollSong()
 	end
 end
 

@@ -1,18 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LS13>
-	<Entity Id="Entity.BaseItem">
-		<Name>item</Name>
-		<Description>shitass base item</Description>
-
-		<Components>
-			<Item>
-			</Item>
-			<Graphic>
-				<Graphic>Graphic.Fallback</Graphic>
-			</Graphic>
-		</Components>
-	</Entity>
-
 	<Entity Id="Entity.Gilb" Parent="Entity.BaseItem">
 		<Name>Gilb</Name>
 		<Description>Gilb it. Now.</Description>
