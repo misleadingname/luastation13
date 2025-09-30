@@ -41,7 +41,7 @@ function console.draw()
 	local y = 0
 	local now = love.timer.getTime()
 
-	for i = 1, #displayLogs, 1 do
+	for i = #displayLogs, 1, -1 do
 		local entry = displayLogs[i]
 		local age = now - entry.time
 
