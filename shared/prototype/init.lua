@@ -69,11 +69,17 @@ function PrototypeManager.Parse(path, preload)
 
 	local allNodes = {}
 	for nodeType, nodes in pairs(ls13) do
-		if type(nodes) == "table" then
-			for _, node in ipairs(nodes) do
-				node._nodeType = nodeType
-				table.insert(allNodes, node)
-			end
+		local paired = false
+		for _, node in ipairs(nodes) do
+			node._nodeType = nodeType
+			table.insert(allNodes, node)
+			paired = true
+		end
+
+		if not paired then
+			local node = nodes
+			node._nodeType = nodeType
+			table.insert(allNodes, node)
 		end
 	end
 
