@@ -34,8 +34,8 @@ end
 
 function love.draw()
 	xpcall(function()
-		LS13.StateManager:draw()
 		LS13.Console.draw()
+		LS13.StateManager:draw()
 		if DEBUG then LS13.DebugOverlay.draw() end
 	end, handleError)
 end
