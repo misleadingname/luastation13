@@ -41,7 +41,7 @@ function console.draw()
 	local y = 0
 	local now = love.timer.getTime()
 
-	for i = #displayLogs, 1, -1 do
+	for i = 1, #displayLogs, 1 do
 		local entry = displayLogs[i]
 		local age = now - entry.time
 
@@ -54,10 +54,10 @@ function console.draw()
 		local logHeight = font.size * numLines
 
 		love.graphics.setColor(0, 0, 0, 0.75 * alpha)
-		love.graphics.print(entry.text, 6, y + logHeight + 1)
+		love.graphics.print(entry.text, 6, y + 1)
 
 		love.graphics.setColor(entry.color.r, entry.color.g, entry.color.b, alpha)
-		love.graphics.print(entry.text, 5, y + logHeight)
+		love.graphics.print(entry.text, 5, y)
 		y = y + logHeight
 	end
 

@@ -19,7 +19,7 @@ return function(node)
     end)
 
     if not success then
-        LS13.Logging.LogError("Failed to load sound %s: %s", data.fileName, err)
+        LS13.Logging.LogError("Failed to load sound %s: %s, falling back.", data.fileName, err)
         snd = love.audio.newSource("resources/sound/core/default.ogg", "static")
     end
 
