@@ -1,6 +1,6 @@
 local ecs = LS13.ECSManager
 
-ecs.component("Transform", function(c, v, y, z, r, sx, sy)
+local transformComponent = ecs.component("Transform", function(c, v, y, z, r, sx, sy)
 	c.v = v or Vector2.new(0, 0)
 	c.z = z or 0
 
@@ -8,3 +8,5 @@ ecs.component("Transform", function(c, v, y, z, r, sx, sy)
 	c.sx = sx or 1
 	c.sy = sy or 1
 end)
+
+LS13.ECS.Components.Transform = transformComponent
