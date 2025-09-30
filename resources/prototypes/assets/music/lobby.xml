@@ -1,109 +1,92 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <LS13>
-	<Sound Id="Music.Lobby.FlipFlap">
-		<FileName>resources/sound/music/lobby/flip-flap.mod</FileName>
+	<Sound Id="Music.BaseLobby">
 		<SoundMode>stream</SoundMode>
 		<Looping>false</Looping>
+	</Sound>
+
+	<Sound Id="Music.Lobby.FlipFlap" Parent="Music.BaseLobby">
+		<FileName>resources/sound/music/lobby/flip-flap.mod</FileName>
 		<Volume>0.6</Volume>
 
 		<Name>Flip-Flap</Name>
 		<Author>X-CEED</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.LeisurelyVoice">
+	<Sound Id="Music.Lobby.LeisurelyVoice" Parent="Music.BaseLobby">
 		<FileName>resources/sound/music/lobby/leisurely_voice.xm</FileName>
-		<SoundMode>stream</SoundMode>
-		<Looping>false</Looping>
 		<Volume>0.5</Volume>
 
 		<Name>Leisurely Voice</Name>
 		<Author>Drozerix</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.Aggravated">
+	<Sound Id="Music.Lobby.Aggravated" Parent="Music.BaseLobby">
 		<FileName>resources/sound/music/lobby/aggravated.it</FileName>
-		<SoundMode>stream</SoundMode>
-		<Looping>false</Looping>
 		<Volume>0.6</Volume>
 
 		<Name>Aggravated Assault</Name>
 		<Author>MEL</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.Title3">
+	<Sound Id="Music.Lobby.Title3" Parent="Music.BaseLobby">
 		<FileName>resources/sound/music/lobby/title3.ogg</FileName>
-		<SoundMode>stream</SoundMode>
-		<Looping>false</Looping>
 		<Volume>0.3</Volume>
 
 		<Name>Tintin on the Moon</Name>
 		<Author>RMX: ??? / OG: Jeroen Tel</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.Thunderdome">
+	<Sound Id="Music.Lobby.Thunderdome" Parent="Music.BaseLobby">
 		<FileName>resources/sound/music/lobby/thunderdome.ogg</FileName>
-		<SoundMode>stream</SoundMode>
-		<Looping>false</Looping>
 		<Volume>0.2</Volume>
 
 		<Name>THUNDERDOME</Name>
 		<Author>MashedByMachines</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.ThePenis">
+	<Sound Id="Music.Lobby.ThePenis" Parent="Music.BaseLobby">
 		<FileName>resources/sound/music/lobby/thepenis.it</FileName>
-		<SoundMode>stream</SoundMode>
-		<Looping>false</Looping>
 		<Volume>0.7</Volume>
 
 		<Name>The Penis (Eek!)</Name>
 		<Author>Surasshu</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.Title2">
+	<Sound Id="Music.Lobby.Title2" Parent="Music.BaseLobby">
 		<FileName>resources/sound/music/lobby/title2.ogg</FileName>
-		<SoundMode>stream</SoundMode>
-		<Looping>false</Looping>
 		<Volume>0.3</Volume>
 
 		<Name>Robocop</Name>
 		<Author>Chef Boyardee</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.Chollima">
+	<Sound Id="Music.Lobby.Chollima" Parent="Music.BaseLobby">
 		<FileName>resources/sound/music/lobby/chollima.ogg</FileName>
-		<SoundMode>stream</SoundMode>
-		<Looping>false</Looping>
 		<Volume>0.2</Volume>
 
 		<Name>Chollima On The Wing</Name>
 		<Author>Pochonbo Electronic Ensemble</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.Superposition">
+	<Sound Id="Music.Lobby.Superposition" Parent="Music.BaseLobby">
 		<FileName>resources/sound/music/lobby/superposition.ogg</FileName>
-		<SoundMode>stream</SoundMode>
-		<Looping>false</Looping>
 		<Volume>0.3</Volume>
 
 		<Name>Superposition</Name>
 		<Author>Amie Waters</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.Conundrum">
+	<Sound Id="Music.Lobby.Conundrum" Parent="Music.BaseLobby">
 		<FileName>resources/sound/music/lobby/conundrum.it</FileName>
-		<SoundMode>stream</SoundMode>
-		<Looping>false</Looping>
 		<Volume>0.8</Volume>
 
 		<Name>Conundrum</Name>
 		<Author>???</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.EndlessSpace">
+	<Sound Id="Music.Lobby.EndlessSpace" Parent="Music.BaseLobby">
 		<FileName>resources/sound/music/lobby/endless_space.ogg</FileName>
-		<SoundMode>stream</SoundMode>
-		<Looping>false</Looping>
 		<Volume>0.4</Volume>
 
 		<Name>Endless Space</Name>

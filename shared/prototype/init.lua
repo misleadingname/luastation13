@@ -38,7 +38,20 @@ function PrototypeManager.Parse(path, preload)
 		local parser = parsers[nodeType]
 		if parser then
 			for i, node in ipairs(nodes) do
-				local success, err = pcall(function() parser(node) end)
+				local parent = node._attr.Parent
+				if parent and parent ~= node._attr.Id then
+					local data = LS13.AssetManager.Get(parent)
+
+					for k, v in pairs(data) do
+						local k = k:sub(1,1):upper()..k:sub(2)
+						node[k] = node[k] or v
+					end
+				end
+
+				local success, err = pcall(function()
+					parser(node)
+				end)
+
 				if not success then
 					local id = node._attr and node._attr.Id and node._attr.Id or "unknown"
 					LS13.Logging.LogError("Failed to parse %s (%s): %s", nodeType, id, err)
