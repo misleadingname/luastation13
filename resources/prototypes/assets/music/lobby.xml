@@ -92,4 +92,12 @@
 		<Name>Endless Space</Name>
 		<Author>SolusLunes</Author>
 	</Sound>
+
+	<Sound Id="Music.Lobby.EverHigher" Parent="Music.BaseLobby">
+		<FileName>resources/sound/music/lobby/ever_higher.ogg</FileName>
+		<Volume>0.4</Volume>
+
+		<Name>Ever Higher</Name>
+		<Author>resampler</Author>
+	</Sound>
 </LS13>
