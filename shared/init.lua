@@ -3,7 +3,7 @@ local lurker = require("lib.lurker.lurker")
 
 local shared = {}
 
-function shared.load(args)
+function shared.load()
 	print("whats up im the shared yo")
 	math.randomseed(os.time())
 
