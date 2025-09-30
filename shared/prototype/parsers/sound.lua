@@ -1,31 +1,30 @@
 return function(node)
-    local data = {
-        id = node._attr and node._attr.Id and node._attr.Id,
-        type = "sound",
+	local data = {
+		id = node._attr and node._attr.Id and node._attr.Id,
+		type = "sound",
 
-        fileName = node.FileName and node.FileName or "resources/sound/core/default.ogg",
-        soundMode = node.SoundMode and node.SoundMode or "static",
-        looping = node.Looping and node.Looping == "true",
-        volume = node.Volume and node.Volume or 1.0,
+		fileName = node.FileName and node.FileName or "resources/sound/core/default.ogg",
+		soundMode = node.SoundMode and node.SoundMode or "static",
+		looping = node.Looping and node.Looping == "true",
+		volume = node.Volume and node.Volume or 1.0,
 
-        name = node.Name and node.Name,
-        author = node.Author and node.Author
-    }
+		name = node.Name and node.Name,
+		author = node.Author and node.Author
+	}
 
-    
-    local snd
-    local success, err = pcall(function()
-        snd = love.audio.newSource(data.fileName, data.soundMode)
-    end)
+	local snd
+	local success, err = pcall(function()
+		snd = love.audio.newSource(data.fileName, data.soundMode)
+	end)
 
-    if not success then
-        LS13.Logging.LogError("Failed to load sound %s: %s, falling back.", data.fileName, err)
-        snd = love.audio.newSource("resources/sound/core/default.ogg", "static")
-    end
+	if not success then
+		LS13.Logging.LogError("Failed to load sound %s: %s, falling back.", data.fileName, err)
+		snd = love.audio.newSource("resources/sound/core/default.ogg", "static")
+	end
 
-    snd:setLooping(data.looping)
-    snd:setVolume(data.volume)
+	snd:setLooping(data.looping)
+	snd:setVolume(data.volume)
 
-    data.sound = snd
-    LS13.AssetManager.Push(data, data.id)
+	data.sound = snd
+	LS13.AssetManager.Push(data, data.id)
 end

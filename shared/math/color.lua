@@ -75,6 +75,10 @@ function color:normalize()
 	return Color.new(self.r / 255, self.g / 255, self.b / 255, self.a / 255)
 end
 
+function color:toNumbers()
+	return self.r, self.g, self.b, self.a
+end
+
 color.white = color.new(1, 1, 1, 1)
 color.black = color.new(0, 0, 0, 1)
 color.red   = color.new(1, 0, 0, 1)

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <LS13>
 	<Graphic Id="Graphic.Fallback" Type="Static">
 		<FileName>resources/textures/core/default.png</FileName>
@@ -12,9 +12,10 @@
 		<FileName>resources/textures/core/anim_test.png</FileName>
 		<FrameWidth>32</FrameWidth>
 		<FrameHeight>32</FrameHeight>
-		
+
 		<FrameCount>4</FrameCount>
 		<FrameRate>10</FrameRate>
-		<LoopDelay>0</LoopDelay> <!--Is this really required?-->
+		<LoopDelay>0</LoopDelay> <!--Is this really required? -->
+								 <!-- just in case you want it to loop but freeze at the last frame for a bit -->
 	</Graphic>
 </LS13>

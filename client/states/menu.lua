@@ -27,6 +27,8 @@ function MenuState:enter()
 	defaultFont = LS13.AssetManager.Get("Font.Default").font
 	lobbyMusic = LS13.AssetManager.GetPrefixed("Music.Lobby")
 	MenuState:rollSong()
+
+	LS13.UI.Test()
 end
 
 function MenuState:update(dt)

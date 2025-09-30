@@ -1,7 +1,7 @@
 local ecs = LS13.ECSManager
 
 local graphicComponent = ecs.component("Graphic", function(c, graphicId, visible, offset, playing)
-	c.graphicId = graphicId
+	c.graphicId = graphicId or "Graphic.Fallback"
 	c.visible = visible or true
 	c.offset = offset or Vector2.new(0, 0)
 	c.tint = Color.new(255, 255, 255, 255)

@@ -20,7 +20,6 @@ function shared.load(args)
 	LS13.Logging = require("shared.logging")
 	LS13.Util = require("shared.utilities")
 	LS13.ECS = {
-		World = LS13.ECSManager.World,
 		Components = {},
 		Systems = {},
 	}

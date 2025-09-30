@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LS13>
+	<Graphic Id="Graphic.UiPanel" Type="NineSlice">
+		<FileName>resources/textures/ui/panel.png</FileName>
+		<Left>11</Left>
+		<Right>22</Right>
+		<Top>11</Top>
+		<Bottom>22</Bottom>
+	</Graphic>
+
+	<Graphic Id="Graphic.UiButton" Type="NineSlice">
+		<FileName>resources/textures/ui/button.png</FileName>
+		<Left>11</Left>
+		<Right>22</Right>
+		<Top>11</Top>
+		<Bottom>22</Bottom>
+	</Graphic>
+</LS13>

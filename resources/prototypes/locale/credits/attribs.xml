@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <LS13>
 	<Section Name="Libraries">
 		<Attribution>
@@ -16,24 +16,10 @@
 		</Attribution>
 
 		<Attribution>
-			<Name>GameStateManager</Name>
-			<License>MIT</License>
-			<Copyright>Copyright (c) 2024 Lauryn</Copyright>
-			<Link>https://github.com/GwyrddGlas/GameStateManager/blob/main/LICENSE</Link>
-		</Attribution>
-
-		<Attribution>
 			<Name>Lurker</Name>
 			<License>MIT</License>
 			<Copyright>Copyright (c) 2018 rxi</Copyright>
 			<Link>https://github.com/rxi/lurker/blob/master/LICENSE</Link>
-		</Attribution>
-
-		<Attribution>
-			<Name>Inky</Name>
-			<License>MIT</License>
-			<Copyright>Copyright (c) 2025 Justin van der Leij</Copyright>
-			<Link>https://github.com/Keyslam/Inky/blob/develop/LICENSE</Link>
 		</Attribution>
 
 		<Attribution>
