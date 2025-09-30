@@ -1,8 +1,10 @@
-local DebugState = {}
+local debugOverlay = {}
 
 local W = love.graphics.getWidth
 local H = love.graphics.getHeight
-local font = love.graphics.newFont(12)
+
+local init = false
+local font
 
 local lines = {
 	{
@@ -25,8 +27,13 @@ local lines = {
 	}
 }
 
+function debugOverlay.init()
+	font = LS13.AssetManager.Get("Font.Monospace")
+	init = true
+end
+
 local function shadowText(text, x, y, align, color, shadowColor)
-	love.graphics.setFont(font)
+	love.graphics.setFont(font.font)
 	local textSize = love.graphics.getFont():getWidth(text)
 
 	if align == "center" then
@@ -42,17 +49,16 @@ local function shadowText(text, x, y, align, color, shadowColor)
 	love.graphics.setColor(1, 1, 1, 1)
 end
 
-function DebugState:enter()
+function debugOverlay.update(dt)
+	if not init then return end
 end
 
-function DebugState:update(dt)
-end
-
-function DebugState:draw()
+function debugOverlay.draw()
+	if not init then return end
 	shadowText("!!! debug !!!", 16, 16, "center")
 	for i, line in ipairs(lines) do
 		shadowText(line.Text(), 16, 16 + i * 16, "right", line.Color())
 	end
 end
 
-return DebugState
+return debugOverlay

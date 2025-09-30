@@ -4,10 +4,12 @@ return function(node)
 		type = "font",
 
 		fileName = node.FileName and node.FileName,
+		filter = node.Filter and node.Filter or "linear",
 		size = node.Size and tonumber(node.Size) or 16,
 	}
 
 	local font = love.graphics.newFont(data.fileName, data.size)
+	font:setFilter(data.filter, data.filter)
 
 	data.font = font
 	LS13.AssetManager.Push(data, data.id)

@@ -14,6 +14,7 @@ function LoadingState:update(dt)
 		LS13.PrototypeManager.ParseAll()
 
 		LS13.Console.init()
+		LS13.DebugOverlay.init()
 		LS13.StateManager:setState(LS13.States.Menu)
 
 		local splashes = LS13.AssetManager.GetPrefixed("String.Splash")

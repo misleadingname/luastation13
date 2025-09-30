@@ -1,6 +1,5 @@
 local states = {
 	Loading = require("client.states.loading"),
-	Debug = require("client.states.debug"),
 	Menu = require("client.states.menu"),
 }
 
@@ -11,6 +10,8 @@ end
 local client = {}
 
 function client.load(args)
+	love.window.setTitle(LS13.Info.Name)
+
 	LS13.States = states
 	LS13.UI = require("client.ui")
 	LS13.Console = require("client.console")
@@ -18,26 +19,25 @@ function client.load(args)
 
 	LS13.StateManager:setState(states.Loading)
 
-	if DEBUG then states.Debug:enter() end
+	if DEBUG then LS13.DebugOverlay = require("client.debugOverlay") end
 end
 
 function client.update(dt)
-	LS13.StateManager:update(dt)
-	-- client.UI.Update(dt)
+	xpcall(function()
+		LS13.StateManager:update(dt)
+		LS13.Console.update(dt)
+		-- client.UI.Update(dt)
 
-	if DEBUG then states.Debug:update(dt) end
-
-	LS13.Console.update(dt)
+		if DEBUG then LS13.DebugOverlay.update(dt) end
+	end, handleError)
 end
 
 function love.draw()
 	xpcall(function()
+		LS13.Console.draw()
 		LS13.StateManager:draw()
+		if DEBUG then LS13.DebugOverlay.draw() end
 	end, handleError)
-
-	if DEBUG then states.Debug:draw() end
-
-	LS13.Console.draw()
 end
 
 function love.mousepressed(x, y, button)

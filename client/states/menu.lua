@@ -9,6 +9,7 @@ local defaultFont
 local shuffledSongs = {}
 local function rollSong()
 	LS13.Logging.LogInfo("Rolling lobby song...")
+	if music and music.sound:isPlaying() then music.sound:stop() end
 
 	if #shuffledSongs == 0 then
 		shuffledSongs = lume.shuffle(lume.clone(lobbyMusic))
@@ -34,19 +35,19 @@ function MenuState:update(dt)
 end
 
 function MenuState:draw()
-	-- tile bg
-	local w, h = bg:getDimensions()
+	-- -- tile bg
+	-- local w, h = bg:getDimensions()
 	local sx, sy = love.graphics.getDimensions()
 
-	love.graphics.setColor(1, 1, 1, 0.25)
-	for x = 0, sx * 2, w do
-		for y = 0, sy * 2, h do
-			local t = love.timer.getTime()
-			love.graphics.draw(bg, x - w / 2 + math.sin(t * 2) * w, y - h / 2 + math.cos(t * 4) * w, 0, 1, 1)
-		end
-	end
+	-- love.graphics.setColor(1, 1, 1, 0.25)
+	-- for x = 0, sx * 2, w do
+	-- 	for y = 0, sy * 2, h do
+	-- 		local t = love.timer.getTime()
+	-- 		love.graphics.draw(bg, x - w / 2 + math.sin(t * 2) * w, y - h / 2 + math.cos(t * 4) * w, 0, 1, 1)
+	-- 	end
+	-- end
 
-	love.graphics.setColor(1, 1, 1, 1)
+	-- love.graphics.setColor(1, 1, 1, 1)
 
 	-- Debug info
 	love.graphics.setFont(defaultFont)
