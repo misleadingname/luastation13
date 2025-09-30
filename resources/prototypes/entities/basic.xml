@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LS13>
+	<Tile Id="Entity.BaseItem">
+		<Name>item</Name>
+		<Description>shitass base item</Description>
+
+        <Components>
+            <Item>
+            </Item>
+            <Graphic>
+                <Graphic>Graphic.Fallback</Graphic>
+            </Graphic>
+        </Components>
+	</Tile>
+	<Tile Id="Entity.Thingy", Parent="Entity.BaseItem">
+		<Name>Thingy</Name>
+		<Description>A thingy</Description>
+
+        <Components>
+            <GraphicComponent>
+                <Graphic>Graphic.Items.Thingy</Graphic>
+            </GraphicComponent>
+        </Components>
+	</Tile>
+</LS13>

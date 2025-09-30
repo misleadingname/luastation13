@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LS13>
+	<Tile Id="Tile.Test">
+		<Graphic>Graphic.Fallback</Graphic>
+	</Tile>
+	<Tile Id="Tile.Test2" Parent="Tile.Test">
+	</Tile>
+	<Tile Id="Tile.Grass">
+		<Graphic>Graphic.Tiles.Grass</Graphic>
+	</Tile>
+	<Tile Id="Tile.Lattice">
+		<Graphic>Graphic.Tiles.Lattice</Graphic>
+	</Tile>
+	<Tile Id="Tile.Plating">
+		<Graphic>Graphic.Tiles.Plating</Graphic>
+	</Tile>
+	<Tile Id="Tile.TileFloor">
+		<Graphic>Graphic.Tiles.TileFloor</Graphic>
+	</Tile>
+</LS13>
