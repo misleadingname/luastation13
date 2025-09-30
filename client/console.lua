@@ -6,6 +6,13 @@ local font
 local fadeTime = 5
 local displayLogs = {}
 
+local function easeOutBack(t, s)
+	s = s or 1.70158 -- overshoot
+	t = t - 1
+	return (t * t * ((s + 1) * t + s) + 1)
+end
+
+
 function console.init()
 	font = LS13.AssetManager.Get("Font.Monospace")
 	init = true
@@ -45,7 +52,7 @@ function console.draw()
 		local entry = displayLogs[i]
 		local age = now - entry.time
 
-		local alpha = 1.0 - (age / fadeTime)
+		local alpha = 1.0 - (age / fadeTime) ^ 32
 		if alpha < 0 then alpha = 0 end
 
 		local _, numLines = string.gsub(entry.text, "\n", "\n")
@@ -53,11 +60,18 @@ function console.draw()
 
 		local logHeight = font.size * numLines
 
+		local t = math.min(age / fadeTime * 8, 1)
+		local startX = -100
+		local eased = easeOutBack(t)
+
+		local x = startX * (1 - eased)
+		local yy = 0
+
 		love.graphics.setColor(0, 0, 0, 0.75 * alpha)
-		love.graphics.print(entry.text, 6, y + 1)
+		love.graphics.print(entry.text, x + 1, y + yy + 1)
 
 		love.graphics.setColor(entry.color.r, entry.color.g, entry.color.b, alpha)
-		love.graphics.print(entry.text, 5, y)
+		love.graphics.print(entry.text, x, y + yy)
 		y = y + logHeight
 	end
 
