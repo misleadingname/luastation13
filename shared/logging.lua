@@ -7,12 +7,14 @@ local logs = {}
 
 local PRINTER_TYPE_DEBUG = 1
 local PRINTER_TYPE_INFO = 2
-local PRINTER_TYPE_ERROR = 3
-local PRINTER_TYPE_FATAL = 4
+local PRINTER_TYPE_WARN = 3
+local PRINTER_TYPE_ERROR = 4
+local PRINTER_TYPE_FATAL = 5
 
 local printerTypeStrLUT = {
 	[PRINTER_TYPE_DEBUG] = "[DEBUG]",
-	[PRINTER_TYPE_INFO] = "[INFO ]",
+	[PRINTER_TYPE_INFO]  = "[INFO ]",
+	[PRINTER_TYPE_WARN]  = "[WARN ]",
 	[PRINTER_TYPE_ERROR] = "[ERROR]",
 	[PRINTER_TYPE_FATAL] = "[FATAL]",
 }
@@ -25,6 +27,7 @@ local printerTypeColLUT = {
 	-- [PRINTER_TYPE_FATAL] = Color.new(255, 32, 32),
 	[PRINTER_TYPE_DEBUG] = { r = 90 / 255, g = 90 / 255, b = 90 / 255 },
 	[PRINTER_TYPE_INFO] = { r = 135 / 255, g = 135 / 255, b = 230 / 255 },
+	[PRINTER_TYPE_WARN] = { r = 255 / 255, g = 200 / 255, b = 0 / 255 },
 	[PRINTER_TYPE_ERROR] = { r = 220 / 255, g = 96 / 255, b = 96 / 255 },
 	[PRINTER_TYPE_FATAL] = { r = 255 / 255, g = 32 / 255, b = 32 / 255 },
 }
@@ -32,10 +35,10 @@ local printerTypeColLUT = {
 local printerLevelTresholdLUT = {
 	[PRINTER_TYPE_DEBUG] = 0,
 	[PRINTER_TYPE_INFO] = 1,
-	[PRINTER_TYPE_ERROR] = 2,
-	[PRINTER_TYPE_FATAL] = 3,
+	[PRINTER_TYPE_WARN] = 2,
+	[PRINTER_TYPE_ERROR] = 3,
+	[PRINTER_TYPE_FATAL] = 4,
 }
-
 
 local function makePrinter(printerType)
 	local typeStr = printerTypeStrLUT[printerType]
@@ -83,6 +86,7 @@ end
 
 local dbg = makePrinter(PRINTER_TYPE_DEBUG)
 local nfo = makePrinter(PRINTER_TYPE_INFO)
+local wrn = makePrinter(PRINTER_TYPE_WARN)
 local err = makePrinter(PRINTER_TYPE_ERROR)
 local ftl = makePrinter(PRINTER_TYPE_FATAL)
 
@@ -91,6 +95,7 @@ Logging.PrintLevel = 0
 
 Logging.LogDebug = dbg
 Logging.LogInfo = nfo
+Logging.LogWarn = wrn
 Logging.LogError = err
 Logging.LogFatal = ftl
 
