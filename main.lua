@@ -61,8 +61,8 @@ function love.load(args)
 	print(string.format("Running %s/%s v%s%s", LS13.Info.Name, LS13.Info.Ident, LS13.Info.Version,
 		branch and " (" .. branch .. "/" .. head .. ")" or ""))
 	xpcall(function()
-		shared.load(args)
-		LS13.load(args)
+		shared.load()
+		LS13.load()
 	end, handleError)
 end
 
