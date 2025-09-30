@@ -1,4 +1,4 @@
-local parsers = {
+return {
 	-- Attribution = require("shared.prototype.parsers.attribution"),
 	-- Credit = require("shared.prototype.parsers.credit"),
 
@@ -7,5 +7,3 @@ local parsers = {
 	Sound = require("shared.prototype.parsers.sound"),
 	Font = require("shared.prototype.parsers.font"),
 }
-
-return parsers

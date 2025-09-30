@@ -2,6 +2,7 @@ local GraphicType = {
 	Static = "static",
 	Animated = "animated",
 	NineSlice = "nineSlice",
+	Directional = "directional",
 }
 
 return function(node)
@@ -19,15 +20,7 @@ return function(node)
 		fps = node.FPS or 10,
 	}
 
-	local img
-	local success, err = pcall(function()
-		img = love.graphics.newImage(data.fileName, { linear = false })
-	end)
-
-	if not success then
-		LS13.Logging.LogError("Failed to load image %s: %s, falling back.", data.fileName, err)
-		img = love.graphics.newImage("resources/textures/core/default.png")
-	end
+	local img = LS13.AssetManager.Loader.Load(data.fileName)
 
 	data.image = img
 	LS13.AssetManager.Push(data, data.id)

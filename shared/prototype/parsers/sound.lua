@@ -12,15 +12,7 @@ return function(node)
 		author = node.Author and node.Author
 	}
 
-	local snd
-	local success, err = pcall(function()
-		snd = love.audio.newSource(data.fileName, data.soundMode)
-	end)
-
-	if not success then
-		LS13.Logging.LogError("Failed to load sound %s: %s, falling back.", data.fileName, err)
-		snd = love.audio.newSource("resources/sound/core/default.ogg", "static")
-	end
+	local snd = LS13.AssetManager.Loader.Load(data.fileName, { mode = data.soundMode })
 
 	snd:setLooping(data.looping)
 	snd:setVolume(data.volume)
