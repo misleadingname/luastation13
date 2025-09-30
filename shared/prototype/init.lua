@@ -5,21 +5,6 @@ local handler = require("lib.xml2lua.xmlhandler.tree")
 local PrototypeManager = {}
 local parsedPrototypes = {}
 
-local function deepMerge(target, source)
-	for k, v in pairs(source) do
-		if type(v) == "table" then
-			if type(target[k]) ~= "table" then
-				target[k] = {}
-			end
-			deepMerge(target[k], v)
-		else
-			if target[k] == nil then
-				target[k] = v
-			end
-		end
-	end
-end
-
 function PrototypeManager.RawParse(xmlString)
 	local tree = handler:new()
 	local parser = xml2lua.parser(tree)
@@ -58,7 +43,7 @@ function PrototypeManager.Parse(path, preload)
 				if parent and parent ~= node._attr.Id then
 					local data = parsedPrototypes[parent]
 					if data then
-						deepMerge(node, data)
+						node = lume.merge(data, node)
 					end
 				end
 
