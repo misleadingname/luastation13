@@ -24,7 +24,7 @@ function loader.Load(path, options)
 		end
 	end
 
-	if not path or not love.filesystem.getInfo(path) then
+	if not path then
 		error("Invalid asset path")
 	end
 
@@ -37,7 +37,7 @@ function loader.Load(path, options)
 	end)
 
 	if not success then
-		error(string.format("Failed to load asset %s: %s", path, err))
+		error(string.format("Failed to load asset (fallback failed!!!) %s: %s", path, err))
 	end
 
 	loaded[path] = asset

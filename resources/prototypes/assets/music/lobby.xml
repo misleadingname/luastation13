@@ -34,7 +34,7 @@
 		<Volume>0.2</Volume>
 
 		<Name>Tintin on the Moon</Name>
-		<Author>RMX: ??? / OG: Jeroen Tel</Author>
+		<Author>RMX: Cuboos / OG: Jeroen Tel</Author>
 	</Sound>
 
 	<Sound Id="Music.Lobby.Thunderdome" Parent="Music.BaseLobby">
