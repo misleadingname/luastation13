@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LS13>
+	<Graphic Id="Graphic.Tile.TileFloor" Type="Static">
+		<FileName>resources/textures/tiles/floor/tile.png</FileName>
+	</Graphic>
+</LS13>
