@@ -27,7 +27,7 @@ end
 function ui.Test()
 	local testObj = LS13.ECSManager.entity()
 	testObj:give("Transform", Vector2.new(32, 32))
-	testObj:give("Graphic", "")
+	testObj:give("Graphic", "Graphic.Gilb")
 	world:addEntity(testObj)
 end
 
