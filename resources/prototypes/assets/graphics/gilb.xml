@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <LS13>
 	<Graphic Id="Graphic.Gilb" Type="Static">
-		<FileName>resources/textures/gsilb.png</FileName>
+		<FileName>resources/textures/gilb.png</FileName>
 	</Graphic>
 </LS13>
