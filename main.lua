@@ -55,8 +55,8 @@ function love.load(args)
 	LS13.Role = runMode
 	LS13.LaunchArgs = args
 
-	local head = love.filesystem.read(".git/ORIG_HEAD"):gsub("\n", "")
-	local branch = love.filesystem.read(".git/HEAD"):gsub("^ref: .*/", ""):gsub("\n", "")
+	local head = (love.filesystem.read(".git/refs/heads/master") or "UKNOWN"):gsub("\n", "")
+	local branch = (love.filesystem.read(".git/HEAD") or "UKNOWN"):gsub("^ref: .*/", ""):gsub("\n", "")
 
 	print(string.format("Running %s/%s v%s%s", LS13.Info.Name, LS13.Info.Ident, LS13.Info.Version,
 		branch and " (" .. branch .. "/" .. head .. ")" or ""))
