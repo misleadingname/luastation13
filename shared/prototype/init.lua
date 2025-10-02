@@ -95,6 +95,7 @@ function PrototypeManager.Parse(path, preload)
 				progress = true
 			end
 		end
+
 		unresolved = remaining
 	end
 
