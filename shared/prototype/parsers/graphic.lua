@@ -10,7 +10,7 @@ return function(node)
 		id = node._attr and node._attr.Id and node._attr.Id,
 		type = "graphic",
 
-		fileName = node.FileName or "resources/textures/core/default.png",
+		fileName = node.FileName or "resources/textures/core/error.png",
 		graphicType = GraphicType[node._attr.Type] or GraphicType.Static,
 		frameWidth = node.FrameWidth or 32,
 		frameHeight = node.FrameHeight or 32,
