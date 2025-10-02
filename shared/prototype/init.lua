@@ -124,4 +124,16 @@ function PrototypeManager.ParseAll()
 	recurse(basePath)
 end
 
+local channel = love.thread.getChannel("PrototypeWatchdog")
+local thread = love.thread.newThread("shared/prototype/watchdog.lua")
+thread:start()
+
+function PrototypeManager.UpdateWatchdog()
+	local path = channel:pop()
+	if path then
+		LS13.Logging.LogInfo("Prototype file refreshed, reloading %s", path)
+		PrototypeManager.Parse(path)
+	end
+end
+
 return PrototypeManager

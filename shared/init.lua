@@ -35,6 +35,7 @@ function shared.load()
 end
 
 function shared.update(dt)
+	LS13.PrototypeManager.UpdateWatchdog()
 	lurker.update()
 end
 
