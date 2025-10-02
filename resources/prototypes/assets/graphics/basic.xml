@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <LS13>
 	<Graphic Id="Graphic.Fallback" Type="Static">
-		<FileName>resources/textures/core/default.png</FileName>
+		<FileName>resources/textures/core/error.png</FileName>
 	</Graphic>
 
 	<Graphic Id="Graphic.FallbackObject" Type="Static">
-		<FileName>resources/textures/core/default_obj.png</FileName>
+		<FileName>resources/textures/core/error_item.png</FileName>
 	</Graphic>
 
 	<Graphic Id="Graphic.TestAnimated" Type="Animated">

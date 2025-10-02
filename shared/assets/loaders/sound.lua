@@ -6,7 +6,7 @@ return function(path, options)
 
 	if not success then
 		LS13.Logging.LogError(string.format("Failed to load sound: %s %s", path, err))
-		snd = love.audio.newSource("resources/sound/core/default.ogg", "static")
+		snd = love.audio.newSource("resources/sound/core/error.ogg", "static")
 	end
 
 	return snd

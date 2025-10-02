@@ -8,7 +8,7 @@ return function(path, options)
 
 	if not success then
 		LS13.Logging.LogError(string.format("Failed to load image: %s %s", path, err))
-		img = love.graphics.newImage("resources/textures/core/default.png", { linear = false })
+		img = love.graphics.newImage("resources/textures/core/error.png", { linear = false })
 	end
 
 	return img
