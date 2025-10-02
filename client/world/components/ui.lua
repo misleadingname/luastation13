@@ -12,15 +12,17 @@ local uiTransform = ecs.component("UiTransform", function(c, position, rotation,
 	c.position = position or Vector2.new(0, 0)
 	c.size = size or Vector2.new(100, 100)
 	c.rotation = rotation or 0
+
+	c.cpos = Vector2.new(0, 0)
 end)
 LS13.ECS.Components.UiTransform = uiTransform
 
 local uiLayout = ecs.component("UiLayout", function(c, type, padding, spacing, align, justify)
-	c.type = type or "vertical"
+	c.type = type or "vertical" -- vertical, horizontal
 	c.padding = padding or Vector2.new(0, 0)
 	c.spacing = spacing or 0
-	c.align = align or "begin"
-	c.justify = justify or "center"
+	c.align = align or "begin"  -- begin, center, end
+	c.justify = justify or "begin" -- begin, center, end, stretch
 end)
 LS13.ECS.Components.UiLayout = uiLayout
 

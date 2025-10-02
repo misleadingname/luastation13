@@ -26,6 +26,25 @@ function layoutSystem:update()
 
 		unsorted = remaining
 	end
+
+	for _, ent in ipairs(sorted) do
+		if ent.UiElement.parent then
+			if ent.UiElement.parent.UiLayout then
+				-- TODO: this
+			else
+				ent.UiTransform.cpos.x = ent.UiElement.parent.UiTransform.cpos.x + ent.UiTransform.position.x
+				ent.UiTransform.cpos.y = ent.UiElement.parent.UiTransform.cpos.y + ent.UiTransform.position.y
+			end
+		else
+			ent.UiTransform.cpos.x = ent.UiTransform.position.x
+			ent.UiTransform.cpos.y = ent.UiTransform.position.y
+		end
+	end
+
+	for _, ent in ipairs(sorted) do
+		LS13.Logging.LogDebug("%s <- %s", ent.UiTransform.cpos,
+			ent.UiElement.parent and ent.UiElement.parent.UiTransform.cpos or nil)
+	end
 end
 
 LS13.ECS.Systems.UiLayoutSystem = layoutSystem

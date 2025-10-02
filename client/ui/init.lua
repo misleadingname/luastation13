@@ -30,14 +30,14 @@ function ui.Test()
 	local ent1 = LS13.ECSManager.entity()
 	local ent2 = LS13.ECSManager.entity()
 
-	ent2:give("Metadata", "child")
-	ent2:give("UiElement", ent1)
-	ent2:give("UiTransform")
-
-	ent1:give("Metadata", "parent")
+	ent1:give("Metadata", "top")
 	ent1:give("UiElement")
-	ent1:give("UiTransform")
-	ent1:give("UiLayout")
+	ent1:give("UiTransform", Vector2.new(10, 10))
+
+	ent2:give("Metadata", "middle")
+	ent2:give("UiElement", ent1)
+	ent2:give("UiTransform", Vector2.new(10, 10))
+	-- ent2:give("UiLayout")
 
 	world:addEntity(ent2)
 	world:addEntity(ent1)
