@@ -14,3 +14,10 @@ if CLIENT then
 elseif SERVER then
 
 end
+
+LS13.ECSManager.entity = function(name, ...)
+	local entity = LS13.ECSManager.entity(...)
+	entity:give("Metadata", name)
+
+	return entity
+end
