@@ -28,12 +28,13 @@ function layoutSystem:update()
 	end
 
 	for _, ent in ipairs(sorted) do
-		if ent.UiElement.parent then
-			if ent.UiElement.parent.UiLayout then
-				-- TODO: this
+		local parent = ent.UiElement.parent
+		if parent then
+			if parent.UiLayout then
+				-- TODO: layout
 			else
-				ent.UiTransform.cpos.x = ent.UiElement.parent.UiTransform.cpos.x + ent.UiTransform.position.x
-				ent.UiTransform.cpos.y = ent.UiElement.parent.UiTransform.cpos.y + ent.UiTransform.position.y
+				ent.UiTransform.cpos.x = parent.UiTransform.cpos.x + ent.UiTransform.position.x
+				ent.UiTransform.cpos.y = parent.UiTransform.cpos.y + ent.UiTransform.position.y
 			end
 		else
 			ent.UiTransform.cpos.x = ent.UiTransform.position.x
