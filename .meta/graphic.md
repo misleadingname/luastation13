@@ -1,5 +1,5 @@
 # `<Graphic>`s and you.
-###### Discuss the prototype on [this relevant issue](https://github.com/misleadingname/luastation13/issues/2).
+###### Discuss the prototype in [this relevant issue](https://github.com/misleadingname/luastation13/issues/2).
 
 A `<Graphic>` defines how an image or sprite sheet is represented in the engine.
 Graphics are not gameplay objects; they are abstract references used by renderers and components.
