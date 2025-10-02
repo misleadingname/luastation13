@@ -5,8 +5,6 @@ require("shared.world.components.transform")
 require("shared.world.components.rendering")
 require("shared.world.components.physics")
 
-require("shared.world.systems.rendering.graphicSystem")
-
 if CLIENT then
 	require("client.world.components.ui")
 

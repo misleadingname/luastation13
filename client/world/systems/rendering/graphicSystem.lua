@@ -1,4 +1,4 @@
-local graphicsRenderSystem = LS13.ECS.Systems.GraphicsRenderSystem
+local graphicsRenderSystem = LS13.ECSManager.system({ pool = { "Transform", "Graphic" } })
 
 function graphicsRenderSystem:draw()
 	for _, ent in ipairs(self.pool) do
@@ -13,3 +13,5 @@ function graphicsRenderSystem:draw()
 		love.graphics.draw(graphic.image, position.x, position.y)
 	end
 end
+
+LS13.ECS.Systems.GraphicsRenderSystem = graphicsRenderSystem
