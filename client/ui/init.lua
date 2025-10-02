@@ -27,14 +27,15 @@ function ui.mouseReleased(x, y, button)
 end
 
 function ui.Test()
-	local ent1 = LS13.ECSManager.entity()
-	ent1:give("UiElement")
-	ent1:give("UiTransform")
-	ui_world:addEntity(ent1)
 	local ent2 = LS13.ECSManager.entity()
 	ent2:give("UiElement", ent1)
 	ent2:give("UiTransform")
 	ui_world:addEntity(ent2)
+	local ent1 = LS13.ECSManager.entity()
+	ent1:give("UiElement")
+	ent1:give("UiTransform")
+	ent1:give("UiLayout")
+	ui_world:addEntity(ent1)
 end
 
 return ui
