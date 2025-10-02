@@ -34,8 +34,12 @@ function ui.Test()
 	ent2:give("UiTransform")
 
 	ent1:give("UiElement")
-	ent1:give("UiTransform")
-	ent1:give("UiLayout")
+	ent1:give("UiTransform", Vector2.new(10, 10))
+
+	ent2:give("Metadata", "middle")
+	ent2:give("UiElement", ent1)
+	ent2:give("UiTransform", Vector2.new(10, 10))
+	-- ent2:give("UiLayout")
 
 	LS13.Logging.LogInfo(ent1:getComponent("Metadata").name)
 	LS13.Logging.LogInfo(ent2:getComponent("Metadata").name)

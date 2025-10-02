@@ -10,9 +10,9 @@ function vector2.new(x, y)
 end
 
 function vector2:__index(key)
-	if key == 1 or key == "X" then
+	if key == 1 or key == "x" then
 		return rawget(self, "x")
-	elseif key == 2 or key == "Y" then
+	elseif key == 2 or key == "y" then
 		return rawget(self, "y")
 	else
 		return rawget(vector2, key)
