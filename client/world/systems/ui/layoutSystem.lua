@@ -42,10 +42,10 @@ function layoutSystem:update()
 		end
 	end
 
-	for _, ent in ipairs(sorted) do
-		LS13.Logging.LogDebug("%s <- %s", ent.UiTransform.cpos,
-			ent.UiElement.parent and ent.UiElement.parent.UiTransform.cpos or nil)
-	end
+	-- for _, ent in ipairs(sorted) do
+	-- 	LS13.Logging.LogDebug("%s <- %s", ent.UiTransform.cpos,
+	-- 		ent.UiElement.parent and ent.UiElement.parent.UiTransform.cpos or nil)
+	-- end
 end
 
 LS13.ECS.Systems.UiLayoutSystem = layoutSystem

@@ -15,8 +15,9 @@ elseif SERVER then
 
 end
 
+local entMethod = LS13.ECSManager.entity
 LS13.ECSManager.entity = function(name, ...)
-	local entity = LS13.ECSManager.entity(...)
+	local entity = entMethod(...)
 	entity:give("Metadata", name)
 
 	return entity

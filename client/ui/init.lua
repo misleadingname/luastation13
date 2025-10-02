@@ -41,9 +41,6 @@ function ui.Test()
 	ent2:give("UiTransform", Vector2.new(10, 10))
 	-- ent2:give("UiLayout")
 
-	LS13.Logging.LogInfo(ent1:getComponent("Metadata").name)
-	LS13.Logging.LogInfo(ent2:getComponent("Metadata").name)
-
 	world:addEntity(ent2)
 	world:addEntity(ent1)
 end
