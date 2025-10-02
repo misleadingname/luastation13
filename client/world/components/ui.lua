@@ -7,15 +7,14 @@ local uiElement = ecs.component("UiElement", function(c, parent, visible, enable
 	c.z = z or 0
 end)
 
-local uiTransform = ecs.component("UiTransform", function(c, position, rotation, width, height)
+local uiTransform = ecs.component("UiTransform", function(c, position, rotation, size)
 	c.position = position or Vector2.new(0, 0)
 
 	c.rotation = rotation or 0
-	c.width = width or 1
-	c.height = height or 1
+	c.size = size or Vector2.new(100, 100)
 
-	c.cx = 0
-	c.cy = 0
+	c.cpos = position or Vector2.new(0, 0)
+	c.size = size or Vector2.new(100, 100)
 end)
 
 local uiLayout = ecs.component("UiLayout", function(c, type, padding, spacing, align, justify)
