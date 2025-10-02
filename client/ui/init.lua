@@ -7,11 +7,13 @@ function ui.init()
 	ui_world = LS13.ECSManager.world()
 
 	ui_world:addSystems(
-		systems.GraphicsRenderSystem
+		systems.GraphicsRenderSystem,
+		systems.UiLayoutSystem
 	)
 end
 
 function ui.update(dt)
+	ui_world:emit("update")
 end
 
 function ui.draw()
@@ -25,10 +27,14 @@ function ui.mouseReleased(x, y, button)
 end
 
 function ui.Test()
-	local testObj = LS13.ECSManager.entity()
-	testObj:give("Transform", Vector2.new(32, 32))
-	testObj:give("Graphic", "Graphic.Gilb")
-	ui_world:addEntity(testObj)
+	local ent1 = LS13.ECSManager.entity()
+	ent1:give("UiElement")
+	ent1:give("UiTransform")
+	ui_world:addEntity(ent1)
+	local ent2 = LS13.ECSManager.entity()
+	ent2:give("UiElement", ent1)
+	ent2:give("UiTransform")
+	ui_world:addEntity(ent2)
 end
 
 return ui
