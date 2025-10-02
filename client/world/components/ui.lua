@@ -9,19 +9,15 @@ end)
 
 local uiTransform = ecs.component("UiTransform", function(c, position, rotation, size)
 	c.position = position or Vector2.new(0, 0)
-
+	c.size = size or Vector2.new(100, 100)
 	c.rotation = rotation or 0
-	c.size = size or Vector2.new(100, 100)
-
-	c.cpos = position or Vector2.new(0, 0)
-	c.size = size or Vector2.new(100, 100)
 end)
 
 local uiLayout = ecs.component("UiLayout", function(c, type, padding, spacing, align, justify)
-	c.type = type or "horizontal"
+	c.type = type or "vertical"
 	c.padding = padding or Vector2.new(0, 0)
 	c.spacing = spacing or 0
-	c.align = align or "center"
+	c.align = align or "begin"
 	c.justify = justify or "center"
 end)
 

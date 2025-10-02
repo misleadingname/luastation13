@@ -1,12 +1,12 @@
 local systems = LS13.ECS.Systems
 
 local ui = {}
-local world
+local ui_world
 
 function ui.init()
-	world = LS13.ECSManager.world()
+	ui_world = LS13.ECSManager.world()
 
-	world:addSystems(
+	ui_world:addSystems(
 		systems.GraphicsRenderSystem
 	)
 end
@@ -15,7 +15,7 @@ function ui.update(dt)
 end
 
 function ui.draw()
-	world:emit("draw")
+	ui_world:emit("draw")
 end
 
 function ui.mousePressed(x, y, button)
@@ -28,7 +28,7 @@ function ui.Test()
 	local testObj = LS13.ECSManager.entity()
 	testObj:give("Transform", Vector2.new(32, 32))
 	testObj:give("Graphic", "Graphic.Gilb")
-	world:addEntity(testObj)
+	ui_world:addEntity(testObj)
 end
 
 return ui
