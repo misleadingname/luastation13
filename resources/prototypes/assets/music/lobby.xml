@@ -116,4 +116,12 @@
 		<Name>War Without Reason</Name>
 		<Author>Heaven Pierce Her</Author>
 	</Sound>
+
+	<Sound Id="Music.Lobby.WSERemix" Parent="Music.BaseLobby">
+		<FileName>resources/sound/music/lobby/wse_remix.ogg</FileName>
+		<Volume>0.4</Volume>
+
+		<Name>WSE Remix</Name>
+		<Author>Anonymous</Author>
+	</Sound>
 </LS13>
