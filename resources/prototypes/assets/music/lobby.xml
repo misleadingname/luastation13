@@ -108,4 +108,12 @@
 		<Name>Quantum Leaps</Name>
 		<Author>Sonoton Music</Author>
 	</Sound>
+
+	<Sound Id="Music.Lobby.QuantumLeaps" Parent="Music.BaseLobby">
+		<FileName>resources/sound/music/lobby/war_without_reason.ogg</FileName>
+		<Volume>0.3</Volume>
+
+		<Name>War Without Reason</Name>
+		<Author>Heaven Pierce Her</Author>
+	</Sound>
 </LS13>
