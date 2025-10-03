@@ -50,7 +50,7 @@ function shared.load()
 		LS13.Util.PrintTable(info)
 
 		LS13.Logging.LogDebug("Fused! Mounting resource directory: %s", path)
-		local mounted = love.filesystem.mount(path, "resources")
+		local mounted = love.filesystem.mountFullPath(path, "resources")
 		if not mounted then
 			LS13.Logging.LogFatal("Failed to mount resource directory")
 			love.event.quit(1)
