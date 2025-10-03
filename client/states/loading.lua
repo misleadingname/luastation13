@@ -7,7 +7,6 @@ function LoadingState:enter()
 end
 
 function LoadingState:update(dt)
-	frame = frame + 1
 	if frame == 1 then
 		LS13.PrototypeManager.ParseAll()
 
@@ -22,9 +21,9 @@ function LoadingState:update(dt)
 
 		love.window.setTitle(string.format("%s: %s", title, splash.value))
 		LS13.StateManager.switchState("Menu")
-	elseif frame == 2 then
-		Crash("failed to change states")
 	end
+
+	frame = frame + 1
 end
 
 function LoadingState:draw()

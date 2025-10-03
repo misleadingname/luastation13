@@ -9,10 +9,6 @@ function HandleError(error)
 	end
 end
 
-function Crash(reason)
-	error(string.format("SOOOD!!! (crash) %s", reason))
-end
-
 local shared = {}
 
 function shared.load()

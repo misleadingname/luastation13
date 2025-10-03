@@ -127,8 +127,16 @@
 
 	<Sound Id="Music.Lobby.Camera01" Parent="Music.BaseLobby">
 		<FileName>resources/sound/music/lobby/camera01.ogg</FileName>
-		
+
 		<Name>2023-01-05_21-51-57</Name>
 		<Author>Camera</Author>
+	</Sound>
+
+	<Sound Id="Music.Lobby.Infinity" Parent="Music.BaseLobby">
+		<FileName>resources/sound/music/lobby/infinity.ogg</FileName>
+		<Volume>0.4</Volume>
+
+		<Name>The Start of Infinity</Name>
+		<Author>Axosun</Author>
 	</Sound>
 </LS13>
