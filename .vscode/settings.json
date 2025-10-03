@@ -1,4 +1,12 @@
 {
 	"stylua.targetReleaseVersion": "latest",
-	"Lua.diagnostics.globals": ["love", "LS13"]
+	"Lua.diagnostics.globals": [
+		"love",
+		"LS13"
+	],
+	"diffEditor.ignoreTrimWhitespace": false,
+	"Lua.workspace.checkThirdParty": false,
+	"redhat.telemetry.enabled": false,
+	"git.enableSmartCommit": true,
+	"editor.insertSpaces": false,
 }
