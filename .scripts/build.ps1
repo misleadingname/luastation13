@@ -137,9 +137,18 @@ try {
         exit 1
     }
 
-    $loveDir = $config['build']['LoveDirectory']
-    $executableName = $config['windows']['ExecutableName']
-    $includeDLLs = $config['windows']['IncludeDLLs'] -eq 'true'
+    $platform = $args[0] ?? "windows"
+    $platform = $platform.ToLower()
+
+    $platformConfig = $config[$platform]
+    if (-not $platformConfig) {
+        Write-Styled "Invalid platform: $platform" -Style Error
+        exit 1
+    }
+
+    $loveDir = $platformConfig['LoveDirectory']
+    $executableName = $platformConfig['ExecutableName']
+    $includeDLLs = $platformConfig['IncludeDLLs'] -eq 'true'
 
     $extraFiles = if ($config['build']['ExtraFiles']) {
         $config['build']['ExtraFiles'] -split ',' | ForEach-Object { $_.Trim() }
@@ -158,10 +167,18 @@ try {
     Write-Host ""
 
     # Validate LÖVE directory
-    $loveExePath = Join-Path $loveDir "love.exe"
-    if (-not (Test-Path $loveExePath)) {
-        Write-Styled "LÖVE executable not found: $loveExePath" -Style Error
-        exit 1
+    if ($PSVersionTable.Platform -eq 'Win32NT') {
+        $loveExePath = Join-Path $loveDir "love.exe"
+        if (-not (Test-Path $loveExePath)) {
+            Write-Styled "LÖVE executable not found: $loveExePath" -Style Error
+            exit 1
+        }
+    } else {
+        $loveExePath = Join-Path $loveDir "love"
+        if (-not (Test-Path $loveExePath)) {
+            Write-Styled "LÖVE executable not found: $loveExePath" -Style Error
+            exit 1
+        }
     }
 
     # Create build directory
@@ -230,7 +247,8 @@ try {
     Write-Section -Title "Building Executable" -Width 70
     $outputExePath = Join-Path $buildDir $executableName
 
-    Write-Styled "Concatenating love.exe + game.love..." -Style Info
+    Start-Spinner -Text "Concatenating love.exe + game.love..."
+    Stop-Spinner
 
     $loveExeBytes = [System.IO.File]::ReadAllBytes($loveExePath)
     $loveFileBytes = [System.IO.File]::ReadAllBytes($loveFilePath)
