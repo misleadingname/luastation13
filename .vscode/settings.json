@@ -8,5 +8,5 @@
 	"Lua.workspace.checkThirdParty": false,
 	"redhat.telemetry.enabled": false,
 	"git.enableSmartCommit": true,
-	"editor.insertSpaces": false,
+	"editor.insertSpaces": false
 }
