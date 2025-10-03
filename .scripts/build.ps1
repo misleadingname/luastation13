@@ -1,7 +1,9 @@
 #Requires -Version 7.0
 
 [CmdletBinding()]
-param()
+param(
+    [string]$Platform = "windows"
+)
 
 Import-Module "$PSScriptRoot\_common.psm1" -Force
 
@@ -137,7 +139,7 @@ try {
         exit 1
     }
 
-    $platform = $args[0] ?? "windows"
+    $platform = $Platform ?? "windows"
     $platform = $platform.ToLower()
 
     $platformConfig = $config[$platform]
@@ -159,6 +161,7 @@ try {
     } else { @() }
 
     Write-Section -Title "Build Settings" -Width 70
+    Write-KeyValue -Key "Platform" -Value $platform
     Write-KeyValue -Key "LÖVE Directory" -Value $loveDir
     Write-KeyValue -Key "Executable Name" -Value $executableName
     Write-KeyValue -Key "Include DLLs" -Value $includeDLLs
@@ -167,7 +170,7 @@ try {
     Write-Host ""
 
     # Validate LÖVE directory
-    if ($PSVersionTable.Platform -eq 'Win32NT') {
+    if ($platform -eq 'windows') {
         $loveExePath = Join-Path $loveDir "love.exe"
         if (-not (Test-Path $loveExePath)) {
             Write-Styled "LÖVE executable not found: $loveExePath" -Style Error
