@@ -30,17 +30,19 @@ function layoutSystem:update()
 
 	-- update layout
 	for _, ent in ipairs(sorted) do
+		local trans = ent.UiTransform
 		local parent = ent.UiElement.parent
 		if parent then
+			local parentTrans = ent.UiElement.parent.UiTransform
 			if parent.UiLayout then
 				-- TODO: layout
 			else
-				ent.UiTransform.cpos.x = parent.UiTransform.cpos.x + ent.UiTransform.position.x
-				ent.UiTransform.cpos.y = parent.UiTransform.cpos.y + ent.UiTransform.position.y
+				trans.cpos.x = parentTrans.cpos.x + trans.position.x
+				trans.cpos.y = parentTrans.cpos.y + trans.position.y
 			end
 		else
-			ent.UiTransform.cpos.x = ent.UiTransform.position.x
-			ent.UiTransform.cpos.y = ent.UiTransform.position.y
+			trans.cpos.x = trans.position.x
+			trans.cpos.y = trans.position.y
 		end
 	end
 

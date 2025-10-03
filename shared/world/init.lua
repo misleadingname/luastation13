@@ -9,7 +9,8 @@ require("shared.world.components.physics")
 if CLIENT then
 	require("client.world.components.ui")
 
-	require("client.world.systems.rendering.graphicSystem")
+	require("client.world.systems.rendering.renderViewportSystem")
+	require("client.world.systems.ui.rendering.uiLabelSystem")
 	require("client.world.systems.ui.layoutSystem")
 elseif SERVER then
 

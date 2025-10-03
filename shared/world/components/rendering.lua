@@ -7,5 +7,9 @@ local graphicComponent = ecs.component("Graphic", function(c, graphicId, visible
 	c.tint = Color.new(255, 255, 255, 255)
 	c.playing = playing or false
 end)
-
 LS13.ECS.Components.Graphic = graphicComponent
+
+local rendererComponent = ecs.component("Renderer", function(c, visible)
+	c.visible = visible or true
+end)
+LS13.ECS.Components.Renderer = rendererComponent

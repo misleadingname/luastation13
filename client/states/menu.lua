@@ -28,7 +28,7 @@ function MenuState:enter()
 	lobbyMusic = LS13.AssetManager.GetPrefixed("Music.Lobby")
 	MenuState:rollSong()
 
-	LS13.UI.Test()
+	LS13.UI.test_scene()
 end
 
 function MenuState:update(dt)
