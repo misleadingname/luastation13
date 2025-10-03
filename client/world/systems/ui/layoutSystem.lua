@@ -1,6 +1,7 @@
 local layoutSystem = LS13.ECSManager.system({ pool = { "UiElement", "UiTransform" } })
 
 function layoutSystem:update()
+	-- sort the entities in such a way that the parent is always before the child
 	local unsorted = self.pool
 	local progress = true
 	local sorted = {}
@@ -27,6 +28,7 @@ function layoutSystem:update()
 		unsorted = remaining
 	end
 
+	-- update layout
 	for _, ent in ipairs(sorted) do
 		local parent = ent.UiElement.parent
 		if parent then
@@ -42,6 +44,7 @@ function layoutSystem:update()
 		end
 	end
 
+	-- -- debug print
 	-- for _, ent in ipairs(sorted) do
 	-- 	LS13.Logging.LogDebug("%s <- %s", ent.UiTransform.cpos,
 	-- 		ent.UiElement.parent and ent.UiElement.parent.UiTransform.cpos or nil)

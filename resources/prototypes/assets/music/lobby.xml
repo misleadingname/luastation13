@@ -6,7 +6,7 @@
 	</Sound>
 
 	<Sound Id="Music.Lobby.FlipFlap" Parent="Music.BaseLobby">
-		<FileName>resources/sound/music/lobby/flip-flap.mod</FileName>
+		<FileName>resources/sound/lobby/flip-flap.mod</FileName>
 		<Volume>0.5</Volume>
 
 		<Name>Flip-Flap</Name>
@@ -14,7 +14,7 @@
 	</Sound>
 
 	<Sound Id="Music.Lobby.LeisurelyVoice" Parent="Music.BaseLobby">
-		<FileName>resources/sound/music/lobby/leisurely_voice.xm</FileName>
+		<FileName>resources/sound/lobby/leisurely_voice.xm</FileName>
 		<Volume>0.4</Volume>
 
 		<Name>Leisurely Voice</Name>
@@ -22,7 +22,7 @@
 	</Sound>
 
 	<Sound Id="Music.Lobby.Aggravated" Parent="Music.BaseLobby">
-		<FileName>resources/sound/music/lobby/aggravated.it</FileName>
+		<FileName>resources/sound/lobby/aggravated.it</FileName>
 		<Volume>0.6</Volume>
 
 		<Name>Aggravated Assault</Name>
@@ -30,7 +30,7 @@
 	</Sound>
 
 	<Sound Id="Music.Lobby.Title3" Parent="Music.BaseLobby">
-		<FileName>resources/sound/music/lobby/title3.ogg</FileName>
+		<FileName>resources/sound/lobby/title3.ogg</FileName>
 		<Volume>0.2</Volume>
 
 		<Name>Tintin on the Moon</Name>
@@ -38,7 +38,7 @@
 	</Sound>
 
 	<Sound Id="Music.Lobby.Thunderdome" Parent="Music.BaseLobby">
-		<FileName>resources/sound/music/lobby/thunderdome.ogg</FileName>
+		<FileName>resources/sound/lobby/thunderdome.ogg</FileName>
 		<Volume>0.2</Volume>
 
 		<Name>THUNDERDOME</Name>
@@ -46,7 +46,7 @@
 	</Sound>
 
 	<Sound Id="Music.Lobby.ThePenis" Parent="Music.BaseLobby">
-		<FileName>resources/sound/music/lobby/thepenis.it</FileName>
+		<FileName>resources/sound/lobby/thepenis.it</FileName>
 		<Volume>0.7</Volume>
 
 		<Name>The Penis (Eek!)</Name>
@@ -54,7 +54,7 @@
 	</Sound>
 
 	<Sound Id="Music.Lobby.Title2" Parent="Music.BaseLobby">
-		<FileName>resources/sound/music/lobby/title2.ogg</FileName>
+		<FileName>resources/sound/lobby/title2.ogg</FileName>
 		<Volume>0.3</Volume>
 
 		<Name>Robocop</Name>
@@ -62,7 +62,7 @@
 	</Sound>
 
 	<Sound Id="Music.Lobby.Chollima" Parent="Music.BaseLobby">
-		<FileName>resources/sound/music/lobby/chollima.ogg</FileName>
+		<FileName>resources/sound/lobby/chollima.ogg</FileName>
 		<Volume>0.2</Volume>
 
 		<Name>Chollima On The Wing</Name>
@@ -70,7 +70,7 @@
 	</Sound>
 
 	<Sound Id="Music.Lobby.Superposition" Parent="Music.BaseLobby">
-		<FileName>resources/sound/music/lobby/superposition.ogg</FileName>
+		<FileName>resources/sound/lobby/superposition.ogg</FileName>
 		<Volume>0.3</Volume>
 
 		<Name>Superposition</Name>
@@ -78,7 +78,7 @@
 	</Sound>
 
 	<Sound Id="Music.Lobby.Conundrum" Parent="Music.BaseLobby">
-		<FileName>resources/sound/music/lobby/conundrum.it</FileName>
+		<FileName>resources/sound/lobby/conundrum.it</FileName>
 		<Volume>0.8</Volume>
 
 		<Name>Conundrum</Name>
@@ -86,7 +86,7 @@
 	</Sound>
 
 	<Sound Id="Music.Lobby.EndlessSpace" Parent="Music.BaseLobby">
-		<FileName>resources/sound/music/lobby/endless_space.ogg</FileName>
+		<FileName>resources/sound/lobby/endless_space.ogg</FileName>
 		<Volume>0.4</Volume>
 
 		<Name>Endless Space</Name>
@@ -94,7 +94,7 @@
 	</Sound>
 
 	<Sound Id="Music.Lobby.EverHigher" Parent="Music.BaseLobby">
-		<FileName>resources/sound/music/lobby/ever_higher.ogg</FileName>
+		<FileName>resources/sound/lobby/ever_higher.ogg</FileName>
 		<Volume>0.3</Volume>
 
 		<Name>Ever Higher</Name>
@@ -102,7 +102,7 @@
 	</Sound>
 
 	<Sound Id="Music.Lobby.QuantumLeaps" Parent="Music.BaseLobby">
-		<FileName>resources/sound/music/lobby/quantum_leaps.ogg</FileName>
+		<FileName>resources/sound/lobby/quantum_leaps.ogg</FileName>
 		<Volume>0.2</Volume>
 
 		<Name>Quantum Leaps</Name>
@@ -110,7 +110,7 @@
 	</Sound>
 
 	<Sound Id="Music.Lobby.WarWithoutReason" Parent="Music.BaseLobby">
-		<FileName>resources/sound/music/lobby/war_without_reason.ogg</FileName>
+		<FileName>resources/sound/lobby/war_without_reason.ogg</FileName>
 		<Volume>0.2</Volume>
 
 		<Name>War Without Reason</Name>
@@ -118,7 +118,7 @@
 	</Sound>
 
 	<Sound Id="Music.Lobby.WSERemix" Parent="Music.BaseLobby">
-		<FileName>resources/sound/music/lobby/wse_remix.ogg</FileName>
+		<FileName>resources/sound/lobby/wse_remix.ogg</FileName>
 		<Volume>0.4</Volume>
 
 		<Name>WSE Remix</Name>
@@ -126,14 +126,14 @@
 	</Sound>
 
 	<Sound Id="Music.Lobby.Camera01" Parent="Music.BaseLobby">
-		<FileName>resources/sound/music/lobby/camera01.ogg</FileName>
+		<FileName>resources/sound/lobby/camera01.ogg</FileName>
 
 		<Name>2023-01-05_21-51-57</Name>
 		<Author>Camera</Author>
 	</Sound>
 
 	<Sound Id="Music.Lobby.Infinity" Parent="Music.BaseLobby">
-		<FileName>resources/sound/music/lobby/infinity.ogg</FileName>
+		<FileName>resources/sound/lobby/infinity.ogg</FileName>
 		<Volume>0.4</Volume>
 
 		<Name>The Start of Infinity</Name>
