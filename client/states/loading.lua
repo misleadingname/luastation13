@@ -34,4 +34,7 @@ function LoadingState:draw()
 	love.graphics.draw(splash, sx / 2 - w / 2 * scale, sy / 2 - h / 2 * scale, 0, scale, scale)
 end
 
+function LoadingState:exit()
+end
+
 return LoadingState
