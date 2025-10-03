@@ -46,7 +46,7 @@ function love.load(args)
 			minwidth = t.window.minwidth,
 		})
 
-		love.window.setIcon(love.image.newImageData(t.window.icon))
+		_G.iconPath = t.window.icon
 		love.window.setTitle(t.window.title)
 	end
 

@@ -107,7 +107,7 @@ function PrototypeManager.Parse(path, preload)
 end
 
 function PrototypeManager.ParseAll()
-	local basePath = "/resources/prototypes"
+	local basePath = "resources/prototypes"
 
 	local function recurse(path)
 		for _, file in ipairs(love.filesystem.getDirectoryItems(path)) do

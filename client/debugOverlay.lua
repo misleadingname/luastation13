@@ -28,7 +28,7 @@ local lines = {
 
 	{
 		Text = function()
-			return string.format("state: %s", LS13.StateManager:getState().name)
+			return string.format("state: %s", LS13.StateManager.currentState.name)
 		end,
 		Color = function()
 			return { 1, 1, 1, 1 }

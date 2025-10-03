@@ -1,4 +1,4 @@
-local MenuState = { name = "menu" }
+local MenuState = LS13.StateManager.new("Menu")
 
 -- local bg
 local music

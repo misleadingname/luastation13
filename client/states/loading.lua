@@ -1,13 +1,14 @@
-local LoadingState = { name = "loading" }
+local LoadingState = LS13.StateManager.new("Loading")
 
 local splash = love.graphics.newImage("/resources/textures/core/splash.png")
-local frame = false
+local frame = 0
 
 function LoadingState:enter()
 end
 
 function LoadingState:update(dt)
-	if frame then
+	frame = frame + 1
+	if frame == 1 then
 		LS13.PrototypeManager.ParseAll()
 
 		if DEBUG then
@@ -20,11 +21,10 @@ function LoadingState:update(dt)
 		local title = love.window.getTitle()
 
 		love.window.setTitle(string.format("%s: %s", title, splash.value))
-		LS13.StateManager:setState(LS13.States.Menu)
-		return
+		LS13.StateManager.switchState("Menu")
+	elseif frame == 2 then
+		Crash("failed to change states")
 	end
-
-	frame = true
 end
 
 function LoadingState:draw()

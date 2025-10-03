@@ -1,0 +1,13 @@
+[build]
+; Where love.exe and DLLs are located
+LoveDirectory = C:/love-11.5-win32
+; Include Extra next to the executable
+ExtraFiles = LICENSE.txt, resources/
+; Do not pack these files into the executable
+DoNotPack = resources/, LICENSE.txt, README.md
+
+[windows]
+; Final exe name
+ExecutableName = ls13.exe
+; Whether to bundle DLLs
+IncludeDLLs = true
