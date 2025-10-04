@@ -9,5 +9,4 @@ local transformComponent = ecs.component("Transform", function(c, position, z, r
 	c.scaleX = scaleX or 1
 	c.scaleY = scaleY or 1
 end)
-
 LS13.ECS.Components.Transform = transformComponent
