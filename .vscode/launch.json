@@ -8,7 +8,10 @@
 			"program": {
 				"command": "lovec"
 			},
-			"args": [".", "--debug"]
+			"args": [
+				".",
+				"--debug"
+			]
 		},
 		{
 			"type": "lua-local",
@@ -17,7 +20,9 @@
 			"program": {
 				"command": "love"
 			},
-			"args": ["."]
+			"args": [
+				"."
+			]
 		}
 	]
 }

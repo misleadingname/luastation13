@@ -6,13 +6,6 @@ local font
 local fadeTime = 5
 local displayLogs = {}
 
-local function easeOutBack(t, s)
-	s = s or 1.70158 -- overshoot
-	t = t - 1
-	return (t * t * ((s + 1) * t + s) + 1)
-end
-
-
 function console.init()
 	font = LS13.AssetManager.Get("Font.Monospace")
 	init = true
@@ -62,7 +55,7 @@ function console.draw()
 
 		local t = math.min(age / fadeTime * 8, 1)
 		local startX = -100
-		local eased = easeOutBack(t)
+		local eased = Easings.outBack(t, 0, 1, 1)
 
 		local x = startX * (1 - eased)
 		local yy = 0
