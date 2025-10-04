@@ -82,7 +82,7 @@
 		<Volume>0.8</Volume>
 
 		<Name>Conundrum</Name>
-		<Author>???</Author>
+		<Author>Midori</Author>
 	</Sound>
 
 	<Sound Id="Music.Lobby.EndlessSpace" Parent="Music.BaseLobby">
@@ -138,5 +138,13 @@
 
 		<Name>The Start of Infinity</Name>
 		<Author>Axosun</Author>
+	</Sound>
+
+	<Sound Id="Music.Lobby.EveryLightIsBlinkingAtOnce" Parent="Music.BaseLobby">
+		<FileName>resources/sound/lobby/every_light_is_blinking_at_once.ogg</FileName>
+		<Volume>0.4</Volume>
+
+		<Name>Every Light Is Blinking At Once</Name>
+		<Author>Alexander Divine</Author>
 	</Sound>
 </LS13>
