@@ -28,7 +28,7 @@ function Utilities.PrintTable(tbl, var)
 				end
 
 				printTableHelper(v, cnt, visited)
-				str = str .. (",\n")
+				str = str .. ",\n"
 			end
 
 			cnt = cnt - 1
@@ -41,7 +41,9 @@ function Utilities.PrintTable(tbl, var)
 	end
 
 	printTableHelper(tbl, 0, {})
-	if var then return str end
+	if var then
+		return str
+	end
 
 	print(str)
 end
@@ -51,7 +53,9 @@ function Utilities.GetArgument(key)
 	key = "--" .. key
 
 	local arg = lume.find(args, key)
-	if not arg then return nil end
+	if not arg then
+		return nil
+	end
 
 	local value = args[arg]:match("=%w+$")
 	return value or true
@@ -62,7 +66,9 @@ function Utilities.Gilb()
 	local b = bit
 	local p = { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29 }
 	local q = {}
-	for z = 1, 16 do q[z] = (z * 13) % 37 end
+	for z = 1, 16 do
+		q[z] = (z * 13) % 37
+	end
 	local s = (os.time() % 1000) + (math.floor((math.pi - 3) * 1e6) % 1000)
 	local o = {}
 	for n = 1, 4 do
@@ -89,7 +95,9 @@ function Utilities.Gilb()
 				for bit = 0, 7 do
 					local bt = (math.floor(t / m) % 2)
 					local bb = (math.floor(0x5A / m) % 2)
-					if bt ~= bb then xr = xr + m end
+					if bt ~= bb then
+						xr = xr + m
+					end
 					m = m * 2
 				end
 				hsh = (hsh + xr) % 1024
@@ -97,8 +105,12 @@ function Utilities.Gilb()
 		end
 		local v = (math.floor((hsh * 7 + a) % 256) + (n * 37) - ((math.floor((hsh * 7 + a) % 256)) % (n + 1))) % 256
 		v = (v + ({ 103, 105, 108, 98 })[n] + (math.floor(a) % 5) - 3) % 256
-		if v < 32 then v = v + 32 end
-		for z = 1, 6 do v = (v + math.floor((v * 0.37 + z) % 7) - math.floor((v * 0.13) % 5)) % 256 end
+		if v < 32 then
+			v = v + 32
+		end
+		for z = 1, 6 do
+			v = (v + math.floor((v * 0.37 + z) % 7) - math.floor((v * 0.13) % 5)) % 256
+		end
 		o[n] = ({ 103, 105, 108, 98 })[n]
 	end
 	return string.char(o[1], o[2], o[3], o[4])

@@ -10,7 +10,7 @@ function ui.init()
 	ui.cursor = cursor
 
 	ui.world:addSystems(
-	-- update systems
+		-- update systems
 		systems.UiLayoutSystem,
 		systems.UiTargettingSystem,
 
@@ -43,7 +43,9 @@ function ui.test_scene()
 	local ent1 = LS13.ECSManager.entity("parent")
 	local ent2 = LS13.ECSManager.entity("child")
 
-	local text = function() return love.timer.getDelta() end
+	local text = function()
+		return love.timer.getDelta()
+	end
 
 	ent1:give("UiElement")
 	ent1:give("UiTarget")

@@ -15,7 +15,9 @@ function labelSystem:draw()
 
 		local text = label.text
 		if type(text) == "function" then
-			local success, err = pcall(function() text = text() end)
+			local success, err = pcall(function()
+				text = text()
+			end)
 			if not success then
 				LS13.Logging.LogError("Error in label %s function: %s", ent.Metadata.name, err)
 			end

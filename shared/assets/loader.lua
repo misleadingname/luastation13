@@ -4,12 +4,14 @@ local loaders = require("shared.assets.loaders")
 
 local typesLookup = {
 	["png"] = "Graphics",
-	["ogg|wav|mp3|it|mod|xm"] = "Sound"
+	["ogg|wav|mp3|it|mod|xm"] = "Sound",
 }
 
 function loader.Load(path, options)
 	local asset = loaded[path]
-	if asset then return asset end
+	if asset then
+		return asset
+	end
 
 	local ext = string.match(path, "%.(%w+)$")
 	local type

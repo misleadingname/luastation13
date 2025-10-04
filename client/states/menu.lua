@@ -10,7 +10,9 @@ local shuffledSongs = {}
 
 function MenuState:rollSong()
 	LS13.Logging.LogInfo("Rolling lobby song...")
-	if music and music.sound:isPlaying() then music.sound:stop() end
+	if music and music.sound:isPlaying() then
+		music.sound:stop()
+	end
 
 	if #shuffledSongs == 0 then
 		shuffledSongs = lume.shuffle(lume.clone(lobbyMusic))

@@ -8,10 +8,14 @@ function targettingSystem:update(dt)
 		local target = ent.UiTarget
 
 		local lc, rc = -- left top corner, right bottom corner
-			trans.cpos,
-			trans.cpos + trans.size
+			trans.cpos, trans.cpos + trans.size
 
-		if cursor.position.x >= lc.x and cursor.position.x <= rc.x and cursor.position.y >= lc.y and cursor.position.y <= rc.y then
+		if
+			cursor.position.x >= lc.x
+			and cursor.position.x <= rc.x
+			and cursor.position.y >= lc.y
+			and cursor.position.y <= rc.y
+		then
 			target.hovered = true
 		else
 			target.hovered = false
@@ -41,15 +45,15 @@ function targettingSystem:release(btn)
 end
 
 function targettingSystem:draw()
-	if not DEBUG then return end
+	if not DEBUG then
+		return
+	end
 
 	for _, ent in ipairs(self.pool) do
 		local trans = ent.UiTransform
 		local target = ent.UiTarget
 
-		local lc, rc =
-			trans.cpos,
-			trans.cpos + trans.size
+		local lc, rc = trans.cpos, trans.cpos + trans.size
 
 		love.graphics.rectangle("line", lc.x, lc.y, rc.x - lc.x, rc.y - lc.y)
 		if target.hovered then
