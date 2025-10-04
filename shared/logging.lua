@@ -13,8 +13,8 @@ local LOGGER_TYPE_FATAL = 5
 
 local loggerTypeStrLUT = {
 	[LOGGER_TYPE_DEBUG] = "[DEBUG]",
-	[LOGGER_TYPE_INFO]  = "[INFO ]",
-	[LOGGER_TYPE_WARN]  = "[WARN ]",
+	[LOGGER_TYPE_INFO] = "[INFO ]",
+	[LOGGER_TYPE_WARN] = "[WARN ]",
 	[LOGGER_TYPE_ERROR] = "[ERROR]",
 	[LOGGER_TYPE_FATAL] = "[FATAL]",
 }
@@ -60,7 +60,8 @@ local function makeLogger(loggerType)
 
 		local logText
 		if DEBUG then
-			logText = string.format("[%s] [%s] %s %s: %s",
+			logText = string.format(
+				"[%s] [%s] %s %s: %s",
 				os.date("%d/%m/%Y %H:%M:%S"),
 				CLIENT and "CLIENT" or "SERVER",
 				typeStr,
@@ -68,7 +69,8 @@ local function makeLogger(loggerType)
 				message
 			)
 		else
-			logText = string.format("[%s] [%s] %s: %s",
+			logText = string.format(
+				"[%s] [%s] %s: %s",
 				os.date("%d/%m/%Y %H:%M:%S"),
 				CLIENT and "CLIENT" or "SERVER",
 				typeStr,
@@ -77,7 +79,9 @@ local function makeLogger(loggerType)
 		end
 		io.write(logText .. "\n")
 
-		if CLIENT and LS13.Console then LS13.Console.Push(logText, typeCol) end
+		if CLIENT and LS13.Console then
+			LS13.Console.Push(logText, typeCol)
+		end
 		table.insert(logs, {
 			logText,
 		})

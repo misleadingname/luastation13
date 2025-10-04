@@ -14,7 +14,7 @@ local lines = {
 		Color = function()
 			local g = love.timer.getFPS() / 60
 			return { 1, g, g, 1 }
-		end
+		end,
 	},
 
 	{
@@ -23,7 +23,7 @@ local lines = {
 		end,
 		Color = function()
 			return { 1, 1, 1, 1 }
-		end
+		end,
 	},
 
 	{
@@ -32,8 +32,8 @@ local lines = {
 		end,
 		Color = function()
 			return { 1, 1, 1, 1 }
-		end
-	}
+		end,
+	},
 }
 
 function debugOverlay.init()
@@ -59,11 +59,15 @@ local function shadowText(text, x, y, align, color, shadowColor)
 end
 
 function debugOverlay.update(dt)
-	if not init then return end
+	if not init then
+		return
+	end
 end
 
 function debugOverlay.draw()
-	if not init then return end
+	if not init then
+		return
+	end
 	shadowText("!!! debug !!!", 16, 16, "center")
 	for i, line in ipairs(lines) do
 		shadowText(line.Text(), 16, 16 + i * 16, "right", line.Color())

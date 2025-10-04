@@ -12,7 +12,9 @@ function client.load()
 	LS13.UI.init()
 
 	love.window.setIcon(love.image.newImageData(_G.iconPath))
-	if DEBUG then LS13.DebugOverlay = require("client.debugOverlay") end
+	if DEBUG then
+		LS13.DebugOverlay = require("client.debugOverlay")
+	end
 	LS13.StateManager.switchState("Loading")
 end
 
@@ -22,7 +24,9 @@ function client.update(dt)
 		LS13.Console.update(dt)
 		LS13.UI.update(dt)
 
-		if DEBUG and LS13.DebugOverlay then LS13.DebugOverlay.update(dt) end
+		if DEBUG and LS13.DebugOverlay then
+			LS13.DebugOverlay.update(dt)
+		end
 	end, HandleError)
 end
 
@@ -33,7 +37,9 @@ function love.draw()
 		LS13.UI.draw()
 		LS13.Console.draw()
 
-		if DEBUG and LS13.DebugOverlay then LS13.DebugOverlay.draw() end
+		if DEBUG and LS13.DebugOverlay then
+			LS13.DebugOverlay.draw()
+		end
 	end, HandleError)
 end
 

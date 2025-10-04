@@ -10,7 +10,7 @@ function ui.init()
 	ui.cursor = cursor
 
 	ui.world:addSystems(
-	-- update systems
+		-- update systems
 		systems.UiLayoutSystem,
 		systems.UiTargettingSystem,
 

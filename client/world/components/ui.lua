@@ -21,7 +21,7 @@ local uiLayout = ecs.component("UiLayout", function(c, type, padding, spacing, a
 	c.type = type or "vertical" -- vertical, horizontal
 	c.padding = padding or Vector2.new(0, 0)
 	c.spacing = spacing or 0
-	c.align = align or "begin"  -- begin, center, end
+	c.align = align or "begin" -- begin, center, end
 	c.justify = justify or "begin" -- begin, center, end, stretch
 end)
 LS13.ECS.Components.UiLayout = uiLayout

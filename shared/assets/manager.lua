@@ -14,7 +14,7 @@ end
 
 function AssetManager.Push(asset, id)
 	if id:match("[%s/]") then
-		LS13.Logging.LogError("Asset ID (\"%s\") contains illegal characters, BAIL!", id)
+		LS13.Logging.LogError('Asset ID ("%s") contains illegal characters, BAIL!', id)
 		return
 	end
 

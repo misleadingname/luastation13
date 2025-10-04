@@ -23,13 +23,21 @@ function vector2:__tostring()
 	return ("[%s, %s]"):format(self.x, self.y)
 end
 
-function vector2.__add(a, b) return vector2.new(a.x + b.x, a.y + b.y) end
+function vector2.__add(a, b)
+	return vector2.new(a.x + b.x, a.y + b.y)
+end
 
-function vector2.__sub(a, b) return vector2.new(a.x - b.x, a.y - b.y) end
+function vector2.__sub(a, b)
+	return vector2.new(a.x - b.x, a.y - b.y)
+end
 
-function vector2.__mul(a, b) return vector2.new(a.x * b.x, a.y * b.y) end
+function vector2.__mul(a, b)
+	return vector2.new(a.x * b.x, a.y * b.y)
+end
 
-function vector2.__div(a, b) return vector2.new(a.x / b.x, a.y / b.y) end
+function vector2.__div(a, b)
+	return vector2.new(a.x / b.x, a.y / b.y)
+end
 
 function vector2:magnitude()
 	return math.sqrt(self.x ^ 2 + self.y ^ 2)
@@ -37,7 +45,9 @@ end
 
 function vector2:unit()
 	local d = self:magnitude()
-	if d == 0 then return vector2.new(0, 0) end
+	if d == 0 then
+		return vector2.new(0, 0)
+	end
 	return vector2.new(self.x / d, self.y / d)
 end
 
@@ -62,10 +72,7 @@ function vector2.intersects(a, b, c, d)
 	local x1, y1, w1, h1 = a.x, a.y, b.x, b.y
 	local x2, y2, w2, h2 = c.x, c.y, d.x, d.y
 
-	local collide = x1 < x2 + w2 + 1 and
-		x1 + w1 > x2 - 1 and
-		y1 < y2 + h2 + 1 and
-		y1 + h1 > y2 - 1
+	local collide = x1 < x2 + w2 + 1 and x1 + w1 > x2 - 1 and y1 < y2 + h2 + 1 and y1 + h1 > y2 - 1
 
 	local surface = ""
 	if collide then
@@ -80,17 +87,13 @@ function vector2.intersects(a, b, c, d)
 		end
 
 		-- Corner cases
-		if y1 + h1 > y2 - 1 and y1 + h1 < y2 and
-			x1 + w1 > x2 - 1 and x1 + w1 < x2 then
+		if y1 + h1 > y2 - 1 and y1 + h1 < y2 and x1 + w1 > x2 - 1 and x1 + w1 < x2 then
 			surface = "topleft"
-		elseif y1 + h1 > y2 - 1 and y1 + h1 < y2 and
-			x1 > x2 + w2 and x1 < x2 + w2 + 1 then
+		elseif y1 + h1 > y2 - 1 and y1 + h1 < y2 and x1 > x2 + w2 and x1 < x2 + w2 + 1 then
 			surface = "topright"
-		elseif y1 > y2 + h2 and y1 < y2 + h2 + 1 and
-			x1 + w1 > x2 - 1 and x1 + w1 < x2 then
+		elseif y1 > y2 + h2 and y1 < y2 + h2 + 1 and x1 + w1 > x2 - 1 and x1 + w1 < x2 then
 			surface = "bottomleft"
-		elseif y1 > y2 + h2 and y1 < y2 + h2 + 1 and
-			x1 > x2 + w2 and x1 < x2 + w2 + 1 then
+		elseif y1 > y2 + h2 and y1 < y2 + h2 + 1 and x1 > x2 + w2 and x1 < x2 + w2 + 1 then
 			surface = "bottomright"
 		end
 	end

@@ -9,7 +9,7 @@ return function(node)
 		volume = node.Volume and node.Volume or 1.0,
 
 		name = node.Name and node.Name,
-		author = node.Author and node.Author
+		author = node.Author and node.Author,
 	}
 
 	local snd = LS13.AssetManager.Loader.Load(data.fileName, { mode = data.soundMode })

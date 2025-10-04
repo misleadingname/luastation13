@@ -31,9 +31,13 @@ function color:__tostring()
 	return ("RGBA(%s, %s, %s, %s)"):format(self.r, self.g, self.b, self.a)
 end
 
-function color.__add(a, b) return color.new(a.r + b.r, a.g + b.g, a.b + b.b, a.a + b.a) end
+function color.__add(a, b)
+	return color.new(a.r + b.r, a.g + b.g, a.b + b.b, a.a + b.a)
+end
 
-function color.__sub(a, b) return color.new(a.r - b.r, a.g - b.g, a.b - b.b, a.a - b.a) end
+function color.__sub(a, b)
+	return color.new(a.r - b.r, a.g - b.g, a.b - b.b, a.a - b.a)
+end
 
 function color.__mul(a, b)
 	if type(b) == "number" then
@@ -81,8 +85,8 @@ end
 
 color.white = color.new(1, 1, 1, 1)
 color.black = color.new(0, 0, 0, 1)
-color.red   = color.new(1, 0, 0, 1)
+color.red = color.new(1, 0, 0, 1)
 color.green = color.new(0, 1, 0, 1)
-color.blue  = color.new(0, 0, 1, 1)
+color.blue = color.new(0, 0, 1, 1)
 
 return color

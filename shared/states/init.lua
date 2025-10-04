@@ -41,7 +41,7 @@ states = setmetatable(states, {
 				end
 			end
 		end
-	end
+	end,
 })
 
 return states

@@ -31,12 +31,12 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 local easings = {}
 
-local sin     = math.sin
-local cos     = math.cos
-local pi      = math.pi
-local sqrt    = math.sqrt
-local abs     = math.abs
-local asin    = math.asin
+local sin = math.sin
+local cos = math.cos
+local pi = math.pi
+local sqrt = math.sqrt
+local abs = math.abs
+local asin = math.asin
 
 function easings.linear(t, b, c, d)
 	return c * t / d + b
@@ -190,8 +190,12 @@ function easings.outExpo(t, b, c, d)
 end
 
 function easings.inOutExpo(t, b, c, d)
-	if t == 0 then return b end
-	if t == d then return b + c end
+	if t == 0 then
+		return b
+	end
+	if t == d then
+		return b + c
+	end
 	t = t / d * 2
 	if t < 1 then
 		return c / 2 * 2 ^ (10 * (t - 1)) + b - c * 0.0005
@@ -238,13 +242,19 @@ function easings.outInCirc(t, b, c, d)
 end
 
 function easings.inElastic(t, b, c, d, a, p)
-	if t == 0 then return b end
+	if t == 0 then
+		return b
+	end
 
 	t = t / d
 
-	if t == 1 then return b + c end
+	if t == 1 then
+		return b + c
+	end
 
-	if not p then p = d * 0.3 end
+	if not p then
+		p = d * 0.3
+	end
 
 	local s
 
@@ -263,13 +273,19 @@ end
 -- a: amplitud
 -- p: period
 function easings.outElastic(t, b, c, d, a, p)
-	if t == 0 then return b end
+	if t == 0 then
+		return b
+	end
 
 	t = t / d
 
-	if t == 1 then return b + c end
+	if t == 1 then
+		return b + c
+	end
 
-	if not p then p = d * 0.3 end
+	if not p then
+		p = d * 0.3
+	end
 
 	local s
 
@@ -286,14 +302,22 @@ end
 -- p = period
 -- a = amplitud
 function easings.inOutElastic(t, b, c, d, a, p)
-	if t == 0 then return b end
+	if t == 0 then
+		return b
+	end
 
 	t = t / d * 2
 
-	if t == 2 then return b + c end
+	if t == 2 then
+		return b + c
+	end
 
-	if not p then p = d * (0.3 * 1.5) end
-	if not a then a = 0 end
+	if not p then
+		p = d * (0.3 * 1.5)
+	end
+	if not a then
+		a = 0
+	end
 
 	local s
 
@@ -324,19 +348,25 @@ function easings.outInElastic(t, b, c, d, a, p)
 end
 
 function easings.inBack(t, b, c, d, s)
-	if not s then s = 1.70158 end
+	if not s then
+		s = 1.70158
+	end
 	t = t / d
 	return c * t * t * ((s + 1) * t - s) + b
 end
 
 function easings.outBack(t, b, c, d, s)
-	if not s then s = 1.70158 end
+	if not s then
+		s = 1.70158
+	end
 	t = t / d - 1
 	return c * (t * t * ((s + 1) * t + s) + 1) + b
 end
 
 function easings.inOutBack(t, b, c, d, s)
-	if not s then s = 1.70158 end
+	if not s then
+		s = 1.70158
+	end
 	s = s * 1.525
 	t = t / d * 2
 	if t < 1 then
@@ -379,7 +409,7 @@ function easings.inOutBounce(t, b, c, d)
 	if t < d / 2 then
 		return easings.inBounce(t * 2, 0, c, d) * 0.5 + b
 	else
-		return easings.outBounce(t * 2 - d, 0, c, d) * 0.5 + c * .5 + b
+		return easings.outBounce(t * 2 - d, 0, c, d) * 0.5 + c * 0.5 + b
 	end
 end
 

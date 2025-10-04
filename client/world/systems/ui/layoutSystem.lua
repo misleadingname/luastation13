@@ -8,7 +8,9 @@ function layoutSystem:update()
 
 	local function resolveNode(node)
 		local parent = node.UiElement.parent
-		if parent and not lume.find(sorted, parent) then return false end
+		if parent and not lume.find(sorted, parent) then
+			return false
+		end
 
 		table.insert(sorted, node)
 		return true

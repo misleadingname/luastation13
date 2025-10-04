@@ -3,8 +3,7 @@ return function(node)
 		id = node._attr and node._attr.Id and node._attr.Id,
 		type = "font",
 
-		fileName = node.FileName and node.FileName or
-			"/resources/fonts/verdana.ttf",
+		fileName = node.FileName and node.FileName or "/resources/fonts/verdana.ttf",
 		filter = node.Filter and node.Filter or "linear",
 		size = node.Size and tonumber(node.Size) or 16,
 	}

@@ -34,7 +34,9 @@ function console.update(dt)
 end
 
 function console.draw()
-	if not init then return end
+	if not init then
+		return
+	end
 
 	love.graphics.setFont(font.font)
 
@@ -46,7 +48,9 @@ function console.draw()
 		local age = now - entry.time
 
 		local alpha = 1.0 - (age / fadeTime) ^ 32
-		if alpha < 0 then alpha = 0 end
+		if alpha < 0 then
+			alpha = 0
+		end
 
 		local _, numLines = string.gsub(entry.text, "\n", "\n")
 		numLines = numLines + 1
