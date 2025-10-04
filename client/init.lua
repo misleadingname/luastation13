@@ -38,7 +38,6 @@ function love.draw()
 end
 
 function love.mousepressed(x, y, button)
-	LS13.Logging.LogDebug("Mouse button %s pressed at X: %s Y: %s", button, x, y)
 	xpcall(function()
 		LS13.UI.mousePressed(x, y, button)
 	end, HandleError)

@@ -50,6 +50,14 @@ function vector2:toAngle(other)
 	return math.atan2(other.y - self.y, other.x - self.x)
 end
 
+function vector2:distance(other)
+	return math.sqrt((self.x - other.x) ^ 2 + (self.y - other.y) ^ 2)
+end
+
+function vector2:toNumbers()
+	return self.x, self.y
+end
+
 function vector2.intersects(a, b, c, d)
 	local x1, y1, w1, h1 = a.x, a.y, b.x, b.y
 	local x2, y2, w2, h2 = c.x, c.y, d.x, d.y

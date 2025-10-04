@@ -11,7 +11,9 @@ if CLIENT then
 
 	require("client.world.systems.rendering.renderViewportSystem")
 	require("client.world.systems.ui.rendering.uiLabelSystem")
+	require("client.world.systems.ui.rendering.uiPanelSystem")
 	require("client.world.systems.ui.layoutSystem")
+	require("client.world.systems.ui.targetingSystem")
 elseif SERVER then
 
 end

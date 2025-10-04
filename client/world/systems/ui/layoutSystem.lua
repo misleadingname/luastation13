@@ -34,9 +34,7 @@ function layoutSystem:update()
 		local parent = ent.UiElement.parent
 		if parent then
 			local parentTrans = ent.UiElement.parent.UiTransform
-			if parent.UiLayout then
-				-- TODO: layout
-			else
+			if not parent.UiLayout then -- there's no layout moving for us
 				trans.cpos.x = parentTrans.cpos.x + trans.position.x
 				trans.cpos.y = parentTrans.cpos.y + trans.position.y
 			end
