@@ -147,4 +147,12 @@
 		<Name>Every Light Is Blinking At Once</Name>
 		<Author>Alexander Divine</Author>
 	</Sound>
+
+	<Sound Id="Music.Lobby.PWMUR" Parent="Music.BaseLobby">
+		<FileName>resources/sound/lobby/pwmur.ogg</FileName>
+		<Volume>0.2</Volume>
+
+		<Name>Proron Will Make Us Rich</Name>
+		<Author>Alexander Divine</Author>
+	</Sound>
 </LS13>
