@@ -53,8 +53,8 @@ function ui.test_scene()
 	ent1:give("UiLabel", text, Color.white, "Font.Default", "center", "center")
 	ent1:give("UiPanel")
 
-	ent1.UiTarget.onClick = function()
-		LS13.Logging.LogDebug("Clicked!")
+	ent1.UiTarget.onClick = function(btn)
+		LS13.Logging.LogDebug("Clicked! M%s", btn)
 	end
 
 	-- ent2:give("UiElement", ent1)
