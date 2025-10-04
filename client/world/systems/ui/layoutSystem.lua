@@ -9,10 +9,14 @@ function layoutSystem:update()
 			if not parent.UiLayout then -- there's no layout moving for us
 				trans.cpos.x = parentTrans.cpos.x + trans.position.x
 				trans.cpos.y = parentTrans.cpos.y + trans.position.y
+				trans.csize.x = trans.size.x
+				trans.csize.y = trans.size.y
 			end
 		else
 			trans.cpos.x = trans.position.x
 			trans.cpos.y = trans.position.y
+			trans.csize.x = trans.size.x
+			trans.csize.y = trans.size.y
 		end
 	end
 end

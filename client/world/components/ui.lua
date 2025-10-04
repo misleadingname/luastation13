@@ -1,7 +1,8 @@
 local ecs = LS13.ECSManager
 
-local uiElement = ecs.component("UiElement", function(c, parent, visible, enabled, z)
+local uiElement = ecs.component("UiElement", function(c, parent, children, visible, enabled, z)
 	c.parent = parent or nil
+	c.children = children or {}
 	c.visible = visible or true
 	c.enabled = enabled or true
 	c.z = z or 0
@@ -14,6 +15,7 @@ local uiTransform = ecs.component("UiTransform", function(c, position, size, rot
 	c.rotation = rotation or 0
 
 	c.cpos = Vector2.new(0, 0)
+	c.csize = Vector2.new(0, 0)
 end)
 LS13.ECS.Components.UiTransform = uiTransform
 

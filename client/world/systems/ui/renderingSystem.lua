@@ -16,8 +16,8 @@ function renderingSystem:draw()
 				trans.cpos.x,
 				trans.cpos.y,
 				trans.rotation,
-				trans.size.x / gsx,
-				trans.size.y / gsy
+				trans.csize.x / gsx,
+				trans.csize.y / gsy
 			)
 		end
 
@@ -44,14 +44,14 @@ function renderingSystem:draw()
 
 			local y = trans.cpos.y
 			if label.vAlign == "center" then
-				y = y + trans.size.y / 2 - textHeight / 2
+				y = y + trans.csize.y / 2 - textHeight / 2
 			elseif label.vAlign == "bottom" then
-				y = y + trans.size.y - textHeight
+				y = y + trans.csize.y - textHeight
 			end
 
 			love.graphics.setColor(label.color:toNumbers())
 			love.graphics.setFont(font)
-			love.graphics.printf(tostring(text), trans.cpos.x, y, trans.size.x, label.hAlign)
+			love.graphics.printf(tostring(text), trans.cpos.x, y, trans.csize.x, label.hAlign)
 		end
 	end
 end

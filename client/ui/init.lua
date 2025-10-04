@@ -37,7 +37,9 @@ end
 
 function ui.test_scene()
 	local ent1 = LS13.ECSManager.entity("parent")
-	ent1:give("UiElement")
+	local ent2 = LS13.ECSManager.entity("child")
+
+	ent1:give("UiElement", nil, { ent2 })
 	ent1:give("UiTarget")
 	ent1:give("UiTransform", Vector2.new(32, 32), Vector2.new(256, 128))
 	ent1:give("UiPanel")
@@ -54,7 +56,6 @@ function ui.test_scene()
 		LS13.Logging.LogDebug("A pressed")
 	end
 
-	local ent2 = LS13.ECSManager.entity("child")
 	ent2:give("UiElement", ent1)
 	ent2:give("UiTarget")
 	ent2:give("UiTransform", Vector2.new(16, 64), Vector2.new(256, 128))
