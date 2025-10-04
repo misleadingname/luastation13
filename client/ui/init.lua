@@ -9,14 +9,10 @@ function ui.init()
 	ui.world = LS13.ECSManager.world()
 	ui.cursor = cursor
 
-	ui.world:addSystems(
-		-- update systems
+	ui.world:addSystems( -- (this comment is only here to make stylua behave)
 		systems.UiLayoutSystem,
 		systems.UiTargettingSystem,
-
-		-- render systems
-		systems.UiPanelSystem,
-		systems.UiLabelSystem
+		systems.UiRenderingSystem
 	)
 end
 
@@ -41,31 +37,43 @@ end
 
 function ui.test_scene()
 	local ent1 = LS13.ECSManager.entity("parent")
-	local ent2 = LS13.ECSManager.entity("child")
-
-	local c = 0
-	local text = function() return c end
-
 	ent1:give("UiElement")
 	ent1:give("UiTarget")
-	ent1:give("UiTransform", Vector2.new(32, 32), Vector2.new(96, 24))
-	ent1:give("UiLabel", text, Color.white, "Font.Default", "center", "center")
+	ent1:give("UiTransform", Vector2.new(32, 32), Vector2.new(256, 128))
 	ent1:give("UiPanel")
+	ent1:give(
+		"UiLabel",
+		"AAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAA",
+		Color.white,
+		"Font.Default",
+		"center",
+		"center"
+	)
 
-	ent1.UiTarget.onClick = function(btn)
-		if btn == MOUSEBUTTON_LEFT then
-			c = c + 1
-		elseif btn == MOUSEBUTTON_RIGHT then
-			c = c - 1
-		end
+	ent1.UiTarget.onClick = function(button)
+		LS13.Logging.LogDebug("A pressed")
 	end
 
-	-- ent2:give("UiElement", ent1)
-	-- ent2:give("UiTransform", Vector2.new(20, 20))
-	-- ent2:give("UiLabel", "hi im child!")
+	local ent2 = LS13.ECSManager.entity("child")
+	ent2:give("UiElement", ent1)
+	ent2:give("UiTarget")
+	ent2:give("UiTransform", Vector2.new(16, 64), Vector2.new(256, 128))
+	ent2:give("UiPanel")
+	ent2:give(
+		"UiLabel",
+		"BBBBBBBBBBBBBB\nBBBBBBBBBBBBBBBB\nBBBBBBBBBBBBBB",
+		Color.white,
+		"Font.Default",
+		"center",
+		"center"
+	)
+
+	ent2.UiTarget.onClick = function(button)
+		LS13.Logging.LogDebug("B pressed")
+	end
 
 	ui.world:addEntity(ent1)
-	-- ui.world:addEntity(ent2)
+	ui.world:addEntity(ent2)
 end
 
 return ui

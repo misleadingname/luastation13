@@ -41,8 +41,8 @@ local uiLabel = ecs.component("UiLabel", function(c, text, color, font, hAlign, 
 	c.text = text or ""
 	c.color = color or Color.white
 	c.font = font or "Font.Default"
-	c.hAlign = hAlign or "left" --  center, justify, left, right
-	c.vAlign = vAlign or "top" --  center, top, bottom
+	c.hAlign = hAlign or "left" -- left, center, right, justify
+	c.vAlign = vAlign or "top" -- top, center, bottom
 end)
 LS13.ECS.Components.UiLabel = uiLabel
 

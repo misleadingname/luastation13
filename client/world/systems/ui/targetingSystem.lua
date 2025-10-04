@@ -3,12 +3,14 @@ local targettingSystem = LS13.ECSManager.system({ pool = { "UiElement", "UiTrans
 function targettingSystem:update(dt)
 	local cursor = LS13.UI.cursor
 
-	for _, ent in ipairs(self.pool) do
+	local hoveredEnt
+
+	for i = #self.pool, 1, -1 do
+		local ent = self.pool[i]
 		local trans = ent.UiTransform
 		local target = ent.UiTarget
 
-		local lc, rc = -- left top corner, right bottom corner
-			trans.cpos, trans.cpos + trans.size
+		local lc, rc = trans.cpos, trans.cpos + trans.size -- left top corner, right bottom corner
 
 		if
 			cursor.position.x >= lc.x
@@ -16,14 +18,19 @@ function targettingSystem:update(dt)
 			and cursor.position.y >= lc.y
 			and cursor.position.y <= rc.y
 		then
-			target.hovered = true
-		else
-			target.hovered = false
+			hoveredEnt = ent
+			break
 		end
+	end
+
+	for _, ent in ipairs(self.pool) do
+		local target = ent.UiTarget
+
+		target.hovered = ent == hoveredEnt
 	end
 end
 
-function targettingSystem:press(btn)
+function targettingSystem:press(button)
 	for _, ent in ipairs(self.pool) do
 		local target = ent.UiTarget
 
@@ -33,13 +40,13 @@ function targettingSystem:press(btn)
 	end
 end
 
-function targettingSystem:release(btn)
+function targettingSystem:release(button)
 	for _, ent in ipairs(self.pool) do
 		local target = ent.UiTarget
 
 		if target.hovered then
 			target.selected = false
-			target.onClick(btn)
+			target.onClick(button)
 		end
 	end
 end

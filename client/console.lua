@@ -55,7 +55,7 @@ function console.draw()
 		local _, numLines = string.gsub(entry.text, "\n", "\n")
 		numLines = numLines + 1
 
-		local logHeight = font.size * numLines
+		local logHeight = font.font:getHeight() * numLines
 
 		local t = math.min(age / fadeTime * 8, 1)
 		local startX = -100
