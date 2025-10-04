@@ -24,6 +24,17 @@ function targettingSystem:press(btn)
 		local target = ent.UiTarget
 
 		if target.hovered then
+			target.selected = true
+		end
+	end
+end
+
+function targettingSystem:release(btn)
+	for _, ent in ipairs(self.pool) do
+		local target = ent.UiTarget
+
+		if target.hovered then
+			target.selected = false
 			target.onClick(btn)
 		end
 	end
