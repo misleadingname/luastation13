@@ -43,7 +43,8 @@ function ui.test_scene()
 	local ent1 = LS13.ECSManager.entity("parent")
 	local ent2 = LS13.ECSManager.entity("child")
 
-	local text = function() return love.timer.getDelta() end
+	local c = 0
+	local text = function() return c end
 
 	ent1:give("UiElement")
 	ent1:give("UiTarget")
@@ -52,7 +53,11 @@ function ui.test_scene()
 	ent1:give("UiPanel")
 
 	ent1.UiTarget.onClick = function(btn)
-		LS13.Logging.LogDebug("Clicked! M%s", btn)
+		if btn == MOUSEBUTTON_LEFT then
+			c = c + 1
+		elseif btn == MOUSEBUTTON_RIGHT then
+			c = c - 1
+		end
 	end
 
 	-- ent2:give("UiElement", ent1)

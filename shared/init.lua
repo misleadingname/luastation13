@@ -35,6 +35,7 @@ function shared.load()
 
 	require("shared.math")
 	require("shared.world")
+	require("shared.consts")
 
 	if love.filesystem.isFused() then
 		local dir = love.filesystem.getSourceBaseDirectory()
