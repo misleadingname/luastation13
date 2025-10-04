@@ -1,3 +1,8 @@
+require("client.ui.components.ui")
+require("client.ui.systems.layoutSystem")
+require("client.ui.systems.targetingSystem")
+require("client.ui.systems.renderingSystem")
+
 local systems = LS13.ECS.Systems
 
 local ui = {}

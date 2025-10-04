@@ -11,12 +11,7 @@ require("shared.world.components.physics")
 require("shared.world.components.world")
 
 if CLIENT then
-	require("client.world.components.ui")
-
 	require("client.world.systems.rendering.renderViewportSystem")
-	require("client.world.systems.ui.renderingSystem")
-	require("client.world.systems.ui.layoutSystem")
-	require("client.world.systems.ui.targetingSystem")
 elseif SERVER then
 end
 

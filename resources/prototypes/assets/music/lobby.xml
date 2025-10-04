@@ -119,7 +119,7 @@
 
 	<Sound Id="Music.Lobby.WSERemix" Parent="Music.BaseLobby">
 		<FileName>resources/sound/lobby/wse_remix.ogg</FileName>
-		<Volume>0.4</Volume>
+		<Volume>0.3</Volume>
 
 		<Name>WSE Remix</Name>
 		<Author>Anonymous</Author>
@@ -150,7 +150,7 @@
 
 	<Sound Id="Music.Lobby.PWMUR" Parent="Music.BaseLobby">
 		<FileName>resources/sound/lobby/pwmur.ogg</FileName>
-		<Volume>0.2</Volume>
+		<Volume>0.15</Volume>
 
 		<Name>Proron Will Make Us Rich</Name>
 		<Author>Alexander Divine</Author>

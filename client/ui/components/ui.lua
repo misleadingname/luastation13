@@ -11,11 +11,11 @@ LS13.ECS.Components.UiElement = uiElement
 
 local uiTransform = ecs.component("UiTransform", function(c, position, size, rotation)
 	c.position = position or Vector2.new(0, 0)
-	c.size = size or Vector2.new(100, 100)
+	c.size = size or Vector2.new(64, 128)
 	c.rotation = rotation or 0
 
 	c.cpos = Vector2.new(0, 0)
-	c.csize = Vector2.new(0, 0)
+	c.csize = Vector2.new(64, 128)
 end)
 LS13.ECS.Components.UiTransform = uiTransform
 
