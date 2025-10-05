@@ -1,4 +1,5 @@
 require("client.ui.components.ui")
+require("client.ui.systems.parentSystem")
 require("client.ui.systems.layoutSystem")
 require("client.ui.systems.targetingSystem")
 require("client.ui.systems.renderingSystem")
@@ -17,6 +18,7 @@ function ui.init()
 	ui.cursor = cursor
 
 	ui.world:addSystems( -- (this comment is only here to make stylua behave)
+		systems.UiParentSystem,
 		systems.UiLayoutSystem,
 		systems.UiTargettingSystem,
 		systems.UiRenderingSystem
@@ -48,7 +50,7 @@ function ui.test_scene()
 	local container = LS13.ECSManager.entity("parent")
 	container:give("UiElement")
 	container:give("UiTransform", Vector2.new(32, 32), Vector2.new(200, 450))
-	container:give("UiLayout", "horizontal", Vector2.new(8, 8), 4, "begin", "center")
+	container:give("UiLayout", "vertical", Vector2.new(8, 8), 4, "begin", "center")
 	container:give("UiPanel")
 
 	local label1 = LS13.ECSManager.entity("child")

@@ -25,7 +25,6 @@ function targettingSystem:update(dt)
 
 	for _, ent in ipairs(self.pool) do
 		local target = ent.UiTarget
-
 		target.hovered = ent == hoveredEnt
 	end
 end

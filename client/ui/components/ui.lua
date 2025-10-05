@@ -1,8 +1,8 @@
 local ecs = LS13.ECSManager
 
-local uiElement = ecs.component("UiElement", function(c, parent, children, visible, enabled, z)
+local uiElement = ecs.component("UiElement", function(c, parent, visible, enabled, z)
 	c.parent = parent or nil
-	c.children = children or {}
+	c.children = {}
 	c.visible = visible or true
 	c.enabled = enabled or true
 	c.z = z or 0
@@ -23,7 +23,7 @@ local uiLayout = ecs.component("UiLayout", function(c, type, padding, spacing, a
 	c.type = type or "vertical" -- vertical, horizontal
 	c.padding = padding or Vector2.new(0, 0)
 	c.spacing = spacing or 0
-	c.align = align or "begin" -- begin, center, end
+	c.align = align or "begin"  -- begin, center, end
 	c.justify = justify or "begin" -- begin, center, end, stretch
 end)
 LS13.ECS.Components.UiLayout = uiLayout
