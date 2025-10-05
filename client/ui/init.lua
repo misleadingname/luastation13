@@ -49,23 +49,33 @@ end
 function ui.test_scene()
 	local root = LS13.ECSManager.entity("root")
 	root:give("UiElement")
-	root:give("UiTransform", Vector2.new(0.5, 0.5), Vector2.new(0.75, 0.75), 0, "ratio", "ratio", Vector2.new(0.5, 0.5))
+	root:give(
+		"UiTransform",
+		Vector2.new(0.5, 0.5),
+		Vector2.new(0.75, 0.75),
+		0,
+		"ratio",
+		"ratio",
+		"ratio",
+		"ratio",
+		Vector2.new(0.5, 0.5)
+	)
 	root:give("UiLayout", "vertical", Vector2.new(12, 12), 8, "begin", "center")
 	root:give("UiPanel", "Graphic.UiPanel", Color.gray)
 
 	local header = LS13.ECSManager.entity("header")
 	header:give("UiElement", root)
-	header:give("UiTransform", Vector2.new(0, 0), Vector2.new(1, 40), 0, "ratio", "pixel")
+	header:give("UiTransform", Vector2.new(0, 0), Vector2.new(1, 40), 0, "ratio", "ratio", "ratio", "pixel")
 	header:give("UiLabel", "TEST", Color.white, "Font.DefaultLarge", "center", "center")
 
 	local buttonContainer = LS13.ECSManager.entity("buttonContainer")
 	buttonContainer:give("UiElement", root)
-	buttonContainer:give("UiTransform", Vector2.new(0, 0), Vector2.new(1, 200), 0, "ratio", "pixel")
+	buttonContainer:give("UiTransform", Vector2.new(0, 0), Vector2.new(1, 200), 0, "ratio", "ratio", "ratio", "pixel")
 	buttonContainer:give("UiLayout", "vertical", Vector2.new(4, 4), 6, "center", "stretch")
 
 	local btn1 = LS13.ECSManager.entity("playBtn")
 	btn1:give("UiElement", buttonContainer)
-	btn1:give("UiTransform", Vector2.new(0, 0), Vector2.new(1, 40), 0, "ratio", "pixel")
+	btn1:give("UiTransform", Vector2.new(0, 0), Vector2.new(1, 40), 0, "ratio", "ratio", "ratio", "pixel")
 	btn1:give("UiPanel", "Graphic.UiButton", Color.green)
 	btn1:give("UiTarget")
 	btn1:give("UiLabel", "OPTION 1", Color.black, "Font.Default", "center", "center")
@@ -75,7 +85,7 @@ function ui.test_scene()
 
 	local btn2 = LS13.ECSManager.entity("optionsBtn")
 	btn2:give("UiElement", buttonContainer)
-	btn2:give("UiTransform", Vector2.new(0, 0), Vector2.new(1, 40), 0, "ratio", "pixel")
+	btn2:give("UiTransform", Vector2.new(0, 0), Vector2.new(1, 40), 0, "ratio", "ratio", "ratio", "pixel")
 	btn2:give("UiPanel", "Graphic.UiButton", Color.blue)
 	btn2:give("UiTarget")
 	btn2:give("UiLabel", "OPTION 2", Color.white, "Font.Default", "center", "center")

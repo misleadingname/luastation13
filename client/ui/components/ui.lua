@@ -9,14 +9,16 @@ local uiElement = ecs.component("UiElement", function(c, parent, visible, enable
 end)
 LS13.ECS.Components.UiElement = uiElement
 
-local uiTransform = ecs.component("UiTransform", function(c, position, size, rotation, scalex, scaley, anchor)
+local uiTransform = ecs.component("UiTransform", function(c, position, size, rotation, posx, posy, sizex, sizey, anchor)
 	c.position = position or Vector2.new(0, 0)
 	c.size = size or Vector2.new(64, 128)
 	c.rotation = rotation or 0
 
 	c.anchor = anchor or Vector2.new(0, 0)
-	c.scalex = scalex or "pixel" -- pixel, ratio
-	c.scaley = scaley or "pixel" -- pixel, ratio
+	c.posx = posx or "pixel" -- pixel, ratio
+	c.posy = posy or "pixel" -- pixel, ratio
+	c.sizex = sizex or "pixel" -- pixel, ratio
+	c.sizey = sizey or "pixel" -- pixel, ratio
 
 	c.cpos = Vector2.new(0, 0)
 	c.csize = Vector2.new(64, 128)
@@ -27,7 +29,7 @@ local uiLayout = ecs.component("UiLayout", function(c, type, padding, spacing, a
 	c.type = type or "vertical" -- vertical, horizontal
 	c.padding = padding or Vector2.new(0, 0)
 	c.spacing = spacing or 0
-	c.align = align or "begin"  -- begin, center, end
+	c.align = align or "begin" -- begin, center, end
 	c.justify = justify or "begin" -- begin, center, end, stretch
 end)
 LS13.ECS.Components.UiLayout = uiLayout

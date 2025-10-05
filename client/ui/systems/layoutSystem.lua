@@ -2,13 +2,13 @@ local layoutSystem = LS13.ECSManager.system({ pool = { "UiElement", "UiTransform
 
 local function resolveTransform(trans, parentSize)
 	local pos = Vector2.new(
-		(trans.scalex == "ratio") and (trans.position.x * parentSize.x) or trans.position.x,
-		(trans.scaley == "ratio") and (trans.position.y * parentSize.y) or trans.position.y
+		(trans.posx == "ratio") and (trans.position.x * parentSize.x) or trans.position.x,
+		(trans.posy == "ratio") and (trans.position.y * parentSize.y) or trans.position.y
 	)
 
 	local size = Vector2.new(
-		(trans.scalex == "ratio") and (trans.size.x * parentSize.x) or trans.size.x,
-		(trans.scaley == "ratio") and (trans.size.y * parentSize.y) or trans.size.y
+		(trans.sizex == "ratio") and (trans.size.x * parentSize.x) or trans.size.x,
+		(trans.sizey == "ratio") and (trans.size.y * parentSize.y) or trans.size.y
 	)
 
 	return pos, size
