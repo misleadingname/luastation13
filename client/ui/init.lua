@@ -62,7 +62,6 @@ function ui.test_scene()
 	buttonContainer:give("UiElement", root)
 	buttonContainer:give("UiTransform", Vector2.new(0, 0), Vector2.new(1, 200), 0, "ratio", "pixel")
 	buttonContainer:give("UiLayout", "vertical", Vector2.new(4, 4), 6, "center", "stretch")
-	buttonContainer:give("UiPanel", "Graphic.UiPanel", Color.darkGray)
 
 	local btn1 = LS13.ECSManager.entity("playBtn")
 	btn1:give("UiElement", buttonContainer)
