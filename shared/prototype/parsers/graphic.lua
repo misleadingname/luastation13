@@ -15,12 +15,18 @@ return function(node)
 		frameWidth = node.FrameWidth or 32,
 		frameHeight = node.FrameHeight or 32,
 
+		wrapMode = node.WrapMode,
+
 		frameCount = node.FrameCount or 1,
 		loopDelay = node.LoopDelay or 0,
 		fps = node.FPS or 10,
 	}
 
 	local img = LS13.AssetManager.Loader.Load(data.fileName)
+
+	if data.wrapMode then
+		img:setWrap(data.wrapMode)
+	end
 
 	data.image = img
 	LS13.AssetManager.Push(data, data.id)
