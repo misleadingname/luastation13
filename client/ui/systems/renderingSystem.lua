@@ -1,32 +1,5 @@
 local renderingSystem = LS13.ECSManager.system({ pool = { "UiElement", "UiTransform" } })
 
-local function buildQuads(panel)
-	local graphic = LS13.AssetManager.Get(panel.graphic)
-	local img = graphic.image
-	local imgw, imgh = img:getDimensions()
-	local slice = panel.slice or { left = 0, right = 0, top = 0, bottom = 0 }
-	local l, r, t, b = slice.left, slice.right, slice.top, slice.bottom
-
-	l = math.min(l, imgw)
-	r = math.min(r, imgw - l)
-	t = math.min(t, imgh)
-	b = math.min(b, imgh - t)
-
-	panel._9quads = {
-		tl = love.graphics.newQuad(0, 0, l, t, imgw, imgh),
-		top = love.graphics.newQuad(l, 0, imgw - l - r, t, imgw, imgh),
-		tr = love.graphics.newQuad(imgw - r, 0, r, t, imgw, imgh),
-
-		left = love.graphics.newQuad(0, t, l, imgh - t - b, imgw, imgh),
-		center = love.graphics.newQuad(l, t, imgw - l - r, imgh - t - b, imgw, imgh),
-		right = love.graphics.newQuad(imgw - r, t, r, imgh - t - b, imgw, imgh),
-
-		bl = love.graphics.newQuad(0, imgh - b, l, b, imgw, imgh),
-		bottom = love.graphics.newQuad(l, imgh - b, imgw - l - r, b, imgw, imgh),
-		br = love.graphics.newQuad(imgw - r, imgh - b, r, b, imgw, imgh)
-	}
-end
-
 function renderingSystem:draw()
 	for _, ent in ipairs(self.pool) do
 		local trans = ent.UiTransform
