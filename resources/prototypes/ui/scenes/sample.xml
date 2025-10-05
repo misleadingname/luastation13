@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LS13>
-	<UIMarkup Type="Template" Name="UI.Markup.Buttons">
+	<UIMarkup Id="UI.Markup.Buttons" Type="Template">
 		<Container Layout="Horizontal" Spacing="4">
 			<Button Name="Button1">
 				<Label Text="Hello!" />
@@ -11,10 +11,10 @@
 		</Container>
 	</UIMarkup>
 
-	<UIMarkup Type="Scene">
+	<UIMarkup Id="UI.Markup.TestScene" Type="Scene">
 		<Container Layout="Vertical" Spacing="4">
 			<Label Text="Hello Station Crew!" />
-			<UIInclude Name="UI.Markup.Buttons" />
+			<UIInclude Id="UI.Markup.Buttons" />
 		</Container>
 	</UIMarkup>
 </LS13>
