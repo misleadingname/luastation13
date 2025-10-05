@@ -10,7 +10,7 @@ local ui = {}
 
 local cursor = {
 	position = Vector2.new(0, 0),
-	activeButtons = {}
+	activeButtons = {},
 }
 
 function ui.init()
@@ -84,11 +84,21 @@ function ui.test_scene()
 		LS13.Logging.LogDebug("2")
 	end
 
+	local btn3 = LS13.ECSManager.entity("optionsBtn")
+	btn3:give("UiElement", buttonContainer)
+	btn3:give("UiTransform", Vector2.new(0, 0), Vector2.new(360, 40))
+	btn3:give("UiPanel", "Graphic.UiButton", Color.blue)
+	btn3:give("UiTarget")
+	btn3.UiTarget.onClick = function()
+		love.audio.play(LS13.SoundManager.NewSource("Sound.Fallback"))
+	end
+
 	ui.world:addEntity(root)
 	ui.world:addEntity(header)
 	ui.world:addEntity(buttonContainer)
 	ui.world:addEntity(btn1)
 	ui.world:addEntity(btn2)
+	ui.world:addEntity(btn3)
 end
 
 return ui
