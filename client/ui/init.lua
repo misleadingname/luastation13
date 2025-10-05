@@ -65,7 +65,7 @@ function ui.test_scene()
 
 	local header = LS13.ECSManager.entity("header")
 	header:give("UiElement", root)
-	header:give("UiTransform", Vector2.new(0, 0), Vector2.new(1, 40), 0, "ratio", "ratio", "ratio", "pixel")
+	header:give("UiTransform", Vector2.new(0, 0), Vector2.new(1, 32), 0, "ratio", "ratio", "ratio", "pixel")
 	header:give("UiLabel", "TEST", Color.white, "Font.DefaultLarge", "center", "center")
 
 	local buttonContainer = LS13.ECSManager.entity("buttonContainer")
