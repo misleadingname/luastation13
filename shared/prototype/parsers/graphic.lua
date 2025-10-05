@@ -2,7 +2,6 @@ local GraphicType = {
 	Static = "static",
 	Animated = "animated",
 	NineSlice = "nineSlice",
-	Directional = "directional",
 }
 
 return function(node)
@@ -27,6 +26,15 @@ return function(node)
 	local img = LS13.AssetManager.Loader.Load(data.fileName)
 	img:setWrap(data.wrapMode)
 	img:setFilter(data.filterMin, data.filterMag)
+
+	if data.graphicType == GraphicType.NineSlice then
+		data.slice = {
+			left = node.Left or 0,
+			right = node.Right or 0,
+			top = node.Top or 0,
+			bottom = node.Bottom or 0,
+		}
+	end
 
 	data.image = img
 	LS13.AssetManager.Push(data, data.id)

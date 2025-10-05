@@ -21,7 +21,7 @@ local function applyAnchor(pos, size, anchor)
 	return pos - Vector2.new(size.x * anchor.x, size.y * anchor.y)
 end
 
-function layoutSystem:update()
+function layoutSystem:update(dt)
 	-- handle parents with layouts
 	for _, parent in ipairs(self.pool) do
 		if parent.UiLayout then
