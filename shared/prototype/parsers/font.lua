@@ -4,7 +4,7 @@ return function(node)
 		type = "font",
 
 		fileName = node.FileName and node.FileName or "/resources/fonts/verdana.ttf",
-		filter = node.Filter and node.Filter or "linear",
+		filter = node.Filter and node.Filter or "nearest",
 		size = node.Size and tonumber(node.Size) or 16,
 	}
 
