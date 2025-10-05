@@ -53,12 +53,21 @@ function MenuState:draw()
 
 	local time = love.timer.getTime()
 
-	local bgX, bgY = time * 25, time * 5
+	local bgX, bgY = time * 24, time * 6
 
-	love.graphics.draw(bgSpace1, love.graphics.newQuad(bgX / 2.5, bgY / 2.5, scrW, scrH, 480, 480))
+	love.graphics.draw(
+		bgSpace1,
+		love.graphics.newQuad(bgX / 2.5 - scrW / 2, bgY / 2.5 - scrH / 2, scrW, scrH, 480, 480)
+	)
 	love.graphics.setBlendMode("add")
-	love.graphics.draw(bgSpace2, love.graphics.newQuad(bgX / 1.5, bgY / 1.5, scrW, scrH, 480, 480))
-	love.graphics.draw(bgSpace3, love.graphics.newQuad(bgX, bgY, scrW, scrH, 480, 480))
+	love.graphics.draw(
+		bgSpace2,
+		love.graphics.newQuad(bgX / 1.5 - scrW / 2, bgY / 1.5 - scrH / 2, scrW, scrH, 480, 480)
+	)
+	love.graphics.draw(
+		bgSpace3,
+		love.graphics.newQuad(bgX / 1.0 - scrW / 2, bgY / 1.0 - scrH / 2, scrW, scrH, 480, 480)
+	)
 	love.graphics.setBlendMode("alpha")
 
 	love.graphics.setFont(defaultFont)
