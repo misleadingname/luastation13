@@ -38,7 +38,6 @@ function love.load(args)
 			depth = t.window.depth,
 			vsync = t.window.vsync,
 			stencil = t.window.stencil,
-			highdpi = t.window.highdpi,
 			msaa = t.window.msaa,
 
 			borderless = t.window.borderless,

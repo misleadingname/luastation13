@@ -1,6 +1,9 @@
 local MenuState = LS13.StateManager.new("Menu")
 
--- local bg
+local bgSpace1
+local bgSpace2
+local bgSpace3
+
 local music
 local lobbyMusic
 
@@ -25,8 +28,10 @@ function MenuState:rollSong()
 end
 
 function MenuState:enter()
-	-- bg = love.graphics.newImage("/resources/textures/core/pepper.png")
 	defaultFont = LS13.AssetManager.Get("Font.Default").font
+	bgSpace1 = LS13.AssetManager.Get("Graphic.BG.SpaceLayer1").image
+	bgSpace2 = LS13.AssetManager.Get("Graphic.BG.SpaceLayer2").image
+	bgSpace3 = LS13.AssetManager.Get("Graphic.BG.SpaceLayer3").image
 	lobbyMusic = LS13.AssetManager.GetPrefixed("Music.Lobby")
 	MenuState:rollSong()
 
@@ -40,24 +45,21 @@ function MenuState:update(dt)
 end
 
 function MenuState:draw()
-	-- -- tile bg
-	-- local w, h = bg:getDimensions()
-	local sx, sy = love.graphics.getDimensions()
+	local scrW, scrH = love.graphics.getDimensions()
 
-	-- love.graphics.setColor(1, 1, 1, 0.25)
-	-- for x = 0, sx * 2, w do
-	-- 	for y = 0, sy * 2, h do
-	-- 		local t = love.timer.getTime()
-	-- 		love.graphics.draw(bg, x - w / 2 + math.sin(t * 2) * w, y - h / 2 + math.cos(t * 4) * w, 0, 1, 1)
-	-- 	end
-	-- end
+	local time = love.timer.getTime()
 
-	-- love.graphics.setColor(1, 1, 1, 1)
+	local bgX, bgY = time * 25, time * 5
 
-	-- Debug info
+	love.graphics.draw(bgSpace1, love.graphics.newQuad(bgX / 2.5, bgY / 2.5, scrW, scrH, 480, 480))
+	love.graphics.setBlendMode("add")
+	love.graphics.draw(bgSpace2, love.graphics.newQuad(bgX / 1.5, bgY / 1.5, scrW, scrH, 480, 480))
+	love.graphics.draw(bgSpace3, love.graphics.newQuad(bgX, bgY, scrW, scrH, 480, 480))
+	love.graphics.setBlendMode("alpha")
+
 	love.graphics.setFont(defaultFont)
 	if music then
-		love.graphics.print("Music: " .. music.name .. " by " .. music.author, 10, sy - 40)
+		love.graphics.print("Music: " .. music.name .. " by " .. music.author, 10, scrH - 40)
 	end
 end
 
