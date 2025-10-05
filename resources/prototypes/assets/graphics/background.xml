@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <LS13>
-	<Graphic Id="Graphic.BG.SpaceLayer1" Type="Static">
+	<Graphic Id="Graphic.BaseBG" Type="Static">
+		<WrapMode>repeat</WrapMode>
+	</Graphic>
+
+	<Graphic Id="Graphic.BG.SpaceLayer1" Parent="Graphic.BaseBG" Type="Static">
 		<FileName>resources/textures/bg/space_layer1.png</FileName>
-		<WrapMode>repeat</WrapMode>
 	</Graphic>
 	
-	<Graphic Id="Graphic.BG.SpaceLayer2" Type="Static">
+	<Graphic Id="Graphic.BG.SpaceLayer2" Parent="Graphic.BaseBG" Type="Static">
 		<FileName>resources/textures/bg/space_layer2.png</FileName>
-		<WrapMode>repeat</WrapMode>
 	</Graphic>
 	
-	<Graphic Id="Graphic.BG.SpaceLayer3" Type="Static">
+	<Graphic Id="Graphic.BG.SpaceLayer3" Parent="Graphic.BaseBG" Type="Static">
 		<FileName>resources/textures/bg/space_layer3.png</FileName>
-		<WrapMode>repeat</WrapMode>
 	</Graphic>
 </LS13>
