@@ -2,7 +2,5 @@
 <LS13>
 	<Sound Id="Sound.Fallback">
 		<FileName>resources/sound/core/error.ogg</FileName>
-		<SoundMode>static</SoundMode>
-		<Looping>false</Looping>
 	</Sound>
 </LS13>
