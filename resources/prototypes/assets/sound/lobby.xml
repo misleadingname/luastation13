@@ -156,4 +156,12 @@
 		<Name>Proron Will Make Us Rich</Name>
 		<Author>Alexander Divine</Author>
 	</Sound>
+
+	<Sound Id="Sound.Lobby.Ajoura" Parent="Sound.BaseLobby">
+		<FileName>resources/sound/lobby/ajoura.ogg</FileName>
+		<Volume>0.3</Volume>
+
+		<Name>The SCP Foundation Main Theme</Name>
+		<Author>Ajoura</Author>
+	</Sound>
 </LS13>
