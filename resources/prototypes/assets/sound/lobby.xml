@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <LS13>
-	<Sound Id="Music.BaseLobby">
+	<Sound Id="Sound.BaseLobby">
 		<SoundMode>stream</SoundMode>
 		<Looping>false</Looping>
+		<Catagory>lobby</Catagory>
 	</Sound>
 
-	<Sound Id="Music.Lobby.FlipFlap" Parent="Music.BaseLobby">
+	<Sound Id="Sound.Lobby.FlipFlap" Parent="Sound.BaseLobby">
 		<FileName>resources/sound/lobby/flip-flap.mod</FileName>
 		<Volume>0.5</Volume>
 
@@ -13,7 +14,7 @@
 		<Author>X-CEED</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.LeisurelyVoice" Parent="Music.BaseLobby">
+	<Sound Id="Sound.Lobby.LeisurelyVoice" Parent="Sound.BaseLobby">
 		<FileName>resources/sound/lobby/leisurely_voice.xm</FileName>
 		<Volume>0.4</Volume>
 
@@ -21,7 +22,7 @@
 		<Author>Drozerix</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.Aggravated" Parent="Music.BaseLobby">
+	<Sound Id="Sound.Lobby.Aggravated" Parent="Sound.BaseLobby">
 		<FileName>resources/sound/lobby/aggravated.it</FileName>
 		<Volume>0.6</Volume>
 
@@ -29,7 +30,7 @@
 		<Author>MEL</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.Title3" Parent="Music.BaseLobby">
+	<Sound Id="Sound.Lobby.Title3" Parent="Sound.BaseLobby">
 		<FileName>resources/sound/lobby/title3.ogg</FileName>
 		<Volume>0.2</Volume>
 
@@ -37,7 +38,7 @@
 		<Author>RMX: Cuboos / OG: Jeroen Tel</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.Thunderdome" Parent="Music.BaseLobby">
+	<Sound Id="Sound.Lobby.Thunderdome" Parent="Sound.BaseLobby">
 		<FileName>resources/sound/lobby/thunderdome.ogg</FileName>
 		<Volume>0.2</Volume>
 
@@ -45,7 +46,7 @@
 		<Author>MashedByMachines</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.ThePenis" Parent="Music.BaseLobby">
+	<Sound Id="Sound.Lobby.ThePenis" Parent="Sound.BaseLobby">
 		<FileName>resources/sound/lobby/thepenis.it</FileName>
 		<Volume>0.7</Volume>
 
@@ -53,7 +54,7 @@
 		<Author>Surasshu</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.Title2" Parent="Music.BaseLobby">
+	<Sound Id="Sound.Lobby.Title2" Parent="Sound.BaseLobby">
 		<FileName>resources/sound/lobby/title2.ogg</FileName>
 		<Volume>0.3</Volume>
 
@@ -61,7 +62,7 @@
 		<Author>Chef Boyardee</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.Chollima" Parent="Music.BaseLobby">
+	<Sound Id="Sound.Lobby.Chollima" Parent="Sound.BaseLobby">
 		<FileName>resources/sound/lobby/chollima.ogg</FileName>
 		<Volume>0.2</Volume>
 
@@ -69,7 +70,7 @@
 		<Author>Pochonbo Electronic Ensemble</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.Superposition" Parent="Music.BaseLobby">
+	<Sound Id="Sound.Lobby.Superposition" Parent="Sound.BaseLobby">
 		<FileName>resources/sound/lobby/superposition.ogg</FileName>
 		<Volume>0.3</Volume>
 
@@ -77,7 +78,7 @@
 		<Author>Amie Waters</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.Conundrum" Parent="Music.BaseLobby">
+	<Sound Id="Sound.Lobby.Conundrum" Parent="Sound.BaseLobby">
 		<FileName>resources/sound/lobby/conundrum.it</FileName>
 		<Volume>0.8</Volume>
 
@@ -85,7 +86,7 @@
 		<Author>Midori</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.EndlessSpace" Parent="Music.BaseLobby">
+	<Sound Id="Sound.Lobby.EndlessSpace" Parent="Sound.BaseLobby">
 		<FileName>resources/sound/lobby/endless_space.ogg</FileName>
 		<Volume>0.4</Volume>
 
@@ -93,7 +94,7 @@
 		<Author>SolusLunes</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.EverHigher" Parent="Music.BaseLobby">
+	<Sound Id="Sound.Lobby.EverHigher" Parent="Sound.BaseLobby">
 		<FileName>resources/sound/lobby/ever_higher.ogg</FileName>
 		<Volume>0.2</Volume>
 
@@ -101,15 +102,15 @@
 		<Author>resampler</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.QuantumLeaps" Parent="Music.BaseLobby">
+	<Sound Id="Sound.Lobby.QuantumLeaps" Parent="Sound.BaseLobby">
 		<FileName>resources/sound/lobby/quantum_leaps.ogg</FileName>
 		<Volume>0.2</Volume>
 
 		<Name>Quantum Leaps</Name>
-		<Author>Sonoton Music</Author>
+		<Author>Sonoton Sound</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.WarWithoutReason" Parent="Music.BaseLobby">
+	<Sound Id="Sound.Lobby.WarWithoutReason" Parent="Sound.BaseLobby">
 		<FileName>resources/sound/lobby/war_without_reason.ogg</FileName>
 		<Volume>0.1</Volume>
 
@@ -117,7 +118,7 @@
 		<Author>Heaven Pierce Her</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.WSERemix" Parent="Music.BaseLobby">
+	<Sound Id="Sound.Lobby.WSERemix" Parent="Sound.BaseLobby">
 		<FileName>resources/sound/lobby/wse_remix.ogg</FileName>
 		<Volume>0.3</Volume>
 
@@ -125,14 +126,14 @@
 		<Author>Anonymous</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.Camera01" Parent="Music.BaseLobby">
+	<Sound Id="Sound.Lobby.Camera01" Parent="Sound.BaseLobby">
 		<FileName>resources/sound/lobby/camera01.ogg</FileName>
 
 		<Name>2023-01-05_21-51-57</Name>
 		<Author>Camera</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.Infinity" Parent="Music.BaseLobby">
+	<Sound Id="Sound.Lobby.Infinity" Parent="Sound.BaseLobby">
 		<FileName>resources/sound/lobby/infinity.ogg</FileName>
 		<Volume>0.4</Volume>
 
@@ -140,7 +141,7 @@
 		<Author>Axosun</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.EveryLightIsBlinkingAtOnce" Parent="Music.BaseLobby">
+	<Sound Id="Sound.Lobby.EveryLightIsBlinkingAtOnce" Parent="Sound.BaseLobby">
 		<FileName>resources/sound/lobby/every_light_is_blinking_at_once.ogg</FileName>
 		<Volume>0.4</Volume>
 
@@ -148,7 +149,7 @@
 		<Author>Alexander Divine</Author>
 	</Sound>
 
-	<Sound Id="Music.Lobby.PWMUR" Parent="Music.BaseLobby">
+	<Sound Id="Sound.Lobby.PWMUR" Parent="Sound.BaseLobby">
 		<FileName>resources/sound/lobby/pwmur.ogg</FileName>
 		<Volume>0.15</Volume>
 

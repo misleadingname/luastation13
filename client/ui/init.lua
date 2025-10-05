@@ -6,6 +6,7 @@ require("client.ui.systems.renderingSystem")
 local systems = LS13.ECS.Systems
 
 local ui = {}
+
 local cursor = {
 	position = Vector2.new(0, 0),
 }

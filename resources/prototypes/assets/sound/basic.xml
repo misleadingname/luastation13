@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LS13>
+	<Sound Id="Sound.Fallback">
+		<FileName>resources/sound/core/error.ogg</FileName>
+		<SoundMode>static</SoundMode>
+		<Looping>false</Looping>
+	</Sound>
+</LS13>
