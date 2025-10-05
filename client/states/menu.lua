@@ -55,6 +55,7 @@ function MenuState:draw()
 
 	local bgX, bgY = time * 24, time * 6
 
+	love.graphics.setColor(1, 1, 1, 1)
 	love.graphics.draw(
 		bgSpace1,
 		love.graphics.newQuad(bgX / 2.5 - scrW / 2, bgY / 2.5 - scrH / 2, scrW, scrH, 480, 480)
