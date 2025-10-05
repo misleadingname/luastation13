@@ -15,7 +15,9 @@ return function(node)
 		frameWidth = node.FrameWidth or 32,
 		frameHeight = node.FrameHeight or 32,
 
-		wrapMode = node.WrapMode,
+		wrapMode = node.WrapMode or "clamp",
+		filterMin = node.FilterMin or "nearest",
+		filterMag = node.FilterMag or "nearest",
 
 		frameCount = node.FrameCount or 1,
 		loopDelay = node.LoopDelay or 0,
@@ -23,10 +25,8 @@ return function(node)
 	}
 
 	local img = LS13.AssetManager.Loader.Load(data.fileName)
-
-	if data.wrapMode then
-		img:setWrap(data.wrapMode)
-	end
+	img:setWrap(data.wrapMode)
+	img:setFilter(data.filterMin, data.filterMag)
 
 	data.image = img
 	LS13.AssetManager.Push(data, data.id)
