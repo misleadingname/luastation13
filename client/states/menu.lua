@@ -4,16 +4,17 @@ local bgSpace1
 local bgSpace2
 local bgSpace3
 
-local music
 local lobbyMusic
+local shuffledSongs = {}
+local music
+local musicSource
 
 local defaultFont
 
-local shuffledSongs = {}
-
 function MenuState:rollSong()
 	LS13.Logging.LogInfo("Rolling lobby song...")
-	if music and music.sound:isPlaying() then
+
+	if musicSource and musicSource:isPlaying() then
 		music.sound:stop()
 	end
 
@@ -23,8 +24,10 @@ function MenuState:rollSong()
 
 	music = table.remove(shuffledSongs)
 
+	musicSource = LS13.SoundManager.NewSource(music.id)
+
 	LS13.Logging.LogInfo("Rolled on lobby song %s (%s by %s)!", music.id, music.name, music.author)
-	love.audio.play(music.sound)
+	love.audio.play(musicSource)
 end
 
 function MenuState:enter()
@@ -32,14 +35,15 @@ function MenuState:enter()
 	bgSpace1 = LS13.AssetManager.Get("Graphic.BG.SpaceLayer1").image
 	bgSpace2 = LS13.AssetManager.Get("Graphic.BG.SpaceLayer2").image
 	bgSpace3 = LS13.AssetManager.Get("Graphic.BG.SpaceLayer3").image
-	lobbyMusic = LS13.AssetManager.GetPrefixed("Music.Lobby")
+
+	lobbyMusic = LS13.AssetManager.GetPrefixed("Sound.Lobby")
 	MenuState:rollSong()
 
 	LS13.UI.test_scene()
 end
 
 function MenuState:update(dt)
-	if not music.sound:isPlaying() then
+	if not musicSource:isPlaying() then
 		MenuState:rollSong()
 	end
 end

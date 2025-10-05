@@ -3,20 +3,21 @@ return function(node)
 		id = node._attr and node._attr.Id and node._attr.Id,
 		type = "sound",
 
-		fileName = node.FileName and node.FileName or "resources/sound/core/error.ogg",
-		soundMode = node.SoundMode and node.SoundMode or "static",
+		fileName = node.FileName or "resources/sound/core/error.ogg",
+		soundMode = node.SoundMode or "static",
+		catagory = node.Catagory,
 		looping = node.Looping and node.Looping == "true",
-		volume = node.Volume and node.Volume or 1.0,
+		volume = node.Volume or 1.0,
 
-		name = node.Name and node.Name,
-		author = node.Author and node.Author,
+		name = node.Name,
+		author = node.Author,
 	}
 
-	local snd = LS13.AssetManager.Loader.Load(data.fileName, { mode = data.soundMode })
+	if data.soundMode == "static" then
+		local sndData = LS13.AssetManager.Loader.Load(data.fileName)
 
-	snd:setLooping(data.looping)
-	snd:setVolume(data.volume)
+		data.soundData = sndData
+	end
 
-	data.sound = snd
 	LS13.AssetManager.Push(data, data.id)
 end
