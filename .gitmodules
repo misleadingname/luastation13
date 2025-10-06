@@ -1,6 +1,3 @@
-[submodule "lib/GameStateManager"]
-	path = lib/GameStateManager
-	url = https://github.com/GwyrddGlas/GameStateManager
 [submodule "lib/lurker"]
 	path = lib/lurker
 	url = https://github.com/rxi/lurker
