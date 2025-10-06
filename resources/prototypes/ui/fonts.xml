@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <LS13>
 	<Font Id="Font.DefaultLarge" Type="Font">
-		<FileName>/resources/fonts/verdana.ttf</FileName>
+		<FileName>/resources/fonts/bahnschrift.ttf</FileName>
 		<Size>32</Size>
 	</Font>
 
 	<Font Id="Font.DefaultMedium" Type="Font">
-		<FileName>/resources/fonts/verdana.ttf</FileName>
+		<FileName>/resources/fonts/bahnschrift.ttf</FileName>
 		<Size>24</Size>
 	</Font>
 
 	<Font Id="Font.Default" Type="Font">
-		<FileName>/resources/fonts/verdana.ttf</FileName>
+		<FileName>/resources/fonts/bahnschrift.ttf</FileName>
 		<Size>16</Size>
 	</Font>
 
