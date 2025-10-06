@@ -8,6 +8,7 @@ function client.load()
 	LS13.SoundManager = require("client.soundManager")
 	LS13.UI = require("client.ui")
 	LS13.Console = require("client.console")
+	LS13.Networking = require("client.networking")
 
 	require("client.states")
 	LS13.UI.init()
@@ -23,6 +24,8 @@ function client.preframe() end
 
 function client.update(dt)
 	xpcall(function()
+		LS13.Networking.process()
+
 		LS13.StateManager.update(dt)
 		LS13.Console.update(dt)
 		LS13.UI.update(dt)
@@ -56,6 +59,10 @@ function love.mousereleased(x, y, button)
 	xpcall(function()
 		LS13.UI.mouseReleased(x, y, button)
 	end, HandleError)
+end
+
+function love.quit()
+	LS13.Networking.shutdown()
 end
 
 return client

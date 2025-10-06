@@ -10,7 +10,9 @@ function server.load()
 
 	LS13.PrototypeManager.ParseAll()
 
-	minDt = 1 / 60
+	LS13.Networking.start(6969, 2)
+
+	minDt = 1 / 100
 	nextTime = love.timer.getTime()
 end
 
@@ -19,7 +21,8 @@ function server.preframe()
 end
 
 function server.update(dt)
-	LS13.Logging.LogDebug("FPS: %s", 1 / dt)
+	-- LS13.Logging.LogDebug("%s", 1 / dt)
+	LS13.Networking.process()
 end
 
 function server.postframe()
@@ -29,6 +32,10 @@ function server.postframe()
 		return
 	end
 	love.timer.sleep(nextTime - curTime)
+end
+
+function love.quit()
+	LS13.Networking.shutdown()
 end
 
 return server
