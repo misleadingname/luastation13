@@ -8,8 +8,13 @@ return function(node)
 		size = node.Size and tonumber(node.Size) or 16,
 	}
 
-	local font = love.graphics.newFont(data.fileName, data.size)
-	font:setFilter(data.filter, data.filter)
+	local font
+	if SERVER then
+		font = nil
+	else
+		font = love.graphics.newFont(data.fileName, data.size)
+		font:setFilter(data.filter, data.filter)
+	end
 
 	data.font = font
 	LS13.AssetManager.Push(data, data.id)

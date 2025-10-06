@@ -23,9 +23,15 @@ return function(node)
 		fps = node.FPS or 10,
 	}
 
-	local img = LS13.AssetManager.Loader.Load(data.fileName)
-	img:setWrap(data.wrapMode)
-	img:setFilter(data.filterMin, data.filterMag)
+	local img
+
+	if SERVER then
+		img = nil
+	else
+		img = LS13.AssetManager.Loader.Load(data.fileName)
+		img:setWrap(data.wrapMode)
+		img:setFilter(data.filterMin, data.filterMag)
+	end
 
 	if data.graphicType == GraphicType.NineSlice then
 		data.slice = {

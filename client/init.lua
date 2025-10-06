@@ -1,6 +1,5 @@
 local client = {}
 
-
 function client.load()
 	print("ey shared im the client")
 
