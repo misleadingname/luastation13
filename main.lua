@@ -73,10 +73,12 @@ function love.load(args)
 end
 
 function love.update(dt)
-	LS13.preupdate() -- only for fps capping, for the love of god do not make it error
+	LS13.preframe() -- only for fps capping, for the love of god do not make it error
 	xpcall(function()
 		shared.update(dt)
 		LS13.update(dt)
 	end, handleError)
-	LS13.postupdate() -- only for fps capping, for the love of god do not make it error
+	if SERVER then
+		LS13.postframe() -- only for fps capping on server
+	end
 end

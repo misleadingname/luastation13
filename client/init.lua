@@ -19,6 +19,8 @@ function client.load()
 	LS13.StateManager.switchState("Loading")
 end
 
+function client.preframe() end
+
 function client.update(dt)
 	xpcall(function()
 		LS13.StateManager.update(dt)

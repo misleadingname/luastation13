@@ -12,7 +12,7 @@ function server.load()
 	nextTime = love.timer.getTime()
 end
 
-function server.preupdate()
+function server.preframe()
 	nextTime = nextTime + minDt
 end
 
@@ -20,7 +20,7 @@ function server.update(dt)
 	LS13.Logging.LogDebug("FPS: %s", 1 / dt)
 end
 
-function server.postupdate()
+function server.postframe()
 	local curTime = love.timer.getTime()
 	if nextTime <= curTime then
 		nextTime = curTime
