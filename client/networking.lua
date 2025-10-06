@@ -5,6 +5,8 @@ local enet = require("enet")
 local host
 local serverPeer
 
+networking.ConnectingIp = "localhost:6969"
+
 function networking.start(ip)
 	if serverPeer then
 		LS13.Logging.LogError("Already connected")
@@ -23,8 +25,6 @@ function networking.start(ip)
 		LS13.Logging.LogError("Failed to connect to %s", ip)
 		return
 	end
-
-	LS13.Logging.LogError("Connected to %s", serverPeer)
 end
 
 function networking.process()

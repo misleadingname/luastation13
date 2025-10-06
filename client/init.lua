@@ -17,6 +17,7 @@ function client.load()
 	if DEBUG then
 		LS13.DebugOverlay = require("client.debugOverlay")
 	end
+
 	LS13.StateManager.switchState("Loading")
 end
 

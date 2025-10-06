@@ -12,7 +12,7 @@ function server.load()
 
 	LS13.Networking.start(6969, 2)
 
-	minDt = 1 / 100
+	minDt = 1 / 60
 	nextTime = love.timer.getTime()
 end
 
