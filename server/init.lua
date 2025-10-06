@@ -6,6 +6,8 @@ local nextTime = love.timer.getTime()
 function server.load()
 	print("just shut the fuck up shared")
 
+	LS13.Networking = require("server.networking")
+
 	LS13.PrototypeManager.ParseAll()
 
 	minDt = 1 / 60
