@@ -15,7 +15,6 @@
 
 		<FrameCount>4</FrameCount>
 		<FrameRate>10</FrameRate>
-		<LoopDelay>0</LoopDelay> <!--Is this really required? -->
-								 <!-- just in case you want it to loop but freeze at the last frame for a bit -->
+		<LoopDelay>0</LoopDelay>
 	</Graphic>
 </LS13>
