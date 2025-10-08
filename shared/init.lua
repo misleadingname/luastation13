@@ -35,6 +35,12 @@ function shared.load()
 	}
 
 	require("shared.math")
+
+	-- local bitser = require("lib.bitser.bitser")
+	-- bitser.registerClass(Vector2)
+	-- bitser.registerClass(Color)
+	-- FIXME: ^^^
+
 	require("shared.world")
 	require("shared.consts")
 

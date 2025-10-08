@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LS13>
+	<Graphic Id="Graphic.Splash" Type="Static">
+		<FileName>resources/textures/core/splash.png</FileName>
+	</Graphic>
+</LS13>

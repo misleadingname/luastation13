@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LS13>
+	<!-- this is just a sample for how world prototypes could work -->
+	<World Id="World.Station.Test">
+		<Location>Location.StationSpace</Location>
+		<!-- a location prototype is used to define things like ambience, backgrounds, etc -->
+
+		<ZMin>0</ZMin>
+		<ZMax>1</ZMax>
+
+		<!-- the maps placed on load (in order) -->
+		<!-- they will overwrite the tiles/entities placed before (areas will be overwritten if the map has them) -->
+		<!-- a map prototype stores tilemap data and entities, can also have areas -->
+		<Structures>
+			<Structure Type="Static">
+				<Map>Map.Station.Test</Map> <!-- the map prototype -->
+				<Position>0,0,0</Position> <!-- a whole offset for the map in tiles -->
+				<Rotation>0</Rotation> <!-- how much the map is rotated clockwise -->
+			</Structure>
+
+			<Structure Type="Static">
+				<Map>Map.Gilb</Map>
+				<Position>-100,-30,0</Position>
+				<Rotation>0</Rotation>
+			</Structure>
+
+			<Structure Type="Static">
+				<Map>Map.Gilb</Map>
+				<Position>-100,30,0</Position>
+				<Rotation>1</Rotation>
+			</Structure>
+
+			<!-- the server will have a seed for each world that gets sent to the client, so no desync issues :D -->
+			<Structure Type="Random">
+				<AmountMin>4</AmountMin>
+				<AmountMax>5</AmountMax>
+				<Maps>
+					<Map>Map.Asteroid.Small1</Map>
+					<Map>Map.Asteroid.Small2</Map>
+					<Map>Map.Asteroid.Small3</Map>
+					<Map>Map.Asteroid.Medium1</Map>
+					<Map>Map.Asteroid.Medium2</Map>
+				</Maps>
+				<PositionMin>100,-50,0</PositionMin>
+				<PositionMax>200,50,1</PositionMax>
+				<RotationMin>0</RotationMin>
+				<RotationMax>3</RotationMax>
+			</Structure>
+		</Structures>
+	</World>
+</LS13>

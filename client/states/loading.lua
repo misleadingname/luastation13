@@ -19,7 +19,7 @@ function LoadingState:update(dt)
 		local title = love.window.getTitle()
 
 		love.window.setTitle(string.format("%s: %s", title, splash.value))
-		LS13.StateManager.switchState("Menu")
+		LS13.StateManager.switchState("Connecting")
 	end
 
 	frame = frame + 1

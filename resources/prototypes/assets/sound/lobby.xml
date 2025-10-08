@@ -3,7 +3,7 @@
 	<Sound Id="Sound.BaseLobby">
 		<SoundMode>stream</SoundMode>
 		<Looping>false</Looping>
-		<Catagory>lobby</Catagory>
+		<Category>lobby</Category>
 	</Sound>
 
 	<Sound Id="Sound.Lobby.FlipFlap" Parent="Sound.BaseLobby">

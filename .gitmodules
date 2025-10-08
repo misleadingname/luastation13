@@ -22,3 +22,6 @@
 [submodule "lib/xml2lua"]
 	path = lib/xml2lua
 	url = https://github.com/misleadingname/xml2lua-LS13
+[submodule "lib/bitser"]
+	path = lib/bitser
+	url = https://github.com/gvx/bitser

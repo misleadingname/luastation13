@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LS13>
+	<Graphic Type="Static">
+		<FileName>resources/textures/core/default.png</FileName>
+		<FrameWidth>32</FrameWidth>
+		<FrameHeight>32</FrameHeight>
+
+		<State Component="Transform" Key="Direction">
+			<StateValue Value="up">1</StateValue> <!-- Frame index -->
+			<StateValue Value="down">2</StateValue>
+			<StateValue Value="left">3</StateValue>
+			<StateValue Value="right">4</StateValue>
+		</State>
+	</Graphic>
+</LS13>

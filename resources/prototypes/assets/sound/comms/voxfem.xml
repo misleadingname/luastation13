@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LS13>
+	<Sound Id="Sound.CommWelcome">
+		<FileName>resources/sound/announcers/voxfem/comms/welcome.ogg</FileName>
+		<Looping>false</Looping>
+		<Category>comm</Category>
+	</Sound>
+</LS13>

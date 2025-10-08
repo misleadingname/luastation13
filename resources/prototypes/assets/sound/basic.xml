@@ -3,4 +3,10 @@
 	<Sound Id="Sound.Fallback">
 		<FileName>resources/sound/core/error.ogg</FileName>
 	</Sound>
+
+	<Sound Id="Sound.BaseComm">
+		<FileName>resources/sound/core/error.ogg</FileName>
+		<Looping>false</Looping>
+		<Category>comm</Category>
+	</Sound>
 </LS13>
