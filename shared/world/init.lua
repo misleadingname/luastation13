@@ -15,7 +15,7 @@ require("shared.world.components.world")
 if CLIENT then
 	require("client.world.systems.tilemapSystem")
 elseif SERVER then
-	require("server.world.systems.networkingSystem")
+	require("server.world.systems.chunkSyncSystem")
 end
 
 local entMethod = LS13.ECSManager.entity
