@@ -1,4 +1,5 @@
 _G.lume = require("lib.lume.lume") -- needed for lurker
+_G.bit = require("bit")
 local lurker = require("lib.lurker.lurker")
 
 function HandleError(error)
@@ -44,7 +45,6 @@ function shared.load()
 
 		local path = dir .. "/resources"
 		local info = love.filesystem.getInfo(path, "directory")
-		LS13.Util.PrintTable(info)
 
 		LS13.Logging.LogDebug("Fused! Mounting resource directory: %s", path)
 		local mounted = love.filesystem.mountFullPath(path, "resources")
@@ -63,7 +63,9 @@ end
 
 function shared.update(dt)
 	LS13.PrototypeManager.UpdateWatchdog()
-	lurker.update()
+	if DEBUG then
+		lurker.update()
+	end
 end
 
 return shared

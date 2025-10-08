@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LS13>
+	<UiMarkup Type="Template" Name="Button">
+		<Container Name="{Name}">
+			<UiTarget />
+			<Panel Color="{Color}" Graphic="{Graphic}" />
+			<Label Text="{Text}" Color="{Color}" Font="{Font}" hAlign="center" vAlign="center" />
+		</Container>
+	</UiMarkup>
+</LS13>
