@@ -24,7 +24,7 @@ local function get_chunk_index(coords)
 	return ly * tilemap.CHUNK_SIZE + lx + 1 -- gotta love lua tables starting at 1
 end
 
-function tilemap.new_chunk()
+function tilemap.newChunk()
 	local chunk = {}
 	for i = 1, tilemap.CHUNK_SIZE * tilemap.CHUNK_SIZE do
 		table.insert(chunk, nil)
@@ -36,6 +36,7 @@ end
 function tilemap.new()
 	local self = setmetatable({}, tilemap)
 	self.chunks = {}
+	self.dirtyChunks = {}
 
 	return self
 end
@@ -44,7 +45,7 @@ function tilemap:__index(key)
 	return rawget(tilemap, key)
 end
 
-function tilemap:get_tile(coords)
+function tilemap:getTile(coords)
 	local chunkCoord = get_chunk_coords(coords)
 	local chunk = self.chunks[chunkCoord.x .. "," .. chunkCoord.y]
 	if chunk then
@@ -54,15 +55,65 @@ function tilemap:get_tile(coords)
 	end
 end
 
-function tilemap:set_tile(coords, tile)
+function tilemap:setTile(coords, tile)
 	local chunkCoord = get_chunk_coords(coords)
-	local chunk = self.chunks[chunkCoord.x .. "," .. chunkCoord.y]
+	local chunkKey = chunkCoord.x .. "," .. chunkCoord.y
+	local chunk = self.chunks[chunkKey]
+
 	if chunk then
 		chunk[get_chunk_index(coords)] = tile
 	else
-		chunk = tilemap.new_chunk()
+		chunk = tilemap.newChunk()
 		chunk[get_chunk_index(coords)] = tile
+		self.chunks[chunkKey] = chunk -- Fix: Actually store the new chunk!
 	end
+
+	if SERVER then
+		self:markChunkDirty(chunkKey)
+	end
+end
+
+function tilemap:markChunkDirty(chunkKey)
+	if not self.dirtyChunks then
+		self.dirtyChunks = {}
+	end
+	self.dirtyChunks[chunkKey] = true
+end
+
+function tilemap:getDirtyChunks()
+	local dirty = self.dirtyChunks or {}
+	self.dirtyChunks = {}
+	return dirty
+end
+
+function tilemap:serializeChunk(chunkKey)
+	local chunk = self.chunks[chunkKey]
+	if not chunk then
+		return nil
+	end
+
+	-- send chunk data by only non-nil tiles
+	local compressedChunk = {}
+	for i = 1, self.CHUNK_SIZE * self.CHUNK_SIZE do
+		if chunk[i] then
+			compressedChunk[i] = chunk[i]
+		end
+	end
+
+	return compressedChunk
+end
+
+function tilemap:deserializeChunk(chunkKey, compressedChunk)
+	local chunk = tilemap.newChunk()
+	for i, tile in pairs(compressedChunk) do
+		chunk[i] = tile
+	end
+	self.chunks[chunkKey] = chunk
+end
+
+function tilemap:getChunkKey(coords)
+	local chunkCoord = get_chunk_coords(coords)
+	return chunkCoord.x .. "," .. chunkCoord.y
 end
 
 return tilemap

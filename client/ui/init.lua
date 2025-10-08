@@ -46,6 +46,10 @@ function ui.mouseReleased(x, y, button)
 	ui.world:emit("release", button)
 end
 
+function ui.clear()
+	ui.world:clear()
+end
+
 function ui.test_scene()
 	local root = LS13.ECSManager.entity("root")
 	root:give("UiElement")
@@ -61,7 +65,7 @@ function ui.test_scene()
 		Vector2.new(0.5, 0.5)
 	)
 	root:give("UiLayout", "vertical", Vector2.new(12, 12), 8, "begin", "top")
-	root:give("UiPanel", "Graphic.UiPanel", Color.gray)
+	root:give("UiPanel", "Graphic.UiPanel")
 
 	local header = LS13.ECSManager.entity("header")
 	header:give("UiElement", root)

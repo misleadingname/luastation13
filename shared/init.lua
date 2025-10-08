@@ -34,6 +34,12 @@ function shared.load()
 	}
 
 	require("shared.math")
+
+	-- local bitser = require("lib.bitser.bitser")
+	-- bitser.registerClass(Vector2)
+	-- bitser.registerClass(Color)
+	-- FIXME: ^^^
+
 	require("shared.world")
 	require("shared.consts")
 
@@ -44,7 +50,6 @@ function shared.load()
 
 		local path = dir .. "/resources"
 		local info = love.filesystem.getInfo(path, "directory")
-		LS13.Util.PrintTable(info)
 
 		LS13.Logging.LogDebug("Fused! Mounting resource directory: %s", path)
 		local mounted = love.filesystem.mountFullPath(path, "resources")

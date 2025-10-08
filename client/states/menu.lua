@@ -4,31 +4,7 @@ local bgSpace1
 local bgSpace2
 local bgSpace3
 
-local lobbyMusic
-local shuffledSongs = {}
-local music
-local musicSource
-
 local defaultFont
-
-function MenuState:rollSong()
-	LS13.Logging.LogInfo("Rolling lobby song...")
-
-	if musicSource and musicSource:isPlaying() then
-		music.sound:stop()
-	end
-
-	if #shuffledSongs == 0 then
-		shuffledSongs = lume.shuffle(lume.clone(lobbyMusic))
-	end
-
-	music = table.remove(shuffledSongs)
-
-	musicSource = LS13.SoundManager.NewSource(music.id)
-
-	LS13.Logging.LogInfo("Rolled on lobby song %s (%s by %s)!", music.id, music.name, music.author)
-	love.audio.play(musicSource)
-end
 
 function MenuState:enter()
 	defaultFont = LS13.AssetManager.Get("Font.Default").font
@@ -36,23 +12,16 @@ function MenuState:enter()
 	bgSpace2 = LS13.AssetManager.Get("Graphic.BG.SpaceLayer2").image
 	bgSpace3 = LS13.AssetManager.Get("Graphic.BG.SpaceLayer3").image
 
-	lobbyMusic = LS13.AssetManager.GetPrefixed("Sound.Lobby")
-	MenuState:rollSong()
-
 	LS13.UI.test_scene()
 end
 
 function MenuState:update(dt)
-	if not musicSource:isPlaying() then
-		MenuState:rollSong()
-	end
 end
 
 function MenuState:draw()
 	local scrW, scrH = love.graphics.getDimensions()
 
 	local time = love.timer.getTime()
-
 	local bgX, bgY = time * 24, time * 6
 
 	love.graphics.setColor(1, 1, 1, 1)

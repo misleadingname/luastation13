@@ -5,7 +5,7 @@ return function(node)
 
 		fileName = node.FileName or "resources/sound/core/error.ogg",
 		soundMode = node.SoundMode or "static",
-		catagory = node.Catagory,
+		category = node.Category,
 		looping = node.Looping == "true",
 		volume = node.Volume or 1.0,
 
