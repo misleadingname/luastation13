@@ -164,4 +164,12 @@
 		<Name>The SCP Foundation Main Theme</Name>
 		<Author>Ajoura</Author>
 	</Sound>
+
+	<Sound Id="Sound.Lobby.SpeedEBoy" Parent="Sound.BaseLobby">
+		<FileName>resources/sound/lobby/speedebo.mod</FileName>
+		<Volume>0.4</Volume>
+
+		<Name>Speed-E-Boy</Name>
+		<Author>Martin Iveson</Author>
+	</Sound>
 </LS13>

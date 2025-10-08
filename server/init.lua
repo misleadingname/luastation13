@@ -1,7 +1,7 @@
 local server = {}
 
-local minDt = 1 / 30
-local nextTime = love.timer.getTime()
+local minDt
+local nextTime
 
 function server.load()
 	print("just shut the fuck up shared")
@@ -10,20 +10,13 @@ function server.load()
 	LS13.Networking.Protocol = require("shared.networking.protocol")
 	LS13.PrototypeManager.ParseAll()
 
-	-- TODO: SWAP WITH MULTIWORLD
-	LS13.World = LS13.ECSManager.world()
-	LS13.World:addSystems(LS13.ECS.Systems.NetworkingSystem)
-
-	local worldEntity = LS13.ECSManager.entity("World")
-	worldEntity:give("World")
-	LS13.World:addEntity(worldEntity)
-	-- END TODO
 	require("server.states")
+	LS13.WorldManager = require("server.worldmanager")
 	LS13.RoundManager = require("server.roundmanager")
 
-	LS13.Logging.LogInfo("Created world entity with tilemap")
-	LS13.Networking.start(NETWORK_DEFAULT_PORT, 2)
 	LS13.StateManager.switchState("Preround")
+
+	LS13.Networking.start(NETWORK_DEFAULT_PORT, 2)
 
 	minDt = 1 / 60
 	nextTime = love.timer.getTime()
@@ -38,9 +31,7 @@ function server.update(dt)
 	LS13.Networking.update()
 	LS13.StateManager.update(dt)
 
-	if LS13.World then
-		LS13.World:emit("update", dt)
-	end
+	LS13.WorldManager.update(dt)
 end
 
 function server.postframe()

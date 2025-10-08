@@ -53,7 +53,7 @@ function RoundManager.startRound()
 	idleTime = 0
 
 	local msg = LS13.Networking.Protocol.createMessage(LS13.Networking.Protocol.MessageType.GAME_STATE, {
-		state = "Round"
+		state = "Round",
 	})
 
 	for _, client in ipairs(participatingClients) do

@@ -93,7 +93,7 @@ function networking.sendWorldInitToClient(clientId)
 	local tilemap = worldEnt.World.tilemap
 	local worldData = {
 		chunks = {},
-		metadata = {}
+		metadata = {},
 	}
 
 	for chunkKey, chunk in pairs(tilemap.chunks) do
@@ -117,7 +117,7 @@ messageHandlers[networking.Protocol.MessageType.HANDSHAKE] = function(peer, mess
 		name = name,
 		clientVersion = clientVersion,
 		lastHeartbeat = love.timer.getTime(),
-		connected = true
+		connected = true,
 	}
 
 	LS13.Logging.LogInfo("Client %s (%s) connected with version %s", clientId, name, clientVersion)
@@ -126,7 +126,7 @@ messageHandlers[networking.Protocol.MessageType.HANDSHAKE] = function(peer, mess
 		clientId = clientId,
 		serverVersion = LS13.Info.Version,
 		netVersion = networking.Protocol.Version,
-		gameState = LS13.StateManager.currentState.name
+		gameState = LS13.StateManager.currentState.name,
 	})
 
 	local serialized = networking.Protocol.serialize(response)
@@ -164,9 +164,8 @@ messageHandlers[networking.Protocol.MessageType.VERB_REQUEST] = function(peer, m
 
 	local valid, error = verb:validate()
 	if not valid then
-		local errorMsg = networking.Protocol.createVerbError(
-			"Verb validation failed: " .. (error or "Unknown error"),
-			message.data)
+		local errorMsg =
+			networking.Protocol.createVerbError("Verb validation failed: " .. (error or "Unknown error"), message.data)
 		networking.sendToClient(clientId, errorMsg)
 		return
 	end
@@ -225,7 +224,9 @@ messageHandlers[networking.Protocol.MessageType.PING] = function(peer, message)
 end
 
 function networking.update()
-	if not host then return end
+	if not host then
+		return
+	end
 
 	local event = host:service()
 	while event do
