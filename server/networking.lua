@@ -3,7 +3,7 @@ local enet = require("enet")
 networking.Protocol = require("shared.networking.protocol")
 
 local host
-local clients = {} -- clientId -> {peer, playerName, lastHeartbeat, etc}
+local clients = {} -- clientId -> {peer, playerName, lastHeartbeat, worldId, etc}
 local clientIdCounter = 1
 
 local messageHandlers = {}
@@ -84,24 +84,17 @@ function networking.sendChunkToClient(clientId, chunkKey, chunkData)
 end
 
 function networking.sendWorldInitToClient(clientId)
-	local worldEnt = LS13.World:getEntities()[1]
-	if not worldEnt or not worldEnt.World then
-		LS13.Logging.LogError("No world entity found for client %s", clientId)
+	local client = clients[clientId]
+	if not client then
+		LS13.Logging.LogError("Cannot send world init to unknown client %s", clientId)
 		return false
 	end
-
-	local tilemap = worldEnt.World.tilemap
-	local worldData = {
-		chunks = {},
-		metadata = {},
-	}
-
-	for chunkKey, chunk in pairs(tilemap.chunks) do
-		worldData.chunks[chunkKey] = tilemap:serializeChunk(chunkKey)
+	if client.worldId then
+		return LS13.WorldManager.sendWorldDataToClient(clientId, client.worldId)
+	else
+		LS13.Logging.LogDebug("Client %s not assigned to any world, skipping world init", clientId)
+		return true
 	end
-
-	local message = networking.Protocol.createWorldInit(worldData)
-	return networking.sendToClient(clientId, message)
 end
 
 messageHandlers[networking.Protocol.MessageType.HANDSHAKE] = function(peer, message)
@@ -118,6 +111,7 @@ messageHandlers[networking.Protocol.MessageType.HANDSHAKE] = function(peer, mess
 		clientVersion = clientVersion,
 		lastHeartbeat = love.timer.getTime(),
 		connected = true,
+		worldId = nil
 	}
 
 	LS13.Logging.LogInfo("Client %s (%s) connected with version %s", clientId, name, clientVersion)
@@ -132,7 +126,6 @@ messageHandlers[networking.Protocol.MessageType.HANDSHAKE] = function(peer, mess
 	local serialized = networking.Protocol.serialize(response)
 	if serialized then
 		peer:send(serialized)
-
 		networking.sendWorldInitToClient(clientId)
 	end
 end
@@ -147,7 +140,6 @@ messageHandlers[networking.Protocol.MessageType.VERB_REQUEST] = function(peer, m
 	local verbName = message.data.verbName
 	local verbData = message.data.verbData
 
-	-- Create a copy of verbData for server processing (with invoker)
 	local serverVerbData = {}
 	for k, v in pairs(verbData) do
 		serverVerbData[k] = v
@@ -180,7 +172,6 @@ messageHandlers[networking.Protocol.MessageType.VERB_REQUEST] = function(peer, m
 		end
 	end
 
-	-- Broadcast verb to other clients using original verbData (without invoker)
 	networking.broadcastVerb(verbName, verbData or {}, clientId)
 end
 
@@ -191,19 +182,29 @@ messageHandlers[networking.Protocol.MessageType.CHUNK_REQUEST] = function(peer, 
 		return
 	end
 
+	-- if client is not in any world, send empty chunk
+	if not client.worldId then
+		local chunkX = message.data.chunkX
+		local chunkY = message.data.chunkY
+		local chunkKey = chunkX .. "," .. chunkY
+		networking.sendChunkToClient(clientId, chunkKey, {})
+		return
+	end
+
 	local chunkX = message.data.chunkX
 	local chunkY = message.data.chunkY
 	local chunkKey = chunkX .. "," .. chunkY
 
-	-- Get chunk data from world
-	local worldEnt = LS13.World:getEntities()[1]
+	local world = LS13.WorldManager.worlds[client.worldId]
+	if not world then return end
+
+	local worldEnt = world:getEntities()[1]
 	if worldEnt and worldEnt.World then
 		local chunkData = worldEnt.World.tilemap:serializeChunk(chunkKey)
 		if chunkData then
 			networking.sendChunkToClient(clientId, chunkKey, chunkData)
-			LS13.Logging.LogDebug("Sent chunk %s to client %s", chunkKey, clientId)
+			LS13.Logging.LogDebug("Sent chunk %s to client %s in world %s", chunkKey, clientId, client.worldId)
 		else
-			-- Send empty chunk
 			networking.sendChunkToClient(clientId, chunkKey, {})
 		end
 	end
@@ -214,12 +215,22 @@ messageHandlers[networking.Protocol.MessageType.PING] = function(peer, message)
 	if client then
 		client.lastHeartbeat = love.timer.getTime()
 
-		-- Send pong response
 		local pong = networking.Protocol.createMessage(networking.Protocol.MessageType.PONG, {})
 		local serialized = networking.Protocol.serialize(pong)
 		if serialized then
 			peer:send(serialized)
 		end
+	end
+end
+
+messageHandlers[networking.Protocol.MessageType.WORLD_SWITCH] = function(message)
+	local worldId = message.data.worldId
+	LS13.Logging.LogInfo("Switching to world: %s", worldId)
+
+	local worldEnt = LS13.World:getEntities()[1]
+	if worldEnt and worldEnt.World then
+		worldEnt.World.tilemap.chunks = {}
+		worldEnt.World.tilemap.dirtyChunks = {}
 	end
 end
 
@@ -248,7 +259,6 @@ function networking.update()
 		elseif event.type == "connect" then
 			LS13.Logging.LogDebug("Peer %s attempting to connect", event.peer)
 		elseif event.type == "disconnect" then
-			-- Remove client from registry
 			local client, clientId = networking.getClientByPeer(event.peer)
 			if client then
 				LS13.Logging.LogInfo("Client %s (%s) disconnected", clientId, client.playerName)
@@ -260,9 +270,8 @@ function networking.update()
 		event = host:service()
 	end
 
-	-- Check for timed out clients
 	local currentTime = love.timer.getTime()
-	local timeoutThreshold = 30.0 -- 30 seconds
+	local timeoutThreshold = 30.0
 
 	for clientId, client in pairs(clients) do
 		if currentTime - client.lastHeartbeat > timeoutThreshold then

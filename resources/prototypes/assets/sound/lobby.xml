@@ -172,4 +172,13 @@
 		<Name>Speed-E-Boy</Name>
 		<Author>Martin Iveson</Author>
 	</Sound>
+
+
+	<Sound Id="Sound.Lobby.WindF" Parent="Sound.BaseLobby">
+		<FileName>resources/sound/lobby/a-windf.it</FileName>
+		<Volume>0.4</Volume>
+
+		<Name>Winds of Fjords</Name>
+		<Author>minomus</Author>
+	</Sound>
 </LS13>

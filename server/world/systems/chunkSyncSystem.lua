@@ -1,15 +1,12 @@
--- Server-side Networking System For Chunks
--- Handles broadcasting dirty chunks to clients
 
 local chunkSyncSystem = LS13.ECSManager.system({ pool = { "World" } })
 
-local updateInterval = 1 / 10 -- 10 Hz update rate for chunk broadcasting
+local updateInterval = 1 / 10
 local lastUpdate = 0
 
 function chunkSyncSystem:update(dt)
 	local currentTime = love.timer.getTime()
 
-	-- Only process at the specified interval
 	if currentTime - lastUpdate < updateInterval then
 		return
 	end
@@ -22,16 +19,19 @@ function chunkSyncSystem:update(dt)
 
 	local tilemap = worldEnt.World.tilemap
 
-	-- Get dirty chunks
 	local dirtyChunks = tilemap:getDirtyChunks()
 
-	-- Broadcast updates to all clients in this world
 	for chunkKey, _ in pairs(dirtyChunks) do
 		local chunkData = tilemap:serializeChunk(chunkKey)
 		if chunkData then
-			-- TODO: broadcast chunk update to all clients in this world
+			local worldId = worldEnt.World.worldId
+			local clientsInWorld = LS13.WorldManager.getClientsInWorld(worldId)
 
-			LS13.Logging.LogDebug("Broadcasted chunk update: %s", chunkKey)
+			for _, client in ipairs(clientsInWorld) do
+				LS13.Networking.sendChunkToClient(client.id, chunkKey, chunkData)
+			end
+
+			LS13.Logging.LogDebug("Broadcasted chunk update %s to %d clients in world %s", chunkKey, #clientsInWorld, worldId)
 		end
 	end
 end

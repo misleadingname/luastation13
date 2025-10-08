@@ -9,4 +9,12 @@
 		<Looping>false</Looping>
 		<Category>comm</Category>
 	</Sound>
+
+	<Sound Id="Sound.UiHover">
+		<FileName>resources/sound/ui/hover.ogg</FileName>
+	</Sound>
+
+	<Sound Id="Sound.UiClick">
+		<FileName>resources/sound/ui/click.ogg</FileName>
+	</Sound>
 </LS13>
