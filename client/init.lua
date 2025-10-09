@@ -47,10 +47,6 @@ function love.draw()
 	xpcall(function()
 		LS13.StateManager.draw()
 
-		if LS13.WorldManager and LS13.WorldManager.getCurrentWorld() then
-			LS13.WorldManager.getCurrentWorld():emit("draw")
-		end
-
 		LS13.UI.draw()
 		LS13.Console.draw()
 

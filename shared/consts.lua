@@ -9,3 +9,8 @@ CON_SERVER = 3
 CON_CLIENT = 4
 -- network
 NETWORK_DEFAULT_PORT = 14700
+
+-- viewport
+-- tg's viewport base width and height
+VIEWPORT_WIDTH = 608
+VIEWPORT_HEIGHT = 480
