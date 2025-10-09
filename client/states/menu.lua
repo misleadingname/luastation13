@@ -11,8 +11,6 @@ function MenuState:enter()
 	bgSpace1 = LS13.AssetManager.Get("Graphic.BG.SpaceLayer1").image
 	bgSpace2 = LS13.AssetManager.Get("Graphic.BG.SpaceLayer2").image
 	bgSpace3 = LS13.AssetManager.Get("Graphic.BG.SpaceLayer3").image
-
-	LS13.UI.test_scene()
 end
 
 function MenuState:update(dt)

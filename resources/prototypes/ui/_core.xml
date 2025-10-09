@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LS13>
+	<UIMarkup Id="UIButton" Type="Template">
+		<Params>
+			<Param Name="Id" Default="UnnamedButton" />
+			<Param Name="Text" Default="Button" />
+			<Param Name="Graphic" Default="Graphic.UiButton" />
+			<Param Name="Font" Default="Font.Default" />
+			<Param Name="Color" Default="1, 1, 1, 1" />
+		</Params>
+
+		<UIEntity Id="{Id}">
+			<UiTransform Position="0,0" Size="1,32" Rotation="0" PosX="ratio" PosY="ratio" SizeX="ratio" SizeY="pixel" />
+			<UiLabel Text="{Text}" Color="{Color}" Font="{Font}" HAlign="center" VAlign="center" />
+			<UiPanel Graphic="{Graphic}" Color="{Color}" />
+			<UiTarget />
+		</UIEntity>
+	</UIMarkup>
+</LS13>

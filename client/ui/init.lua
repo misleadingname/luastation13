@@ -5,8 +5,11 @@ require("client.ui.systems.targetingSystem")
 require("client.ui.systems.renderingSystem")
 
 local systems = LS13.ECS.Systems
+local manager = require("client.ui.manager")
 
 local ui = {}
+ui.manager = manager
+ui.currentScene = nil
 
 local cursor = {
 	position = Vector2.new(0, 0),
@@ -23,6 +26,8 @@ function ui.init()
 		systems.UiTargettingSystem,
 		systems.UiRenderingSystem
 	)
+
+	manager.init()
 end
 
 function ui.update(dt)
@@ -47,7 +52,37 @@ function ui.mouseReleased(x, y, button)
 end
 
 function ui.clear()
+	if ui.currentScene then
+		ui.currentScene:destroy(ui.world)
+		ui.currentScene = nil
+	end
 	ui.world:clear()
+end
+
+function ui.createScene(sceneId)
+	if ui.currentScene then
+		ui.currentScene:destroy(ui.world)
+	end
+
+	ui.currentScene = manager.createScene(sceneId, ui.world)
+	if not ui.currentScene then
+		LS13.Logging.LogError("Failed to create scene: %s", sceneId)
+		return false
+	end
+
+	LS13.Logging.LogInfo("Created scene: %s", sceneId)
+	return true
+end
+
+function ui.getCurrentScene()
+	return ui.currentScene
+end
+
+function ui.getElementById(id)
+	if ui.currentScene then
+		return ui.currentScene:getElementById(id)
+	end
+	return nil
 end
 
 function ui.test_scene()
@@ -113,6 +148,10 @@ function ui.test_scene()
 	ui.world:addEntity(btn1)
 	ui.world:addEntity(btn2)
 	ui.world:addEntity(btn3)
+end
+
+function ui.test_xml_scene()
+	return ui.createScene("UI.Markup.TestScene")
 end
 
 return ui

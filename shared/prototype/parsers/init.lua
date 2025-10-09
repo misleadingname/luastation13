@@ -6,4 +6,5 @@ return {
 	String = require("shared.prototype.parsers.string"),
 	Sound = require("shared.prototype.parsers.sound"),
 	Font = require("shared.prototype.parsers.font"),
+	UIMarkup = require("shared.prototype.parsers.uimarkup"),
 }

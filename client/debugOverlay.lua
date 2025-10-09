@@ -5,6 +5,7 @@ local H = love.graphics.getHeight
 
 local init = false
 local font
+local showUITree = true
 
 local networkStats = {
 	messagesReceived = 0,
@@ -428,6 +429,15 @@ local lines = {
 			return { 0.7, 0.7, 0.7, 1 }
 		end,
 	},
+
+	{
+		Text = function()
+			return "[U] Toggle UI tree view"
+		end,
+		Color = function()
+			return { 0.7, 0.7, 0.7, 1 }
+		end,
+	},
 }
 
 function debugOverlay.init()
@@ -508,6 +518,14 @@ function debugOverlay.update(dt)
 	elseif not love.keyboard.isDown("g") then
 		debugOverlay.gPressed = false
 	end
+
+	if love.keyboard.isDown("u") and not debugOverlay.uPressed then
+		debugOverlay.uPressed = true
+		showUITree = not showUITree
+		LS13.Logging.LogInfo("UI tree view %s", showUITree and "enabled" or "disabled")
+	elseif not love.keyboard.isDown("u") then
+		debugOverlay.uPressed = false
+	end
 end
 
 function debugOverlay.draw()
@@ -519,6 +537,167 @@ function debugOverlay.draw()
 	local startY = 80
 	for i, line in ipairs(lines) do
 		shadowText(line.Text(), 16, startY + i * 16, "right", line.Color())
+	end
+
+	-- UI Debug Tree View
+	if showUITree and LS13.UI and LS13.UI.world then
+		debugOverlay.drawUITree()
+	end
+end
+
+local function getEntityName(entity)
+	if entity.Metadata and entity.Metadata.name then
+		return entity.Metadata.name
+	end
+	return "Entity"
+end
+
+local function getComponentInfo(entity, componentName)
+	local component = entity[componentName]
+	if not component then return nil end
+
+	local info = {}
+
+	if componentName == "UiTransform" then
+		info.pos = string.format("%.1f,%.1f", component.position.x, component.position.y)
+		info.size = string.format("%.1f,%.1f", component.size.x, component.size.y)
+		info.posType = string.format("%s,%s", component.posx, component.posy)
+		info.sizeType = string.format("%s,%s", component.sizex, component.sizey)
+	elseif componentName == "UiLabel" then
+		info.text = component.text or ""
+		info.align = string.format("%s,%s", component.hAlign, component.vAlign)
+		info.font = component.font or "default"
+	elseif componentName == "UiPanel" then
+		info.graphic = component.graphic or "none"
+	elseif componentName == "UiLayout" then
+		info.type = component.type or "vertical"
+		info.align = component.align or "begin"
+		info.justify = component.justify or "begin"
+		info.spacing = tostring(component.spacing or 0)
+	elseif componentName == "UiTarget" then
+		info.hovered = tostring(component.hovered or false)
+		info.focused = tostring(component.focused or false)
+	end
+
+	return info
+end
+
+local function drawTreeNode(entity, depth, x, y, lineHeight)
+	local indent = depth * 16
+	local currentY = y
+
+	local entityName = getEntityName(entity)
+	local nameColor = { 1, 1, 0.5, 1 }
+	local treeSymbol = depth == 0 and "\\/ " or "|- "
+	shadowText(string.rep("  ", depth) .. treeSymbol .. entityName, x + indent, currentY, "left", nameColor)
+	currentY = currentY + lineHeight
+
+	local components = { "UiTransform", "UiLabel", "UiPanel", "UiLayout", "UiTarget" }
+	local componentCount = 0
+
+	for _, componentName in ipairs(components) do
+		if entity[componentName] then
+			componentCount = componentCount + 1
+			local componentColor = { 0.7, 0.9, 1, 1 }
+			shadowText(string.rep("  ", depth + 1) .. "| " .. componentName, x + indent, currentY, "left", componentColor)
+			currentY = currentY + lineHeight
+
+			local info = getComponentInfo(entity, componentName)
+			if info then
+				local detailCount = 0
+				for key, value in pairs(info) do
+					if detailCount < 2 then
+						local detailColor = { 0.8, 0.8, 0.8, 1 }
+						local detailText = string.format("%s| %s: %s", string.rep("  ", depth + 1), key, value)
+						shadowText(detailText, x + indent, currentY, "left", detailColor)
+						currentY = currentY + lineHeight
+						detailCount = detailCount + 1
+					end
+				end
+			end
+		end
+	end
+
+	if componentCount > 0 then
+		local countColor = { 0.6, 0.8, 0.6, 1 }
+		shadowText(string.rep("  ", depth + 1) .. "\\ " .. componentCount .. " components", x + indent, currentY, "left",
+			countColor)
+		currentY = currentY + lineHeight
+	end
+
+	return currentY
+end
+
+local function buildUIHierarchy()
+	if not LS13.UI or not LS13.UI.world then return {} end
+
+	local entities = LS13.UI.world:getEntities()
+	if not entities then return {} end
+
+	local hierarchy = {}
+	local entityMap = {}
+
+	for _, entity in ipairs(entities) do
+		if entity.UiElement then
+			entityMap[entity] = {
+				entity = entity,
+				children = {}
+			}
+		end
+	end
+
+	for _, entity in ipairs(entities) do
+		if entity.UiElement then
+			local parent = entity.UiElement.parent
+			if parent and entityMap[parent] then
+				table.insert(entityMap[parent].children, entityMap[entity])
+			else
+				table.insert(hierarchy, entityMap[entity])
+			end
+		end
+	end
+
+	return hierarchy
+end
+
+local function drawUITreeRecursive(nodes, depth, x, y, lineHeight)
+	local currentY = y
+
+	for _, node in ipairs(nodes) do
+		currentY = drawTreeNode(node.entity, depth, x, currentY, lineHeight)
+
+		if #node.children > 0 then
+			currentY = drawUITreeRecursive(node.children, depth + 1, x, currentY, lineHeight)
+		end
+
+		if depth == 0 then
+			currentY = currentY + lineHeight * 0.5
+		end
+	end
+
+	return currentY
+end
+
+function debugOverlay.drawUITree()
+	if not LS13.UI or not LS13.UI.world then return end
+
+	local entities = LS13.UI.world:getEntities()
+	if not entities or #entities == 0 then return end
+
+	local startX = W() - 600
+	local startY = 80
+	local lineHeight = 14
+
+	local countColor = { 0.8, 1, 0.8, 1 }
+	shadowText(string.format("UI entities: %d", #entities), startX, startY, "left", countColor)
+	startY = startY + lineHeight * 1.5
+
+	local hierarchy = buildUIHierarchy()
+	if #hierarchy > 0 then
+		drawUITreeRecursive(hierarchy, 0, startX, startY, lineHeight)
+	else
+		local noEntitiesColor = { 0.7, 0.7, 0.7, 1 }
+		shadowText("No UI hierarchy found", startX, startY, "left", noEntitiesColor)
 	end
 end
 
