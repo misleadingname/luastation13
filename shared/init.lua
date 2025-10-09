@@ -1,4 +1,5 @@
 _G.lume = require("lib.lume.lume") -- needed for lurker
+_G.bit = require("bit")
 local lurker = require("lib.lurker.lurker")
 
 function HandleError(error)
@@ -68,7 +69,9 @@ end
 
 function shared.update(dt)
 	LS13.PrototypeManager.UpdateWatchdog()
-	lurker.update()
+	if DEBUG then
+		lurker.update()
+	end
 end
 
 return shared

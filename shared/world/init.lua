@@ -13,7 +13,8 @@ require("shared.world.components.physics")
 require("shared.world.components.world")
 
 if CLIENT then
-	require("client.world.systems.tilemapSystem")
+	require("client.world.systems.renderTilemapSystem")
+	require("client.world.systems.renderEntitiesSystem")
 elseif SERVER then
 	require("server.world.systems.chunkSyncSystem")
 end

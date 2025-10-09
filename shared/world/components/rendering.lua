@@ -5,10 +5,10 @@ local rendererComponent = ecs.component("Renderer", function(c, visible)
 end)
 LS13.ECS.Components.Renderer = rendererComponent
 
-local graphicComponent = ecs.component("Graphic", function(c, graphicId, visible, offset, playing)
+local graphicComponent = ecs.component("Graphic", function(c, graphicId, visible, origin, playing)
 	c.graphicId = graphicId or "Graphic.Fallback"
 	c.visible = visible or true
-	c.offset = offset or Vector2.new(0, 0)
+	c.origin = origin or Vector2.new(0, 0)
 	c.tint = Color.new(255, 255, 255, 255)
 	c.playing = playing or false
 end)

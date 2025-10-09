@@ -54,16 +54,20 @@ function love.load(args)
 	LS13.Role = runMode
 	LS13.LaunchArgs = args
 
-	local head = (love.filesystem.read(".git/refs/heads/master") or "UKNOWN"):gsub("\n", "")
-	local branch = (love.filesystem.read(".git/HEAD") or "UKNOWN"):gsub("^ref: .*/", ""):gsub("\n", "")
+	local head = (love.filesystem.read(".git/refs/heads/master") or ""):gsub("\n", "")
+	local branch = (love.filesystem.read(".git/HEAD") or ""):gsub("^ref: .*/", ""):gsub("\n", "")
+	if branch == "" then branch = nil end
+	if head == "" then head = nil end
 
 	print(
 		string.format(
-			"Running %s/%s v%s%s",
+			"Running %s/%s %s@%s %s w/ %s",
 			LS13.Info.Name,
 			LS13.Info.Ident,
 			LS13.Info.Version,
-			branch and " (" .. branch .. "/" .. head .. ")" or ""
+			branch and "(" .. branch .. "/" .. head .. ")" or "off-git, release",
+			"(find out love2d version somehow)",
+			_VERSION
 		)
 	)
 	xpcall(function()
