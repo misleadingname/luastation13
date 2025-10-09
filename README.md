@@ -1,14 +1,23 @@
 # Lua Station 13
-###### The BYONDless remake of the cultist satanist dreamsmp video game million of awards award-winning video game [Space Station 13](https://spacestation13.com) (specifically taking most from [/tg/station 13](https://tgstation13.org))
+###### A BYONDless remake of the classic, satanist, DreamSMP, award-winning space game [Space Station 13](https://spacestation13.com).
+(Currently inspired mostly by [/tg/station 13](https://tgstation13.org))
+
+> [!IMPORTANT]
+> Lua Station 13 (LS13) is still in early development. There’s no station, characters, or gameplay yet.
+> Contributions, ideas, and feedback are always welcome.
 
 ## Prerequisites
-- [Love2D](https://love2d.org/) 12.0+
+- [Love2D](https://love2d.org/) 12.0 or newer
 - [Lua BitOp](https://bitop.luajit.org/)
 
-## Scripts
-To run the scripts, you need to have Powershell 7+ installed.
+## Running Scripts
+Some utility scripts use PowerShell.
+Make sure you have **PowerShell 7+** installed to run them properly.
 
 ## Building
-To make the build function, any third-party libraries should be copied over to project root and added to the `ExtraFiles` and `DoNotPack` entries.
+When building the project:
+- Copy any third-party libraries into the project root.
+- Add them to both `ExtraFiles` and `DoNotPack` entries as needed.
 
-### *WIP!!*
+### *Work in Progress!*
+Things are moving, just slowly. :)
