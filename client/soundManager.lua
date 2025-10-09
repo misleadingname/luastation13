@@ -3,6 +3,9 @@ local soundManager = {}
 function soundManager.NewSource(id)
 	local source
 	local data = LS13.AssetManager.Get(id)
+	if not data then
+		error("Invalid sound id: " .. id)
+	end
 
 	if data.soundMode == "static" then
 		source = love.audio.newSource(data.soundData, data.soundMode)

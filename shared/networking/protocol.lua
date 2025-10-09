@@ -15,6 +15,7 @@ Protocol.MessageType = {
 	VERB_ERROR = "VERB_ERROR",
 
 	WORLD_INIT = "WORLD_INIT",
+	WORLD_SWITCH = "WORLD_SWITCH",
 	CHUNK_UPDATE = "CHUNK_UPDATE",
 	CHUNK_REQUEST = "CHUNK_REQUEST",
 
@@ -37,6 +38,12 @@ local messageSchemas = {
 		verbName = "string",
 		verbData = "table",
 		sourceClient = "string"
+	},
+	[Protocol.MessageType.WORLD_INIT] = {
+		worldId = "string",
+	},
+	[Protocol.MessageType.WORLD_SWITCH] = {
+		worldId = "string",
 	},
 	[Protocol.MessageType.CHUNK_REQUEST] = {
 		chunkX = "number",
@@ -222,4 +229,11 @@ function Protocol.createVerbError(errorMessage, originalVerb)
 	})
 end
 
+function Protocol.createWorldSwitch(worldId)
+	return Protocol.createMessage(Protocol.MessageType.WORLD_SWITCH, {
+		worldId = worldId
+	})
+end
+
 return Protocol
+

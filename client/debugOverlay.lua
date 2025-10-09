@@ -181,8 +181,8 @@ local lines = {
 
 	{
 		Text = function()
-			if LS13.ECSManager and LS13.ECSManager.world then
-				local entities = LS13.ECSManager.world:getEntities()
+			if LS13.ECSManager and LS13.WorldManager.getCurrentWorld() then
+				local entities = LS13.WorldManager.getCurrentWorld():getEntities()
 				return string.format("entities: %s", entities and #entities or "nil table")
 			else
 				return "entities: no world"
@@ -195,8 +195,8 @@ local lines = {
 
 	{
 		Text = function()
-			if LS13.ECSManager and LS13.ECSManager.world then
-				local ents = LS13.ECSManager.world:getEntities()
+			if LS13.ECSManager and LS13.WorldManager.getCurrentWorld() then
+				local ents = LS13.WorldManager.getCurrentWorld():getEntities()
 				if not ents or #ents == 0 then return "tilemap chunks: no world" end
 				local worldEnt = ents[1]
 				if worldEnt and worldEnt.World and worldEnt.World.tilemap then
@@ -219,8 +219,8 @@ local lines = {
 
 	{
 		Text = function()
-			if LS13.ECSManager and LS13.ECSManager.world then
-				local ents = LS13.ECSManager.world:getEntities()
+			if LS13.ECSManager and LS13.WorldManager.getCurrentWorld() then
+				local ents = LS13.WorldManager.getCurrentWorld():getEntities()
 				if not ents or #ents == 0 then return "total tiles: no world" end
 				local worldEnt = ents[1]
 				if worldEnt and worldEnt.World and worldEnt.World.tilemap then
@@ -248,8 +248,8 @@ local lines = {
 
 	{
 		Text = function()
-			if LS13.ECSManager and LS13.ECSManager.world then
-				local ents = LS13.ECSManager.world:getEntities()
+			if LS13.ECSManager and LS13.WorldManager.getCurrentWorld() then
+				local ents = LS13.WorldManager.getCurrentWorld():getEntities()
 				if not ents or #ents == 0 then return "dirty chunks: no world" end
 				local worldEnt = ents[1]
 				if worldEnt and worldEnt.World and worldEnt.World.tilemap and worldEnt.World.tilemap.dirtyChunks then
@@ -266,8 +266,8 @@ local lines = {
 			end
 		end,
 		Color = function()
-			if LS13.ECSManager and LS13.ECSManager.world then
-				local ents = LS13.ECSManager.world:getEntities()
+			if LS13.ECSManager and LS13.WorldManager.getCurrentWorld() then
+				local ents = LS13.WorldManager.getCurrentWorld():getEntities()
 				if not ents or #ents == 0 then return { 0.5, 0.5, 0.5, 1 } end
 				local worldEnt = ents[1]
 				if worldEnt and worldEnt.World and worldEnt.World.tilemap and worldEnt.World.tilemap.dirtyChunks then

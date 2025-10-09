@@ -1,8 +1,15 @@
 local targettingSystem = LS13.ECSManager.system({ pool = { "UiElement", "UiTransform", "UiTarget" } })
 
+local hoverSound
+local pressSound
+
+function targettingSystem:initalize()
+	hoverSound = LS13.SoundManager.NewSource("Sound.UiHover")
+	pressSound = LS13.SoundManager.NewSource("Sound.UiClick")
+end
+
 function targettingSystem:update(dt)
 	local cursor = LS13.UI.cursor
-
 	local hoveredEnt
 
 	for i = #self.pool, 1, -1 do
@@ -25,6 +32,10 @@ function targettingSystem:update(dt)
 
 	for _, ent in ipairs(self.pool) do
 		local target = ent.UiTarget
+		if not target.hovered and hoveredEnt == ent then
+			hoverSound:play()
+		end
+
 		target.hovered = ent == hoveredEnt
 	end
 end
@@ -33,7 +44,7 @@ function targettingSystem:press(button)
 	for _, ent in ipairs(self.pool) do
 		local target = ent.UiTarget
 
-		if target.hovered then
+		if target.hovered and not target.selected then
 			target.selected = true
 		end
 	end
@@ -46,6 +57,7 @@ function targettingSystem:release(button)
 		if target.hovered then
 			target.selected = false
 			target.onClick(button)
+			pressSound:play()
 		end
 	end
 end

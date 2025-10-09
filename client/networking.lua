@@ -122,29 +122,42 @@ messageHandlers[networking.Protocol.MessageType.CHUNK_UPDATE] = function(message
 
 	pendingChunkRequests[chunkKey] = nil
 
-	local worldEnt = LS13.World:getEntities()[1] -- Assuming first entity has World component
-	if worldEnt and worldEnt.World then
-		worldEnt.World.tilemap:deserializeChunk(chunkKey, chunkData)
-		LS13.Logging.LogDebug("Updated chunk %s", chunkKey)
+	local currentWorld = LS13.WorldManager.getCurrentWorld()
+	if currentWorld then
+		local worldEnt = currentWorld:getEntities()[1]
+		if worldEnt and worldEnt.World then
+			worldEnt.World.tilemap:deserializeChunk(chunkKey, chunkData)
+			LS13.Logging.LogDebug("Updated chunk %s in world %s", chunkKey, LS13.WorldManager.getCurrentWorldId())
+		end
 	end
 end
 
 messageHandlers[networking.Protocol.MessageType.WORLD_INIT] = function(message)
 	local chunks = message.data.chunks
+	local worldId = message.data.metadata and message.data.metadata.worldId or "default"
 
-	local worldEnt = LS13.World:getEntities()[1]
-	if worldEnt and worldEnt.World then
-		local tilemap = worldEnt.World.tilemap
+	if not LS13.WorldManager.worlds[worldId] then
+		LS13.WorldManager.newWorld(worldId)
+	end
 
-		tilemap.chunks = {}
+	LS13.WorldManager.switchToWorld(worldId)
 
-		for chunkKey, chunkData in pairs(chunks) do
-			tilemap:deserializeChunk(chunkKey, chunkData)
+	local currentWorld = LS13.WorldManager.getCurrentWorld()
+	if currentWorld then
+		local worldEnt = currentWorld:getEntities()[1]
+		if worldEnt and worldEnt.World then
+			local tilemap = worldEnt.World.tilemap
+
+			tilemap.chunks = {}
+
+			for chunkKey, chunkData in pairs(chunks) do
+				tilemap:deserializeChunk(chunkKey, chunkData)
+			end
+
+			local chunkCount = 0
+			for _ in pairs(chunks) do chunkCount = chunkCount + 1 end
+			LS13.Logging.LogInfo("Received world initialization for world %s with %d chunks", worldId, chunkCount)
 		end
-
-		local chunkCount = 0
-		for _ in pairs(chunks) do chunkCount = chunkCount + 1 end
-		LS13.Logging.LogInfo("Received world initialization with %d chunks", chunkCount)
 	end
 end
 
@@ -163,6 +176,31 @@ end
 
 messageHandlers[networking.Protocol.MessageType.VERB_ERROR] = function(message)
 	LS13.Logging.LogError("Verb error from server: %s", message.data.error)
+end
+
+messageHandlers[networking.Protocol.MessageType.WORLD_SWITCH] = function(message)
+	local worldId = message.data.worldId
+
+	if not worldId then
+		LS13.Logging.LogInfo("Switching to no world")
+		LS13.WorldManager.switchToWorld(nil)
+		return
+	end
+
+	if not LS13.WorldManager.worlds[worldId] then
+		LS13.WorldManager.newWorld(worldId)
+	end
+
+	LS13.WorldManager.switchToWorld(worldId)
+
+	local currentWorld = LS13.WorldManager.getCurrentWorld()
+	if currentWorld then
+		local worldEnt = currentWorld:getEntities()[1]
+		if worldEnt and worldEnt.World then
+			worldEnt.World.tilemap.chunks = {}
+			worldEnt.World.tilemap.dirtyChunks = {}
+		end
+	end
 end
 
 messageHandlers[networking.Protocol.MessageType.PONG] = function(message)

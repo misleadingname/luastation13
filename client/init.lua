@@ -10,16 +10,7 @@ function client.load()
 	LS13.Console = require("client.console")
 	LS13.Networking = require("client.networking")
 
-	-- TODO: SWAP WITH MULTIWORLD
-	LS13.World = LS13.ECSManager.world()
-	LS13.World:addSystems(LS13.ECS.Systems.TilemapSystem)
-
-	local worldEntity = LS13.ECSManager.entity("World")
-	worldEntity:give("World")
-	LS13.World:addEntity(worldEntity)
-	-- END TODO
-
-	LS13.Logging.LogInfo("Created client world entity with tilemap")
+	LS13.WorldManager = require("client.worldmanager")
 
 	require("client.states")
 	LS13.UI.init()
@@ -38,8 +29,8 @@ function client.update(dt)
 	xpcall(function()
 		LS13.Networking.update()
 
-		if LS13.World then
-			LS13.World:emit("update", dt)
+		if LS13.WorldManager then
+			LS13.WorldManager.update(dt)
 		end
 
 		LS13.StateManager.update(dt)
@@ -56,8 +47,8 @@ function love.draw()
 	xpcall(function()
 		LS13.StateManager.draw()
 
-		if LS13.World then
-			LS13.World:emit("draw")
+		if LS13.WorldManager and LS13.WorldManager.getCurrentWorld() then
+			LS13.WorldManager.getCurrentWorld():emit("draw")
 		end
 
 		LS13.UI.draw()

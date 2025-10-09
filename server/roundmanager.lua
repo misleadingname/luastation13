@@ -52,11 +52,14 @@ function RoundManager.startRound()
 	roundTime = 0
 	idleTime = 0
 
+	LS13.WorldManager.deleteWorld("station") -- will just do an error so it's safe to just ignore it
+	LS13.WorldManager.newWorld("station")
 	local msg = LS13.Networking.Protocol.createMessage(LS13.Networking.Protocol.MessageType.GAME_STATE, {
 		state = "Round",
 	})
 
 	for _, client in ipairs(participatingClients) do
+		LS13.WorldManager.switchWorld(client, "station")
 		LS13.Networking.sendToClient(client.id, msg)
 	end
 end
@@ -66,6 +69,10 @@ function RoundManager.endRound()
 	running = false
 	roundTime = 0
 	idleTime = 0
+
+	for _, client in ipairs(LS13.Networking.getClients()) do
+		LS13.WorldManager.switchWorld(client, nil)
+	end
 end
 
 return RoundManager
