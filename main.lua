@@ -27,6 +27,7 @@ function love.load(args)
 
 	if runMode == "client" then -- setup window
 		require("love.window")
+		require("love.keyboard")
 		local t = { modules = {}, audio = {}, window = {}, graphics = {} }
 		love.conf(t)
 

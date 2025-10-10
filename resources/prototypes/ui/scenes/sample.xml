@@ -9,7 +9,7 @@
 			<UIButton Id="Button1" Text="Button 1" Toggle="true" />
 			<UIButton Id="Button2" Text="Button 2" />
 			<UIButton Id="Button3" Text="Button 3" />
-			<UITextField Id="TextField1" Text="TextField 1" Font="Font.Default" Placeholder="Placeholder Text" />
+			<UITextField Id="TextField5" Value="TextField 1" Font="Font.Default" Placeholder="Placeholder Text" />
 		</UIElement>
 	</UIMarkup>
 </LS13>

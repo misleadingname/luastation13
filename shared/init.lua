@@ -1,5 +1,6 @@
 _G.lume = require("lib.lume.lume") -- needed for lurker
 _G.bit = require("bit")
+_G.utf8 = require("utf8")
 local lurker = require("lib.lurker.lurker")
 
 function HandleError(error)

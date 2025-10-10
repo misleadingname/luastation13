@@ -20,6 +20,7 @@ function client.load()
 		LS13.DebugOverlay = require("client.debugOverlay")
 	end
 
+	love.keyboard.setTextInput(true)
 	LS13.StateManager.switchState("Loading")
 end
 
@@ -65,6 +66,24 @@ end
 function love.mousereleased(x, y, button)
 	xpcall(function()
 		LS13.UI.mouseReleased(x, y, button)
+	end, HandleError)
+end
+
+function love.keypressed(key, scancode, isrepeat)
+	xpcall(function()
+		LS13.UI.keyPressed(key, scancode, isrepeat)
+	end, HandleError)
+end
+
+function love.keyreleased(key, scancode)
+	xpcall(function()
+		LS13.UI.keyReleased(key, scancode)
+	end, HandleError)
+end
+
+function love.textinput(text)
+	xpcall(function()
+		LS13.UI.textInput(text)
 	end, HandleError)
 end
 

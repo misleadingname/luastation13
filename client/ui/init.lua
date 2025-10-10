@@ -53,6 +53,18 @@ function ui.mouseReleased(x, y, button)
 	ui.world:emit("release", button)
 end
 
+function ui.keyPressed(key, scancode, isrepeat)
+	ui.world:emit("keyPressed", key, scancode, isrepeat)
+end
+
+function ui.keyReleased(key, scancode)
+	ui.world:emit("keyReleased", key, scancode)
+end
+
+function ui.textInput(text)
+	ui.world:emit("textInput", text)
+end
+
 function ui.clear()
 	if ui.currentScene then
 		ui.currentScene:destroy(ui.world)
@@ -150,10 +162,6 @@ function ui.test_scene()
 	ui.world:addEntity(btn1)
 	ui.world:addEntity(btn2)
 	ui.world:addEntity(btn3)
-end
-
-function ui.test_xml_scene()
-	return ui.createScene("UI.Markup.TestScene")
 end
 
 return ui

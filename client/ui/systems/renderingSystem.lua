@@ -95,6 +95,33 @@ function renderingSystem:draw()
 			love.graphics.setColor(label.color:toNumbers())
 			love.graphics.setFont(font)
 			love.graphics.printf(tostring(text), trans.cpos.x, y, trans.csize.x, label.hAlign)
+
+			if ent.UiTextField and ent.UiTarget and ent.UiTarget.focused then
+				local field = ent.UiTextField
+				local time = love.timer.getTime()
+
+				if field.selectionStart and field.selectionEnd and field.selectionStart ~= field.selectionEnd then
+					local start = math.min(field.selectionStart, field.selectionEnd)
+					local endPos = math.max(field.selectionStart, field.selectionEnd)
+
+					local textBeforeSelection = field.value:sub(1, start)
+					local selectedText = field.value:sub(start + 1, endPos)
+
+					local selectionStartX = trans.cpos.x + font:getWidth(textBeforeSelection)
+					local selectionWidth = font:getWidth(selectedText)
+
+					love.graphics.setColor(0.3, 0.5, 1.0, 0.5)
+					love.graphics.rectangle("fill", selectionStartX, y, selectionWidth, font:getHeight())
+				end
+
+				if (time % 1) > 0.5 and (not field.selectionStart or not field.selectionEnd or field.selectionStart == field.selectionEnd) then
+					local textBeforeCursor = field.value:sub(1, field.cursorPosition)
+					local cursorX = trans.cpos.x + font:getWidth(textBeforeCursor)
+
+					love.graphics.setColor(label.color:toNumbers())
+					love.graphics.rectangle("fill", cursorX, y, 1, font:getHeight())
+				end
+			end
 		end
 
 		if ent.UiTarget then
