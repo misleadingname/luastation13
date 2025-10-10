@@ -2,6 +2,7 @@ require("client.ui.components.ui")
 require("client.ui.systems.parentSystem")
 require("client.ui.systems.layoutSystem")
 require("client.ui.systems.targetingSystem")
+require("client.ui.systems.textFieldSystem")
 require("client.ui.systems.renderingSystem")
 
 local systems = LS13.ECS.Systems
@@ -24,6 +25,7 @@ function ui.init()
 		systems.UiParentSystem,
 		systems.UiLayoutSystem,
 		systems.UiTargettingSystem,
+		systems.UiTextFieldSystem,
 		systems.UiRenderingSystem
 	)
 

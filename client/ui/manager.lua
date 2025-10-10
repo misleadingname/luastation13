@@ -86,7 +86,15 @@ local function createEntityFromXML(xmlNode, parentEntity, templateParams)
 
 					entity:give("UiLayout", layoutType, padding, spacing, align, justify)
 				elseif componentName == "UiTarget" then
-					entity:give("UiTarget")
+					local toggle = substituteParams(attrs.Toggle or "false", templateParams):lower() == "true"
+
+					entity:give("UiTarget", toggle)
+				elseif componentName == "UiTextField" then
+					local value = substituteParams(attrs.Value or "", templateParams)
+					local placeholder = substituteParams(attrs.Placeholder or "", templateParams)
+					local disabled = substituteParams(attrs.Disabled or "false", templateParams):lower() == "true"
+
+					entity:give("UiTextField", value, placeholder, disabled)
 				end
 			else
 				if componentName == "UiTarget" then

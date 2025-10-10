@@ -96,6 +96,19 @@ function renderingSystem:draw()
 			love.graphics.setFont(font)
 			love.graphics.printf(tostring(text), trans.cpos.x, y, trans.csize.x, label.hAlign)
 		end
+
+		if ent.UiTarget then
+			local target = ent.UiTarget
+			local time = love.timer.getTime()
+			local apulse = math.sin(time * math.pi) ^ 2
+			local spulse = (time % 1)
+
+			if target.focused then
+				love.graphics.setColor(1, 1, 1, apulse * 0.85)
+				love.graphics.rectangle("line", trans.cpos.x - spulse * 2, trans.cpos.y - spulse * 2,
+					trans.csize.x + spulse * 4, trans.csize.y + spulse * 4)
+			end
+		end
 	end
 end
 

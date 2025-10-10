@@ -34,10 +34,11 @@ local uiLayout = ecs.component("UiLayout", function(c, type, padding, spacing, a
 end)
 LS13.ECS.Components.UiLayout = uiLayout
 
-local uiTarget = ecs.component("UiTarget", function(c)
+local uiTarget = ecs.component("UiTarget", function(c, toggle)
 	c.hovered = false
 	c.focused = false
 	c.selected = false
+	c.toggle = toggle or false
 
 	c.onHover = function() end
 	c.onFocus = function() end
@@ -53,6 +54,13 @@ local uiLabel = ecs.component("UiLabel", function(c, text, color, font, hAlign, 
 	c.vAlign = vAlign or "top" -- top, center, bottom
 end)
 LS13.ECS.Components.UiLabel = uiLabel
+
+local uiTextField = ecs.component("UiTextField", function(c, value, placeholder, disabled)
+	c.value = value or ""
+	c.placeholder = placeholder or ""
+	c.disabled = disabled or false
+end)
+LS13.ECS.Components.UiTextField = uiTextField
 
 local uiPanel = ecs.component("UiPanel", function(c, graphic, color)
 	c.color = color or Color.white

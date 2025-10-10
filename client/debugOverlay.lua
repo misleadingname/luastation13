@@ -577,6 +577,8 @@ local function getComponentInfo(entity, componentName)
 	elseif componentName == "UiTarget" then
 		info.hovered = tostring(component.hovered or false)
 		info.focused = tostring(component.focused or false)
+		info.selected = tostring(component.selected or false)
+		info.toggle = tostring(component.toggle or false)
 	end
 
 	return info
@@ -604,15 +606,11 @@ local function drawTreeNode(entity, depth, x, y, lineHeight)
 
 			local info = getComponentInfo(entity, componentName)
 			if info then
-				local detailCount = 0
 				for key, value in pairs(info) do
-					if detailCount < 2 then
-						local detailColor = { 0.8, 0.8, 0.8, 1 }
-						local detailText = string.format("%s| %s: %s", string.rep("  ", depth + 1), key, value)
-						shadowText(detailText, x + indent, currentY, "left", detailColor)
-						currentY = currentY + lineHeight
-						detailCount = detailCount + 1
-					end
+					local detailColor = { 0.8, 0.8, 0.8, 1 }
+					local detailText = string.format("%s|- %s: %s", string.rep("  ", depth + 1), key, value)
+					shadowText(detailText, x + indent, currentY, "left", detailColor)
+					currentY = currentY + lineHeight
 				end
 			end
 		end

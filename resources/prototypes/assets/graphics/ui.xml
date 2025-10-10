@@ -15,4 +15,12 @@
 		<Top>11</Top>
 		<Bottom>22</Bottom>
 	</Graphic>
+
+	<Graphic Id="Graphic.UiField" Type="NineSlice">
+		<FileName>resources/textures/ui/field.png</FileName>
+		<Left>11</Left>
+		<Right>22</Right>
+		<Top>11</Top>
+		<Bottom>22</Bottom>
+	</Graphic>
 </LS13>
