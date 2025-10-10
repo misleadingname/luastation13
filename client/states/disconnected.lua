@@ -1,6 +1,6 @@
-local ConnectingState = LS13.StateManager.new("Disconnected")
+local DisconnectedState = LS13.StateManager.new("Disconnected")
 
-function ConnectingState:enter()
+function DisconnectedState:enter()
 	LS13.UI.clear()
 	LS13.SoundManager.NewSource("Sound.AHelp"):play()
 	local scene = LS13.UI.createScene("UI.Markup.Core.Disconnected")
@@ -11,12 +11,12 @@ function ConnectingState:enter()
 	end
 end
 
-function ConnectingState:update(dt)
+function DisconnectedState:update(dt)
 end
 
-function ConnectingState:draw()
+function DisconnectedState:draw()
 end
 
-function ConnectingState:exit() end
+function DisconnectedState:exit() end
 
-return ConnectingState
+return DisconnectedState
