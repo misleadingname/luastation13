@@ -13,3 +13,8 @@ local graphicComponent = ecs.component("Graphic", function(c, graphicId, visible
 	c.playing = playing or false
 end)
 LS13.ECS.Components.Graphic = graphicComponent
+
+local cameraComponent = ecs.component("Camera", function(c, zoom)
+	c.zoom = zoom
+end)
+LS13.ECS.Components.Camera = cameraComponent

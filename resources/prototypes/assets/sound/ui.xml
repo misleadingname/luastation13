@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LS13>
+	<Sound Id="Sound.UiHover">
+		<FileName>resources/sound/ui/hover.ogg</FileName>
+		<Volume>0.2</Volume>
+		<Category>ui</Category>
+	</Sound>
+
+	<Sound Id="Sound.UiClick">
+		<FileName>resources/sound/ui/click.ogg</FileName>
+		<Volume>0.5</Volume>
+		<Category>ui</Category>
+	</Sound>
+</LS13>

@@ -14,10 +14,10 @@ function GameState:enter()
 	bgSpace3 = LS13.AssetManager.Get("Graphic.BG.SpaceLayer3").image
 
 	-- TODO: move this to a function so it can be ran whenever the viewport needs to be rescaled
-	local viewportScale = 1 -- TODO: use setting or something idk
+	local vpScale = 1 -- TODO: use setting or something idk
 
-	viewportCanvas = love.graphics.newCanvas(VIEWPORT_WIDTH * viewportScale, VIEWPORT_HEIGHT * viewportScale)
-	worldCanvas = love.graphics.newCanvas(VIEWPORT_WIDTH * viewportScale, VIEWPORT_HEIGHT * viewportScale)
+	viewportCanvas = love.graphics.newCanvas(VIEWPORT_WIDTH * vpScale, VIEWPORT_HEIGHT * vpScale)
+	worldCanvas = love.graphics.newCanvas(VIEWPORT_WIDTH * vpScale, VIEWPORT_HEIGHT * vpScale)
 	-- END TODO
 end
 
@@ -34,25 +34,46 @@ function GameState:draw()
 		return
 	end
 
-	local worldEnt = world:getEntities()[1]
+	local worldEnt = world:getEntities()[1] -- TODO: misname make this work
 
 	local zMin = worldEnt.zMin
 	local zMax = worldEnt.zMax
 
-	local currentZ = 0 -- TODO: use player z
-
 	local vpWidth, vpHeight = viewportCanvas:getPixelDimensions()
+
+	local vpScale = 1 -- TODO: use setting or something idk
+
+	local camX = 0
+	local camY = 0
+	local camZ = 0
+	local camZoom = 1
 
 	love.graphics.setCanvas(worldCanvas)
 
 	love.graphics.clear(0, 0, 0, 0)
 
-	for z = zMin, currentZ, 1 do
-		-- TODO: push camera transform here (scaled by depth and viewport scale)
+	for z = zMin, camZ, 1 do
+		local cameraTransform = love.math.newTransform()
+
+		cameraTransform:translate(-vpWidth / 2 - camX, -vpHeight / 2 - camY)
+		cameraTransform:scale(camZoom * vpScale, camZoom * vpScale)
+
+		love.graphics.applyTransform(cameraTransform)
+
 		world:emit("draw", z)
-		-- TODO: pop camera transform here
+
+		if DEBUG then
+			love.graphics.setColor(1, 0, 0)
+			love.graphics.line(-32, 0, 32, 0)
+
+			love.graphics.setColor(0, 1, 0)
+			love.graphics.line(0, -32, 0, 32)
+		end
+
+		love.graphics.applyTransform(love.math.newTransform())
+
 		-- depth effect
-		if z ~= currentZ then
+		if z ~= camZ then
 			love.graphics.setBlendMode("multiply")
 			love.graphics.setColor(0.9, 0.9, 0.9, 1)
 			love.graphics.rectangle("fill", 0, 0, vpWidth, vpHeight)
@@ -62,8 +83,9 @@ function GameState:draw()
 
 	love.graphics.setCanvas(viewportCanvas)
 
-	local bgX, bgY = 0, 0 -- be negative of camera x and y
+	local bgX, bgY = -camX, -camY
 
+	-- TODO: use location prototype based background
 	love.graphics.setColor(1, 1, 1, 1)
 	love.graphics.setBlendMode("alpha")
 	love.graphics.draw(
@@ -80,6 +102,7 @@ function GameState:draw()
 		love.graphics.newQuad(bgX / 1.0 - vpWidth / 2, bgY / 1.0 - vpHeight / 2, vpWidth, vpHeight, 480, 480)
 	)
 	love.graphics.setBlendMode("alpha")
+	-- END TODO
 
 	love.graphics.draw(worldCanvas, 0, 0)
 

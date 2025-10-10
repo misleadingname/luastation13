@@ -28,6 +28,18 @@ function LobbyState:enter()
 	rollSong()
 
 	LS13.UI.createScene("UI.Markup.TestScene")
+
+	local dbgStart = LS13.ECSManager.entity("dbgStart")
+	dbgStart:give("UiElement")
+	dbgStart:give("UiTransform", Vector2.new(32, 32), Vector2.new(160, 24))
+	dbgStart:give("UiPanel", "Graphic.UiButton")
+	dbgStart:give("UiTarget")
+	dbgStart:give("UiLabel", "start round", Color.white, "Font.Default", "center", "center")
+	dbgStart.UiTarget.onClick = function()
+		LS13.Networking.sendVerb("DebugStartRound")
+	end
+
+	LS13.UI.world:addEntity(dbgStart)
 end
 
 function LobbyState:update(dt)
