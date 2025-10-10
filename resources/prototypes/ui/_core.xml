@@ -27,14 +27,49 @@
 			<Param Name="Disabled" Default="false" />
 			<Param Name="Graphic" Default="Graphic.UiField" />
 			<Param Name="Color" Default="1, 1, 1, 1" />
+			<Param Name="Position" Default="0,0" />
+			<Param Name="Size" Default="1,32" />
+			<Param Name="PosX" Default="pixel" />
+			<Param Name="PosY" Default="pixel" />
+			<Param Name="SizeX" Default="ratio" />
+			<Param Name="SizeY" Default="pixel" />
 		</Params>
 
 		<UIEntity Id="{Id}">
-			<UiTransform Position="0,0" Size="1,32" Rotation="0" PosX="ratio" PosY="ratio" SizeX="ratio" SizeY="pixel" />
+			<UiTransform
+				Position="{Position}"
+				Size="{Size}"
+				Rotation="0"
+				PosX="{PosX}"
+				PosY="{PosY}"
+				SizeX="{SizeX}"
+				SizeY="{SizeY}"
+			/>
 			<UiLabel Text="{Text}" Color="0,0,0,1" Font="{Font}" HAlign="left" VAlign="center" />
 			<UiTextField Placeholder="{Placeholder}" Disabled="{Disabled}" />
 			<UiPanel Graphic="{Graphic}" Color="{Color}" />
 			<UiTarget />
+		</UIEntity>
+	</UIMarkup>
+
+	<UIMarkup Id="UILabel" Type="Template">
+		<Params>
+			<Param Name="Id" Default="UnnamedLabel" />
+			<Param Name="Text" Default="Label" />
+			<Param Name="Font" Default="Font.Default" />
+			<Param Name="Color" Default="1, 1, 1, 1" />
+			<Param Name="HAlign" Default="center" />
+			<Param Name="VAlign" Default="center" />
+			<Param Name="PosX" Default="pixel" />
+			<Param Name="PosY" Default="pixel" />
+			<Param Name="SizeX" Default="ratio" />
+			<Param Name="SizeY" Default="pixel" />
+			<Param Name="Size" Default="1,32" />
+		</Params>
+
+		<UIEntity Id="{Id}">
+			<UiTransform Position="0,0" Size="1,32" Rotation="0" PosX="{PosX}" PosY="{PosY}" SizeX="{SizeX}" SizeY="{SizeY}" />
+			<UiLabel Text="{Text}" Color="{Color}" Font="{Font}" HAlign="{HAlign}" VAlign="{VAlign}" />
 		</UIEntity>
 	</UIMarkup>
 </LS13>

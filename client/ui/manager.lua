@@ -81,10 +81,17 @@ local function createEntityFromXML(xmlNode, parentEntity, templateParams)
 					local layoutType = substituteParams(attrs.Type or "vertical", templateParams):lower()
 					local padding = parseVector2(substituteParams(attrs.Padding or "0,0", templateParams))
 					local spacing = tonumber(substituteParams(attrs.Spacing or "0", templateParams))
-					local align = substituteParams(attrs.Align or "begin", templateParams)
-					local justify = substituteParams(attrs.Justify or "begin", templateParams)
+					local align = substituteParams(attrs.Align or "begin", templateParams):lower()
+					local justify = substituteParams(attrs.Justify or "begin", templateParams):lower()
+					local wrap = substituteParams(attrs.Wrap or "false", templateParams):lower() == "true"
 
-					entity:give("UiLayout", layoutType, padding, spacing, align, justify)
+					entity:give("UiLayout", layoutType, padding, spacing, align, justify, wrap)
+				elseif componentName == "UiFlexItem" then
+					local grow = tonumber(substituteParams(attrs.Grow or "0", templateParams))
+					local shrink = tonumber(substituteParams(attrs.Shrink or "1", templateParams))
+					local basis = substituteParams(attrs.Basis or "auto", templateParams)
+
+					entity:give("UiFlexItem", grow, shrink, basis)
 				elseif componentName == "UiTarget" then
 					local toggle = substituteParams(attrs.Toggle or "false", templateParams):lower() == "true"
 					entity:give("UiTarget", toggle)
@@ -173,22 +180,20 @@ function manager.createUIElement(xmlNode, parentEntity, world, sceneInstance)
 
 	local entities = {}
 
-	local rootEntity = nil
-	if xmlNode._attr or not parentEntity then
-		rootEntity = createEntityFromXML(xmlNode, parentEntity, {})
-		if rootEntity and world then
-			world:addEntity(rootEntity)
-			if sceneInstance then
-				table.insert(sceneInstance.entities, rootEntity)
-				if xmlNode._attr and xmlNode._attr.Id then
-					sceneInstance.entities[xmlNode._attr.Id] = rootEntity
-				end
+	-- Always create an entity for UIElement nodes (they may have components even without attributes)
+	local rootEntity = createEntityFromXML(xmlNode, parentEntity, {})
+	if rootEntity and world then
+		world:addEntity(rootEntity)
+		if sceneInstance then
+			table.insert(sceneInstance.entities, rootEntity)
+			if xmlNode._attr and xmlNode._attr.Id then
+				sceneInstance.entities[xmlNode._attr.Id] = rootEntity
 			end
 		end
-		table.insert(entities, rootEntity)
 	end
+	table.insert(entities, rootEntity)
 
-	local childParent = rootEntity or parentEntity
+	local childParent = rootEntity
 
 	for nodeName, nodeData in pairs(xmlNode) do
 		if nodeName ~= "_attr" then
@@ -199,13 +204,15 @@ function manager.createUIElement(xmlNode, parentEntity, world, sceneInstance)
 			if nodeData._attr then
 				-- Single element, wrap in array for uniform processing
 				nodeList = { nodeData }
-			elseif type(nodeData) == "table" and #nodeData > 0 then
+			elseif type(nodeData) == "table" and lume.count(nodeData) > 0 then
 				-- Array of elements (multiple elements with same name)
+				-- Use lume.count instead of # because XML tables may have non-consecutive keys
 				nodeList = nodeData
 			end
 
 			-- Process each element in the list
-			for _, elementData in ipairs(nodeList) do
+			-- Use pairs instead of ipairs to handle non-consecutive keys
+			for _, elementData in pairs(nodeList) do
 				local entity = nil
 
 				if templates[nodeName] then
@@ -221,6 +228,19 @@ function manager.createUIElement(xmlNode, parentEntity, world, sceneInstance)
 					if childEntities then
 						for _, childEntity in ipairs(childEntities) do
 							table.insert(entities, childEntity)
+						end
+					end
+				elseif nodeName == "UIEntity" then
+					-- UIEntity creates a single entity with components (used in templates)
+					-- It should NOT create a wrapper entity like UIElement does
+					entity = createEntityFromXML(elementData, childParent, {})
+					if entity and world then
+						world:addEntity(entity)
+						if sceneInstance then
+							table.insert(sceneInstance.entities, entity)
+							if elementData._attr and elementData._attr.Id then
+								sceneInstance.entities[elementData._attr.Id] = entity
+							end
 						end
 					end
 				end

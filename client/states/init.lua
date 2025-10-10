@@ -2,6 +2,7 @@ local states = {
 	require("client.states.loading"),
 	require("client.states.menu"),
 	require("client.states.connecting"),
+	require("client.states.disconnected"),
 	require("client.states.lobby"),
 	require("client.states.game"),
 }

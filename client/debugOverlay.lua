@@ -563,6 +563,8 @@ local function getComponentInfo(entity, componentName)
 		info.size = string.format("%.1f,%.1f", component.size.x, component.size.y)
 		info.posType = string.format("%s,%s", component.posx, component.posy)
 		info.sizeType = string.format("%s,%s", component.sizex, component.sizey)
+		info.cpos = string.format("%.1f,%.1f", component.cpos.x, component.cpos.y)
+		info.csize = string.format("%.1f,%.1f", component.csize.x, component.csize.y)
 	elseif componentName == "UiLabel" then
 		info.text = component.text or ""
 		info.align = string.format("%s,%s", component.hAlign, component.vAlign)
@@ -632,6 +634,7 @@ local function buildUIHierarchy()
 	local entities = LS13.UI.world:getEntities()
 	if not entities then return {} end
 
+	local amount = 0
 	local hierarchy = {}
 	local entityMap = {}
 
@@ -641,6 +644,7 @@ local function buildUIHierarchy()
 				entity = entity,
 				children = {}
 			}
+			amount = amount + 1
 		end
 	end
 
@@ -649,13 +653,15 @@ local function buildUIHierarchy()
 			local parent = entity.UiElement.parent
 			if parent and entityMap[parent] then
 				table.insert(entityMap[parent].children, entityMap[entity])
+				amount = amount + 1
 			else
 				table.insert(hierarchy, entityMap[entity])
+				amount = amount + 1
 			end
 		end
 	end
 
-	return hierarchy
+	return hierarchy, amount + 10
 end
 
 local function drawUITreeRecursive(nodes, depth, x, y, lineHeight)
@@ -690,9 +696,10 @@ function debugOverlay.drawUITree()
 	shadowText(string.format("UI entities: %d", #entities), startX, startY, "left", countColor)
 	startY = startY + lineHeight * 1.5
 
-	local hierarchy = buildUIHierarchy()
+	local hierarchy, amount = buildUIHierarchy()
 	if #hierarchy > 0 then
-		drawUITreeRecursive(hierarchy, 0, startX, startY, lineHeight)
+		local scroll = love.mouse.getY() / love.graphics.getHeight() * -(#hierarchy * lineHeight * amount * 2)
+		drawUITreeRecursive(hierarchy, 0, startX, startY + scroll, lineHeight)
 	else
 		local noEntitiesColor = { 0.7, 0.7, 0.7, 1 }
 		shadowText("No UI hierarchy found", startX, startY, "left", noEntitiesColor)

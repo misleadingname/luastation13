@@ -85,7 +85,7 @@ function ui.createScene(sceneId)
 	end
 
 	LS13.Logging.LogInfo("Created scene: %s", sceneId)
-	return true
+	return ui.currentScene
 end
 
 function ui.getCurrentScene()

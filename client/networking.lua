@@ -247,7 +247,7 @@ function networking.update()
 			connectionState = "disconnected"
 			clientId = nil
 			pendingChunkRequests = {}
-			LS13.StateManager.switchState("Connecting")
+			LS13.StateManager.switchState("Disconnected")
 		end
 		event = host:service()
 	end

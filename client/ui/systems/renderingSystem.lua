@@ -136,6 +136,11 @@ function renderingSystem:draw()
 					trans.csize.x + spulse * 4, trans.csize.y + spulse * 4)
 			end
 		end
+
+		if DEBUG then
+			love.graphics.setColor(1, 0, 0, 1)
+			love.graphics.rectangle("line", trans.cpos.x, trans.cpos.y, trans.csize.x, trans.csize.y)
+		end
 	end
 end
 

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LS13>
+	<UIMarkup Id="UI.Markup.Core.Disconnected" Type="Scene">
+		<UIElement>
+			<UiTransform Position="0.5,0" Anchor="0.5,0" Size="600,1" PosX="ratio" PosY="ratio" SizeX="pixel" SizeY="ratio" />
+			<UiLayout Type="Vertical" Align="center" Justify="center" Spacing="16" Padding="16,16" />
+
+			<UIElement Id="HeaderContainer">
+				<UiTransform Position="0,0" Size="1,0" PosX="ratio" PosY="ratio" SizeX="ratio" SizeY="content" />
+				<UiLayout Type="Vertical" Align="left" Justify="begin" Spacing="2" Padding="0,0" />
+
+				<UILabel Text="Disconnected!" Font="Font.DefaultLarge" HAlign="left" />
+				<UILabel Text="You have been disconnected from the server." HAlign="left" />
+			</UIElement>
+
+			<UIElement Id="ButtonContainer">
+				<UiTransform Size="1,0" SizeX="ratio" SizeY="content" />
+				<UiLayout Type="Horizontal" Spacing="8" Align="begin" Justify="begin" />
+
+				<UIButton Id="QuitButton" Text="Quit" Size="96,0" SizeX="pixel" />
+			</UIElement>
+		</UIElement>
+	</UIMarkup>
+</LS13>

@@ -11,4 +11,9 @@
 		<Volume>0.5</Volume>
 		<Category>ui</Category>
 	</Sound>
+
+	<Sound Id="Sound.AHelp">
+		<FileName>resources/sound/admin/ahelp.ogg</FileName>
+		<Category>ui</Category>
+	</Sound>
 </LS13>
