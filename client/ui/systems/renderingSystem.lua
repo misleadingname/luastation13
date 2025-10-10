@@ -119,7 +119,7 @@ function renderingSystem:draw()
 					local cursorX = trans.cpos.x + font:getWidth(textBeforeCursor)
 
 					love.graphics.setColor(label.color:toNumbers())
-					love.graphics.rectangle("fill", cursorX, y, 1, font:getHeight())
+					love.graphics.rectangle("fill", cursorX, y, 2, font:getHeight())
 				end
 			end
 		end
