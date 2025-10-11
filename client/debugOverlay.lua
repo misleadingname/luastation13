@@ -576,6 +576,13 @@ local function getComponentInfo(entity, componentName)
 		info.align = component.align or "begin"
 		info.justify = component.justify or "begin"
 		info.spacing = tostring(component.spacing or 0)
+	elseif componentName == "UiTextField" then
+		info.value = component.value or ""
+		info.placeholder = component.placeholder or ""
+		info.disabled = tostring(component.disabled or false)
+		info.cursorPosition = tostring(component.cursorPosition or 0)
+		info.selectionStart = tostring(component.selectionStart or 0)
+		info.selectionEnd = tostring(component.selectionEnd or 0)
 	elseif componentName == "UiTarget" then
 		info.hovered = tostring(component.hovered or false)
 		info.focused = tostring(component.focused or false)
@@ -596,7 +603,7 @@ local function drawTreeNode(entity, depth, x, y, lineHeight)
 	shadowText(string.rep("  ", depth) .. treeSymbol .. entityName, x + indent, currentY, "left", nameColor)
 	currentY = currentY + lineHeight
 
-	local components = { "UiTransform", "UiLabel", "UiPanel", "UiLayout", "UiTarget" }
+	local components = { "UiTransform", "UiLabel", "UiPanel", "UiLayout", "UiTarget", "UiTextField" }
 	local componentCount = 0
 
 	for _, componentName in ipairs(components) do

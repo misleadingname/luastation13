@@ -67,6 +67,7 @@ local uiTextField = ecs.component("UiTextField", function(c, value, placeholder,
 	c.value = value or ""
 	c.placeholder = placeholder or ""
 	c.disabled = disabled or false
+
 	c.cursorPosition = utf8.len(c.value) -- cursor position in characters, not bytes
 	c.selectionStart = nil            -- start of text selection (nil means no selection)
 	c.selectionEnd = nil              -- end of text selection

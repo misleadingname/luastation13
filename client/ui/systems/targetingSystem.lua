@@ -33,6 +33,7 @@ function targettingSystem:update(dt)
 	for _, ent in ipairs(self.pool) do
 		local target = ent.UiTarget
 		if not target.hovered and hoveredEnt == ent then
+			target.onHover()
 			hoverSound:play()
 		end
 

@@ -21,7 +21,7 @@
 	<UIMarkup Id="UITextField" Type="Template">
 		<Params>
 			<Param Name="Id" Default="UnnamedTextField" />
-			<Param Name="Text" Default="TextField" />
+			<Param Name="Value" Default="" />
 			<Param Name="Font" Default="Font.Default" />
 			<Param Name="Placeholder" Default="" />
 			<Param Name="Disabled" Default="false" />
@@ -45,8 +45,8 @@
 				SizeX="{SizeX}"
 				SizeY="{SizeY}"
 			/>
-			<UiLabel Text="{Text}" Color="0,0,0,1" Font="{Font}" HAlign="left" VAlign="center" />
-			<UiTextField Placeholder="{Placeholder}" Disabled="{Disabled}" />
+			<UiLabel Color="0,0,0,1" Font="{Font}" HAlign="left" VAlign="center" />
+			<UiTextField Value="{Value}" Placeholder="{Placeholder}" Disabled="{Disabled}" />
 			<UiPanel Graphic="{Graphic}" Color="{Color}" />
 			<UiTarget />
 		</UIEntity>
