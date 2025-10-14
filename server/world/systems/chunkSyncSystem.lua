@@ -1,16 +1,18 @@
-
 local chunkSyncSystem = LS13.ECSManager.system({ pool = { "World" } })
 
 local updateInterval = 1 / 10
-local lastUpdate = 0
+
+function chunkSyncSystem:init(world)
+	self.lastUpdate = 0
+end
 
 function chunkSyncSystem:update(dt)
 	local currentTime = love.timer.getTime()
 
-	if currentTime - lastUpdate < updateInterval then
+	if currentTime - self.lastUpdate < updateInterval then
 		return
 	end
-	lastUpdate = currentTime
+	self.lastUpdate = currentTime
 
 	local worldEnt = self.pool[1]
 	if not worldEnt or not worldEnt.World then
@@ -31,7 +33,12 @@ function chunkSyncSystem:update(dt)
 				LS13.Networking.sendChunkToClient(client.id, chunkKey, chunkData)
 			end
 
-			LS13.Logging.LogDebug("Broadcasted chunk update %s to %d clients in world %s", chunkKey, #clientsInWorld, worldId)
+			LS13.Logging.LogDebug(
+				"Broadcasted chunk update %s to %d clients in world %s",
+				chunkKey,
+				#clientsInWorld,
+				worldId
+			)
 		end
 	end
 end

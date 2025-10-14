@@ -11,6 +11,7 @@ function WorldManager.newWorld(name)
 	end
 
 	local world = LS13.ECSManager.world()
+	world:addSystems(LS13.ECS.Systems.CommandQueueSystem)
 	world:addSystems(LS13.ECS.Systems.ChunkSyncSystem)
 
 	local worldEntity = LS13.ECSManager.entity("World")
@@ -53,15 +54,19 @@ end
 
 function WorldManager.sendWorldDataToClient(clientId, worldId)
 	local world = WorldManager.worlds[worldId]
-	if not world then return false end
+	if not world then
+		return false
+	end
 
 	local worldEnt = world:getEntities()[1]
-	if not worldEnt or not worldEnt.World then return false end
+	if not worldEnt or not worldEnt.World then
+		return false
+	end
 
 	local tilemap = worldEnt.World.tilemap
 	local worldData = {
 		chunks = {},
-		metadata = { worldId = worldId }
+		metadata = { worldId = worldId },
 	}
 
 	for chunkKey, chunk in pairs(tilemap.chunks) do
