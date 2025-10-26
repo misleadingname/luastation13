@@ -6,6 +6,8 @@ local worldComponent = ecs.component("World", function(c)
 
 	c.zMin = 0
 	c.zMax = 0
+
+	c.commandQueue = CommandQueue.new()
 end)
 
 LS13.ECS.Components.World = worldComponent

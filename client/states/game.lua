@@ -9,12 +9,14 @@ local bgSpace2
 local bgSpace3
 
 function GameState:enter()
+	LS13.UI.clear()
+
 	bgSpace1 = LS13.AssetManager.Get("Graphic.BG.SpaceLayer1").image
 	bgSpace2 = LS13.AssetManager.Get("Graphic.BG.SpaceLayer2").image
 	bgSpace3 = LS13.AssetManager.Get("Graphic.BG.SpaceLayer3").image
 
 	-- TODO: move this to a function so it can be ran whenever the viewport needs to be rescaled
-	local vpScale = 1 -- TODO: use setting or something idk
+	local vpScale = 1 -- TODO: use setting
 
 	viewportCanvas = love.graphics.newCanvas(VIEWPORT_WIDTH * vpScale, VIEWPORT_HEIGHT * vpScale)
 	worldCanvas = love.graphics.newCanvas(VIEWPORT_WIDTH * vpScale, VIEWPORT_HEIGHT * vpScale)
@@ -34,14 +36,16 @@ function GameState:draw()
 		return
 	end
 
-	local worldEnt = world:getEntities()[1] -- TODO: misname make this work
+	-- TODO: this is temporary because there is no world entity on the client currently
+	-- local worldEnt = world:getEntities()[1]
 
-	local zMin = worldEnt.zMin
-	local zMax = worldEnt.zMax
+	local zMin = 0
+	local zMax = 0
+	-- END TODO
 
 	local vpWidth, vpHeight = viewportCanvas:getPixelDimensions()
 
-	local vpScale = 1 -- TODO: use setting or something idk
+	local vpScale = 1 -- TODO: use setting
 
 	local camX = 0
 	local camY = 0
@@ -55,22 +59,23 @@ function GameState:draw()
 	for z = zMin, camZ, 1 do
 		local cameraTransform = love.math.newTransform()
 
-		cameraTransform:translate(-vpWidth / 2 - camX, -vpHeight / 2 - camY)
+		cameraTransform:translate(vpWidth / 2 - camX, vpHeight / 2 - camY)
 		cameraTransform:scale(camZoom * vpScale, camZoom * vpScale)
 
+		love.graphics.push()
 		love.graphics.applyTransform(cameraTransform)
 
 		world:emit("draw", z)
 
 		if DEBUG then
 			love.graphics.setColor(1, 0, 0)
-			love.graphics.line(-32, 0, 32, 0)
+			love.graphics.line(0, 0, 32, 0)
 
 			love.graphics.setColor(0, 1, 0)
-			love.graphics.line(0, -32, 0, 32)
+			love.graphics.line(0, 0, 0, 32)
 		end
 
-		love.graphics.applyTransform(love.math.newTransform())
+		love.graphics.pop()
 
 		-- depth effect
 		if z ~= camZ then

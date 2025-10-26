@@ -22,13 +22,11 @@ function ui.init()
 	ui.cursor = cursor
 	ui.nlay = require("lib.nlay")
 
-	ui.world:addSystems( -- (this comment is only here to make stylua behave)
-		systems.UiParentSystem,
-		systems.UiLayoutSystem,
-		systems.UiTargettingSystem,
-		systems.UiTextFieldSystem,
-		systems.UiRenderingSystem
-	)
+	ui.world:addSystems(systems.UiParentSystem)
+	ui.world:addSystems(systems.UiLayoutSystem)
+	ui.world:addSystems(systems.UiTargettingSystem)
+	ui.world:addSystems(systems.UiTextFieldSystem)
+	ui.world:addSystems(systems.UiRenderingSystem)
 
 	manager.init()
 end

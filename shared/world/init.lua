@@ -1,6 +1,7 @@
 -- world loading, yipper!
 
 LS13.Logging.LogDebug("Preloading world...")
+_G.CommandQueue = require("shared.world.command_queue")
 _G.Tilemap = require("shared.world.tilemap")
 
 LS13.VerbSystem = require("shared.verbs")
@@ -16,6 +17,7 @@ if CLIENT then
 	require("client.world.systems.renderTilemapSystem")
 	require("client.world.systems.renderEntitiesSystem")
 elseif SERVER then
+	require("server.world.systems.commandQueueSystem")
 	require("server.world.systems.chunkSyncSystem")
 end
 
