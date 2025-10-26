@@ -7,11 +7,17 @@ _G.Tilemap = require("shared.world.tilemap")
 LS13.VerbSystem = require("shared.verbs")
 LS13.VerbSystem.discoverVerbs()
 
+LS13.InteractionSystem = require("shared.interactions")
+LS13.InteractionSystem.discoverHandlers()
+
 require("shared.world.components.meta")
 require("shared.world.components.transform")
 require("shared.world.components.rendering")
 require("shared.world.components.physics")
+require("shared.world.components.entities")
 require("shared.world.components.world")
+
+require("shared.world.systems.interactionSystem")
 
 if CLIENT then
 	require("client.world.systems.renderTilemapSystem")

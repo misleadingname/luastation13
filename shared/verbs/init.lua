@@ -3,34 +3,7 @@ local VerbSystem = {}
 local verbRegistry = {}
 local verbsByName = {}
 
-local BaseVerb = {}
-BaseVerb.__index = BaseVerb
-
-function BaseVerb.new(name, data)
-	local action = setmetatable({
-		name = name,
-		data = data or {},
-		timestamp = love.timer.getTime(),
-	}, BaseVerb)
-
-	return action
-end
-
-function BaseVerb:validate()
-	return true, nil
-end
-
-function BaseVerb:serialize()
-	return {
-		name = self.name,
-		data = self.data,
-		timestamp = self.timestamp
-	}
-end
-
-function BaseVerb.deserialize(serializedData)
-	return BaseVerb.new(serializedData.name, serializedData.data)
-end
+local BaseVerb = require("shared.verbs.baseVerb")
 
 function VerbSystem.registerVerb(name, verbClass)
 	if verbRegistry[name] then

@@ -13,6 +13,7 @@ function WorldManager.newWorld(name)
 	local world = LS13.ECSManager.world()
 	world:addSystems(LS13.ECS.Systems.CommandQueueSystem)
 	world:addSystems(LS13.ECS.Systems.ChunkSyncSystem)
+	world:addSystems(LS13.ECS.Systems.InteractionSystem)
 
 	local worldEntity = LS13.ECSManager.entity("World")
 	worldEntity:give("World")
