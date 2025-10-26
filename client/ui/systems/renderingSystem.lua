@@ -15,8 +15,8 @@ function renderingSystem:draw()
 			if sliced then
 				local slice = graphic.slice or { left = 0, right = 0, top = 0, bottom = 0 }
 
-				local x, y = trans.cpos.x, trans.cpos.y
-				local w, h = trans.csize.x, trans.csize.y
+				local x, y = trans.position.x, trans.position.y
+				local w, h = trans.size.x, trans.size.y
 
 				love.graphics.setColor(panel.color:toNumbers())
 
@@ -58,8 +58,9 @@ function renderingSystem:draw()
 					(h - t - b) / (imgh - t - b))
 			else
 				love.graphics.setColor(panel.color:toNumbers())
-				love.graphics.draw(graphic.image, trans.cpos.x, trans.cpos.y, trans.rotation, trans.csize.x / imgw,
-					trans.csize.y / imgh)
+				love.graphics.draw(graphic.image, trans.position.x, trans.position.y, trans.rotation,
+					trans.size.x / imgw,
+					trans.size.y / imgh)
 			end
 		end
 
@@ -85,16 +86,16 @@ function renderingSystem:draw()
 
 			local textHeight = font:getHeight() * numLines
 
-			local y = trans.cpos.y
+			local y = trans.position.y
 			if label.vAlign == "center" then
-				y = y + trans.csize.y / 2 - textHeight / 2
+				y = y + trans.size.y / 2 - textHeight / 2
 			elseif label.vAlign == "bottom" then
-				y = y + trans.csize.y - textHeight
+				y = y + trans.size.y - textHeight
 			end
 
 			love.graphics.setColor(label.color:toNumbers())
 			love.graphics.setFont(font)
-			love.graphics.printf(tostring(text), trans.cpos.x, y, trans.csize.x, label.hAlign)
+			love.graphics.printf(tostring(text), trans.position.x, y, trans.size.x, label.hAlign)
 
 			if ent.UiTextField and ent.UiTarget and ent.UiTarget.focused then
 				local field = ent.UiTextField
@@ -107,7 +108,7 @@ function renderingSystem:draw()
 					local textBeforeSelection = field.value:sub(1, start)
 					local selectedText = field.value:sub(start + 1, endPos)
 
-					local selectionStartX = trans.cpos.x + font:getWidth(textBeforeSelection)
+					local selectionStartX = trans.position.x + font:getWidth(textBeforeSelection)
 					local selectionWidth = font:getWidth(selectedText)
 
 					love.graphics.setColor(0.3, 0.5, 1.0, 0.5)
@@ -116,7 +117,7 @@ function renderingSystem:draw()
 
 				if (time % 1) > 0.5 and (not field.selectionStart or not field.selectionEnd or field.selectionStart == field.selectionEnd) then
 					local textBeforeCursor = field.value:sub(1, field.cursorPosition)
-					local cursorX = trans.cpos.x + font:getWidth(textBeforeCursor)
+					local cursorX = trans.position.x + font:getWidth(textBeforeCursor)
 
 					love.graphics.setColor(label.color:toNumbers())
 					love.graphics.rectangle("fill", cursorX, y, 2, font:getHeight())
@@ -132,14 +133,14 @@ function renderingSystem:draw()
 
 			if target.focused then
 				love.graphics.setColor(1, 1, 1, apulse * 0.85)
-				love.graphics.rectangle("line", trans.cpos.x - spulse * 2, trans.cpos.y - spulse * 2,
-					trans.csize.x + spulse * 4, trans.csize.y + spulse * 4)
+				love.graphics.rectangle("line", trans.position.x - spulse * 2, trans.position.y - spulse * 2,
+					trans.size.x + spulse * 4, trans.size.y + spulse * 4)
 			end
 		end
 
 		if DEBUG then
 			love.graphics.setColor(1, 0, 0, 1)
-			love.graphics.rectangle("line", trans.cpos.x, trans.cpos.y, trans.csize.x, trans.csize.y)
+			love.graphics.rectangle("line", trans.position.x, trans.position.y, trans.size.x, trans.size.y)
 		end
 	end
 end

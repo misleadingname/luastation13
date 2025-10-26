@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LS13>
+	<UIMarkup Id="UI.Markup.NLayTest" Type="Scene">
+		<UIElement Id="Root">
+			<!-- Root element fills entire screen -->
+			<UiConstraint Top="root" Left="root" Bottom="root" Right="root" InTop="true" InLeft="true" InBottom="true" InRight="true" />
+			<UiSize Width="0" Height="0" />
+			<UiPanel Graphic="Graphic.UiPanel" Color="0.1,0.1,0.1,1" />
+			
+			<Children>
+				<!-- Centered dialog box -->
+				<UIElement Id="Dialog">
+					<UiConstraint Top="root" Left="root" Bottom="root" Right="root" />
+					<UiSize Width="400" Height="300" />
+					<UiBias Horizontal="0.5" Vertical="0.5" />
+					<UiPanel Graphic="Graphic.UiPanel" Color="0.2,0.2,0.2,1" />
+					<UiPadding Padding="16,16,16,16" />
+					
+					<Children>
+						<!-- Title at top -->
+						<UIElement Id="Title">
+							<UiConstraint Top="Dialog" Left="Dialog" Right="Dialog" InTop="true" InLeft="true" InRight="true" />
+							<UiSize Width="0" Height="32" />
+							<UiLabel Text="Dialog Title" Font="Font.DefaultLarge" HAlign="center" VAlign="center" />
+						</UIElement>
+						
+						<!-- Content in middle -->
+						<UIElement Id="Content">
+							<UiConstraint Top="Title" Left="Dialog" Right="Dialog" Bottom="Buttons" InLeft="true" InRight="true" />
+							<UiSize Width="0" Height="0" />
+							<UiLabel Text="This is the content area." HAlign="center" VAlign="center" />
+						</UIElement>
+						
+						<!-- Buttons at bottom -->
+						<UIElement Id="Buttons">
+							<UiConstraint Left="Dialog" Bottom="Dialog" Right="Dialog" InLeft="true" InBottom="true" InRight="true" />
+							<UiSize Width="0" Height="32" />
+							<UiPanel Graphic="Graphic.UiButton" Color="0.3,0.3,0.3,1" />
+							
+							<Children>
+								<!-- OK button on left -->
+								<UIElement Id="OkButton">
+									<UiConstraint Top="Buttons" Left="Buttons" Bottom="Buttons" InTop="true" InLeft="true" InBottom="true" />
+									<UiSize Width="100" Height="0" />
+									<UiMargin Margin="0,8,0,0" />
+									<UiPanel Graphic="Graphic.UiButton" />
+									<UiLabel Text="OK" HAlign="center" VAlign="center" />
+									<UiTarget />
+								</UIElement>
+								
+								<!-- Cancel button on right -->
+								<UIElement Id="CancelButton">
+									<UiConstraint Top="Buttons" Bottom="Buttons" Right="Buttons" InTop="true" InBottom="true" InRight="true" />
+									<UiSize Width="100" Height="0" />
+									<UiMargin Margin="0,0,0,8" />
+									<UiPanel Graphic="Graphic.UiButton" />
+									<UiLabel Text="Cancel" HAlign="center" VAlign="center" />
+									<UiTarget />
+								</UIElement>
+							</Children>
+						</UIElement>
+					</Children>
+				</UIElement>
+			</Children>
+		</UIElement>
+	</UIMarkup>
+</LS13>

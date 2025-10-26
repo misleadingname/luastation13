@@ -1,3 +1,6 @@
+-- is this mostly vibecoded?
+-- yes! fuck you! ui code, is shite! 
+
 local scene = require("client.ui.scene")
 
 local manager = {}
@@ -27,6 +30,25 @@ local function parseVector2(vecStr)
 	return Vector2.new(0, 0)
 end
 
+local function parseMargin(str)
+	if not str then return {0, 0, 0, 0} end
+	local values = {}
+	for val in str:gmatch("[^,]+") do
+		table.insert(values, tonumber(val) or 0)
+	end
+	if #values == 1 then
+		return {values[1], values[1], values[1], values[1]}
+	elseif #values == 4 then
+		return values
+	end
+	return {0, 0, 0, 0}
+end
+
+local function parseNumber(str, default)
+	if not str then return default or 0 end
+	return tonumber(str) or default or 0
+end
+
 local function substituteParams(text, params)
 	if not text or not params then return text end
 	local sub = text:gsub("{([^}]+)}", function(paramName)
@@ -54,16 +76,44 @@ local function createEntityFromXML(xmlNode, parentEntity, templateParams)
 
 				-- replace with a table lookup later, but this works :)
 				if componentName == "UiTransform" then
-					local position = parseVector2(substituteParams(attrs.Position, templateParams))
-					local size = parseVector2(substituteParams(attrs.Size, templateParams))
-					local rotation = tonumber(substituteParams(attrs.Rotation or "0", templateParams)) or 0
-					local posX = substituteParams(attrs.PosX or "pixel", templateParams)
-					local posY = substituteParams(attrs.PosY or "pixel", templateParams)
-					local sizeX = substituteParams(attrs.SizeX or "pixel", templateParams)
-					local sizeY = substituteParams(attrs.SizeY or "pixel", templateParams)
-					local anchor = parseVector2(substituteParams(attrs.Anchor or "0,0", templateParams))
+					entity:give("UiTransform")
+				elseif componentName == "UiConstraint" then
+					local top = substituteParams(attrs.Top, templateParams)
+					local left = substituteParams(attrs.Left, templateParams)
+					local bottom = substituteParams(attrs.Bottom, templateParams)
+					local right = substituteParams(attrs.Right, templateParams)
+					local inTop = (attrs.InTop or "false"):lower() == "true"
+					local inLeft = (attrs.InLeft or "false"):lower() == "true"
+					local inBottom = (attrs.InBottom or "false"):lower() == "true"
+					local inRight = (attrs.InRight or "false"):lower() == "true"
 
-					entity:give("UiTransform", position, size, rotation, posX, posY, sizeX, sizeY, anchor)
+					entity:give("UiConstraint")
+					entity.UiConstraint.top = top
+					entity.UiConstraint.left = left
+					entity.UiConstraint.bottom = bottom
+					entity.UiConstraint.right = right
+					entity.UiConstraint.inTop = inTop
+					entity.UiConstraint.inLeft = inLeft
+					entity.UiConstraint.inBottom = inBottom
+					entity.UiConstraint.inRight = inRight
+				elseif componentName == "UiSize" then
+					local width = parseNumber(substituteParams(attrs.Width, templateParams), -1)
+					local height = parseNumber(substituteParams(attrs.Height, templateParams), -1)
+					local widthMode = substituteParams(attrs.WidthMode or "pixel", templateParams)
+					local heightMode = substituteParams(attrs.HeightMode or "pixel", templateParams)
+
+					entity:give("UiSize", width, height, widthMode, heightMode)
+				elseif componentName == "UiMargin" then
+					local margin = parseMargin(substituteParams(attrs.Margin, templateParams))
+					entity:give("UiMargin", margin[1], margin[2], margin[3], margin[4])
+				elseif componentName == "UiPadding" then
+					local padding = parseMargin(substituteParams(attrs.Padding, templateParams))
+					entity:give("UiPadding", padding[1], padding[2], padding[3], padding[4])
+				elseif componentName == "UiBias" then
+					local horizontal = parseNumber(substituteParams(attrs.Horizontal, templateParams), 0.5)
+					local vertical = parseNumber(substituteParams(attrs.Vertical, templateParams), 0.5)
+
+					entity:give("UiBias", horizontal, vertical)
 				elseif componentName == "UiLabel" then
 					local text = substituteParams(attrs.Text or "", templateParams)
 					local color = parseColor(substituteParams(attrs.Color, templateParams))
@@ -77,21 +127,6 @@ local function createEntityFromXML(xmlNode, parentEntity, templateParams)
 					local color = parseColor(substituteParams(attrs.Color, templateParams))
 
 					entity:give("UiPanel", graphic, color)
-				elseif componentName == "UiLayout" then
-					local layoutType = substituteParams(attrs.Type or "vertical", templateParams):lower()
-					local padding = parseVector2(substituteParams(attrs.Padding or "0,0", templateParams))
-					local spacing = tonumber(substituteParams(attrs.Spacing or "0", templateParams))
-					local align = substituteParams(attrs.Align or "begin", templateParams):lower()
-					local justify = substituteParams(attrs.Justify or "begin", templateParams):lower()
-					local wrap = substituteParams(attrs.Wrap or "false", templateParams):lower() == "true"
-
-					entity:give("UiLayout", layoutType, padding, spacing, align, justify, wrap)
-				elseif componentName == "UiFlexItem" then
-					local grow = tonumber(substituteParams(attrs.Grow or "0", templateParams))
-					local shrink = tonumber(substituteParams(attrs.Shrink or "1", templateParams))
-					local basis = substituteParams(attrs.Basis or "auto", templateParams)
-
-					entity:give("UiFlexItem", grow, shrink, basis)
 				elseif componentName == "UiTarget" then
 					local toggle = substituteParams(attrs.Toggle or "false", templateParams):lower() == "true"
 					entity:give("UiTarget", toggle)
@@ -197,56 +232,90 @@ function manager.createUIElement(xmlNode, parentEntity, world, sceneInstance)
 
 	for nodeName, nodeData in pairs(xmlNode) do
 		if nodeName ~= "_attr" then
-			-- Handle both single elements and arrays of elements
-			local nodeList = {}
+			-- Handle Children block specially
+			if nodeName == "Children" then
+				-- Process children inside the Children block
+				if nodeData.UIElement then
+					local childElements = nodeData.UIElement
 
-			-- Check if nodeData is a single element or an array
-			if nodeData._attr then
-				-- Single element, wrap in array for uniform processing
-				nodeList = { nodeData }
-			elseif type(nodeData) == "table" and lume.count(nodeData) > 0 then
-				-- Array of elements (multiple elements with same name)
-				-- Use lume.count instead of # because XML tables may have non-consecutive keys
-				nodeList = nodeData
-			end
-
-			-- Process each element in the list
-			-- Use pairs instead of ipairs to handle non-consecutive keys
-			for _, elementData in pairs(nodeList) do
-				local entity = nil
-
-				if templates[nodeName] then
-					entity = processTemplateUsage(nodeName, elementData._attr, childParent, world)
-					if entity and sceneInstance then
-						table.insert(sceneInstance.entities, entity)
-						if elementData._attr and elementData._attr.Id then
-							sceneInstance.entities[elementData._attr.Id] = entity
+					-- Handle both single UIElement and array of UIElements
+					local childList = {}
+					if childElements._attr or childElements.Children then
+						-- Single child
+						childList = {childElements}
+					else
+						-- Multiple children
+						for _, child in pairs(childElements) do
+							table.insert(childList, child)
 						end
 					end
-				elseif nodeName == "UIElement" then
-					local childEntities = manager.createUIElement(elementData, childParent, world, sceneInstance)
-					if childEntities then
-						for _, childEntity in ipairs(childEntities) do
-							table.insert(entities, childEntity)
+
+					-- Create each child entity
+					for _, childXml in ipairs(childList) do
+						local childEntities = manager.createUIElement(childXml, childParent, world, sceneInstance)
+						if childEntities then
+							for _, childEntity in ipairs(childEntities) do
+								table.insert(entities, childEntity)
+								-- Add to parent's children list
+								if childParent and childParent.UiElement then
+									table.insert(childParent.UiElement.children, childEntity)
+								end
+							end
 						end
 					end
-				elseif nodeName == "UIEntity" then
-					-- UIEntity creates a single entity with components (used in templates)
-					-- It should NOT create a wrapper entity like UIElement does
-					entity = createEntityFromXML(elementData, childParent, {})
-					if entity and world then
-						world:addEntity(entity)
-						if sceneInstance then
+				end
+			else
+				-- Handle both single elements and arrays of elements
+				local nodeList = {}
+
+				-- Check if nodeData is a single element or an array
+				if nodeData._attr then
+					-- Single element, wrap in array for uniform processing
+					nodeList = { nodeData }
+				elseif type(nodeData) == "table" and lume.count(nodeData) > 0 then
+					-- Array of elements (multiple elements with same name)
+					-- Use lume.count instead of # because XML tables may have non-consecutive keys
+					nodeList = nodeData
+				end
+
+				-- Process each element in the list
+				-- Use pairs instead of ipairs to handle non-consecutive keys
+				for _, elementData in pairs(nodeList) do
+					local entity = nil
+
+					if templates[nodeName] then
+						entity = processTemplateUsage(nodeName, elementData._attr, childParent, world)
+						if entity and sceneInstance then
 							table.insert(sceneInstance.entities, entity)
 							if elementData._attr and elementData._attr.Id then
 								sceneInstance.entities[elementData._attr.Id] = entity
 							end
 						end
+					elseif nodeName == "UIElement" then
+						local childEntities = manager.createUIElement(elementData, childParent, world, sceneInstance)
+						if childEntities then
+							for _, childEntity in ipairs(childEntities) do
+								table.insert(entities, childEntity)
+							end
+						end
+					elseif nodeName == "UIEntity" then
+						-- UIEntity creates a single entity with components (used in templates)
+						-- It should NOT create a wrapper entity like UIElement does
+						entity = createEntityFromXML(elementData, childParent, {})
+						if entity and world then
+							world:addEntity(entity)
+							if sceneInstance then
+								table.insert(sceneInstance.entities, entity)
+								if elementData._attr and elementData._attr.Id then
+									sceneInstance.entities[elementData._attr.Id] = entity
+								end
+							end
+						end
 					end
-				end
 
-				if entity then
-					table.insert(entities, entity)
+					if entity then
+						table.insert(entities, entity)
+					end
 				end
 			end
 		end

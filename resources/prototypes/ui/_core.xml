@@ -1,75 +1,142 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <LS13>
-	<UIMarkup Id="UIButton" Type="Template">
-		<Params>
-			<Param Name="Id" Default="UnnamedButton" />
-			<Param Name="Text" Default="Button" />
-			<Param Name="Graphic" Default="Graphic.UiButton" />
-			<Param Name="Font" Default="Font.Default" />
-			<Param Name="Color" Default="1, 1, 1, 1" />
-			<Param Name="Toggle" Default="false" />
-		</Params>
 
-		<UIEntity Id="{Id}">
-			<UiTransform Position="0,0" Size="1,32" Rotation="0" PosX="ratio" PosY="ratio" SizeX="ratio" SizeY="pixel" />
-			<UiLabel Text="{Text}" Color="{Color}" Font="{Font}" HAlign="center" VAlign="center" />
-			<UiPanel Graphic="{Graphic}" Color="{Color}" />
-			<UiTarget Toggle="{Toggle}" />
-		</UIEntity>
+	<UIMarkup>
+		<UITemplate Id="UIButton">
+			<Params>
+				<Param Name="Id" Default="UnnamedButton" />
+				<Param Name="Text" Default="Button" />
+				<Param Name="Width" Default="96" />
+				<Param Name="Height" Default="32" />
+				<Param Name="Graphic" Default="Graphic.UiButton" />
+				<Param Name="Font" Default="Font.Default" />
+				<Param Name="Color" Default="1,1,1,1" />
+			</Params>
+			
+			<UIElement Id="{Id}">
+				<UiSize Width="{Width}" Height="{Height}" />
+				<UiPanel Graphic="{Graphic}" Color="{Color}" />
+				<UiLabel Text="{Text}" Font="{Font}" HAlign="center" VAlign="center" />
+				<UiTarget />
+			</UIElement>
+		</UITemplate>
+		
+		<UITemplate Id="UITextField">
+			<Params>
+				<Param Name="Id" Default="UnnamedTextField" />
+				<Param Name="Placeholder" Default="" />
+				<Param Name="Width" Default="200" />
+				<Param Name="Height" Default="32" />
+				<Param Name="Graphic" Default="Graphic.UiField" />
+				<Param Name="Font" Default="Font.Default" />
+			</Params>
+			
+			<UIElement Id="{Id}">
+				<UiSize Width="{Width}" Height="{Height}" />
+				<UiPanel Graphic="{Graphic}" />
+				<UiTextField Placeholder="{Placeholder}" />
+				<UiLabel Text="" Font="{Font}" HAlign="left" VAlign="center" />
+				<UiTarget />
+			</UIElement>
+		</UITemplate>
+		
+		<UITemplate Id="UILabel">
+			<Params>
+				<Param Name="Id" Default="UnnamedLabel" />
+				<Param Name="Text" Default="Label" />
+				<Param Name="Font" Default="Font.Default" />
+				<Param Name="Color" Default="1,1,1,1" />
+				<Param Name="HAlign" Default="left" />
+				<Param Name="VAlign" Default="center" />
+			</Params>
+			
+			<UIElement Id="{Id}">
+				<UiLabel Text="{Text}" Font="{Font}" Color="{Color}" HAlign="{HAlign}" VAlign="{VAlign}" />
+			</UIElement>
+		</UITemplate>
+		
+		<UITemplate Id="UIPanel">
+			<Params>
+				<Param Name="Id" Default="UnnamedPanel" />
+				<Param Name="Width" Default="100" />
+				<Param Name="Height" Default="100" />
+				<Param Name="Graphic" Default="Graphic.UiPanel" />
+				<Param Name="Color" Default="1,1,1,1" />
+			</Params>
+			
+			<UIElement Id="{Id}">
+				<UiSize Width="{Width}" Height="{Height}" />
+				<UiPanel Graphic="{Graphic}" Color="{Color}" />
+			</UIElement>
+		</UITemplate>
 	</UIMarkup>
-
-	<UIMarkup Id="UITextField" Type="Template">
-		<Params>
-			<Param Name="Id" Default="UnnamedTextField" />
-			<Param Name="Value" Default="" />
-			<Param Name="Font" Default="Font.Default" />
-			<Param Name="Placeholder" Default="" />
-			<Param Name="Disabled" Default="false" />
-			<Param Name="Graphic" Default="Graphic.UiField" />
-			<Param Name="Color" Default="1, 1, 1, 1" />
-			<Param Name="Position" Default="0,0" />
-			<Param Name="Size" Default="1,32" />
-			<Param Name="PosX" Default="pixel" />
-			<Param Name="PosY" Default="pixel" />
-			<Param Name="SizeX" Default="ratio" />
-			<Param Name="SizeY" Default="pixel" />
-		</Params>
-
-		<UIEntity Id="{Id}">
-			<UiTransform
-				Position="{Position}"
-				Size="{Size}"
-				Rotation="0"
-				PosX="{PosX}"
-				PosY="{PosY}"
-				SizeX="{SizeX}"
-				SizeY="{SizeY}"
-			/>
-			<UiLabel Color="0,0,0,1" Font="{Font}" HAlign="left" VAlign="center" />
-			<UiTextField Value="{Value}" Placeholder="{Placeholder}" Disabled="{Disabled}" />
-			<UiPanel Graphic="{Graphic}" Color="{Color}" />
-			<UiTarget />
-		</UIEntity>
-	</UIMarkup>
-
-	<UIMarkup Id="UILabel" Type="Template">
-		<Params>
-			<Param Name="Id" Default="UnnamedLabel" />
-			<Param Name="Text" Default="Label" />
-			<Param Name="Font" Default="Font.Default" />
-			<Param Name="Color" Default="1, 1, 1, 1" />
-			<Param Name="HAlign" Default="center" />
-			<Param Name="VAlign" Default="center" />
-			<Param Name="PosX" Default="pixel" />
-			<Param Name="PosY" Default="pixel" />
-			<Param Name="SizeX" Default="ratio" />
-			<Param Name="SizeY" Default="pixel" />
-			<Param Name="Size" Default="1,32" />
-		</Params>
-
-		<UIEntity Id="{Id}">
-			<UiTransform Position="0,0" Size="1,32" Rotation="0" PosX="{PosX}" PosY="{PosY}" SizeX="{SizeX}" SizeY="{SizeY}" />
-			<UiLabel Text="{Text}" Color="{Color}" Font="{Font}" HAlign="{HAlign}" VAlign="{VAlign}" />
-		</UIEntity>
+	<UIMarkup>
+		<UITemplate Id="UIButton">
+			<Params>
+				<Param Name="Id" Default="UnnamedButton" />
+				<Param Name="Text" Default="Button" />
+				<Param Name="Width" Default="96" />
+				<Param Name="Height" Default="32" />
+				<Param Name="Graphic" Default="Graphic.UiButton" />
+				<Param Name="Font" Default="Font.Default" />
+				<Param Name="Color" Default="1,1,1,1" />
+			</Params>
+			
+			<UIElement Id="{Id}">
+				<UiSize Width="{Width}" Height="{Height}" />
+				<UiPanel Graphic="{Graphic}" Color="{Color}" />
+				<UiLabel Text="{Text}" Font="{Font}" HAlign="center" VAlign="center" />
+				<UiTarget />
+			</UIElement>
+		</UITemplate>
+		
+		<UITemplate Id="UITextField">
+			<Params>
+				<Param Name="Id" Default="UnnamedTextField" />
+				<Param Name="Placeholder" Default="" />
+				<Param Name="Width" Default="200" />
+				<Param Name="Height" Default="32" />
+				<Param Name="Graphic" Default="Graphic.UiField" />
+				<Param Name="Font" Default="Font.Default" />
+			</Params>
+			
+			<UIElement Id="{Id}">
+				<UiSize Width="{Width}" Height="{Height}" />
+				<UiPanel Graphic="{Graphic}" />
+				<UiTextField Placeholder="{Placeholder}" />
+				<UiLabel Text="" Font="{Font}" HAlign="left" VAlign="center" />
+				<UiTarget />
+			</UIElement>
+		</UITemplate>
+		
+		<UITemplate Id="UILabel">
+			<Params>
+				<Param Name="Id" Default="UnnamedLabel" />
+				<Param Name="Text" Default="Label" />
+				<Param Name="Font" Default="Font.Default" />
+				<Param Name="Color" Default="1,1,1,1" />
+				<Param Name="HAlign" Default="left" />
+				<Param Name="VAlign" Default="center" />
+			</Params>
+			
+			<UIElement Id="{Id}">
+				<UiLabel Text="{Text}" Font="{Font}" Color="{Color}" HAlign="{HAlign}" VAlign="{VAlign}" />
+			</UIElement>
+		</UITemplate>
+		
+		<UITemplate Id="UIPanel">
+			<Params>
+				<Param Name="Id" Default="UnnamedPanel" />
+				<Param Name="Width" Default="100" />
+				<Param Name="Height" Default="100" />
+				<Param Name="Graphic" Default="Graphic.UiPanel" />
+				<Param Name="Color" Default="1,1,1,1" />
+			</Params>
+			
+			<UIElement Id="{Id}">
+				<UiSize Width="{Width}" Height="{Height}" />
+				<UiPanel Graphic="{Graphic}" Color="{Color}" />
+			</UIElement>
+		</UITemplate>
 	</UIMarkup>
 </LS13>

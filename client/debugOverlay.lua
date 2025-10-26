@@ -559,12 +559,8 @@ local function getComponentInfo(entity, componentName)
 	local info = {}
 
 	if componentName == "UiTransform" then
-		info.pos = string.format("%.1f,%.1f", component.position.x, component.position.y)
+		info.position = string.format("%.1f,%.1f", component.position.x, component.position.y)
 		info.size = string.format("%.1f,%.1f", component.size.x, component.size.y)
-		info.posType = string.format("%s,%s", component.posx, component.posy)
-		info.sizeType = string.format("%s,%s", component.sizex, component.sizey)
-		info.cpos = string.format("%.1f,%.1f", component.cpos.x, component.cpos.y)
-		info.csize = string.format("%.1f,%.1f", component.csize.x, component.csize.y)
 	elseif componentName == "UiLabel" then
 		info.text = component.text or ""
 		info.align = string.format("%s,%s", component.hAlign, component.vAlign)

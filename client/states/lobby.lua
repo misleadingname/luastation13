@@ -27,7 +27,7 @@ function LobbyState:enter()
 	lobbyMusic = LS13.AssetManager.GetPrefixed("Sound.Lobby")
 	rollSong()
 
-	LS13.UI.createScene("UI.Markup.TestScene")
+	LS13.UI.createScene("UI.Markup.NLayTest")
 
 	local dbgStart = LS13.ECSManager.entity("dbgStart")
 	dbgStart:give("UiElement")

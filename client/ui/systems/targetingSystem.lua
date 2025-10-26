@@ -17,7 +17,7 @@ function targettingSystem:update(dt)
 		local ent = self.pool[i]
 		local trans = ent.UiTransform
 		local target = ent.UiTarget
-		local lc, rc = trans.cpos, trans.cpos + trans.csize
+		local lc, rc = trans.position, trans.position + trans.size
 
 		if
 			cursor.position.x >= lc.x
@@ -97,7 +97,7 @@ function targettingSystem:draw()
 		local trans = ent.UiTransform
 		local target = ent.UiTarget
 
-		local lc, rc = trans.cpos, trans.cpos + trans.csize
+		local lc, rc = trans.position, trans.position + trans.size
 
 		love.graphics.rectangle("line", lc.x, lc.y, rc.x - lc.x, rc.y - lc.y)
 		if target.hovered then

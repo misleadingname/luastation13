@@ -20,6 +20,7 @@ local cursor = {
 function ui.init()
 	ui.world = LS13.ECSManager.world()
 	ui.cursor = cursor
+	ui.nlay = require("lib.nlay")
 
 	ui.world:addSystems( -- (this comment is only here to make stylua behave)
 		systems.UiParentSystem,
@@ -84,19 +85,21 @@ function ui.createScene(sceneId)
 		return false
 	end
 
+	ui.world:emit("rebuild")
 	LS13.Logging.LogInfo("Created scene: %s", sceneId)
 	return ui.currentScene
 end
 
-function ui.getCurrentScene()
-	return ui.currentScene
+function ui.updateDimensions(width, height)
+	local nlay = require("lib.nlay")
+	nlay.update(0, 0, width, height)
+
+	-- Rebuild constraints when dimensions change
+	ui.world:emit("rebuild")
 end
 
-function ui.getElementById(id)
-	if ui.currentScene then
-		return ui.currentScene:getElementById(id)
-	end
-	return nil
+function ui.getCurrentScene()
+	return ui.currentScene
 end
 
 function ui.test_scene()

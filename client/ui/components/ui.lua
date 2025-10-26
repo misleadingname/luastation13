@@ -1,4 +1,5 @@
 local ecs = LS13.ECSManager
+local nlay = require("lib.nlay")
 
 local uiElement = ecs.component("UiElement", function(c, parent, visible, enabled, z)
 	c.parent = parent or nil
@@ -9,38 +10,56 @@ local uiElement = ecs.component("UiElement", function(c, parent, visible, enable
 end)
 LS13.ECS.Components.UiElement = uiElement
 
-local uiTransform = ecs.component("UiTransform", function(c, position, size, rotation, posx, posy, sizex, sizey, anchor)
-	c.position = position or Vector2.new(0, 0)
-	c.size = size or Vector2.new(64, 128)
-	c.rotation = rotation or 0
-
-	c.anchor = anchor or Vector2.new(0, 0)
-	c.posx = posx or "pixel" -- pixel, ratio
-	c.posy = posy or "pixel" -- pixel, ratio
-	c.sizex = sizex or "pixel" -- pixel, ratio
-	c.sizey = sizey or "pixel" -- pixel, ratio
-
-	c.cpos = Vector2.new(0, 0)
-	c.csize = Vector2.new(64, 128)
+local uiTransform = ecs.component("UiTransform", function(c)
+	c.constraint = nil
+	c.position = Vector2.new(0, 0)
+	c.size = Vector2.new(0, 0)
 end)
 LS13.ECS.Components.UiTransform = uiTransform
 
-local uiLayout = ecs.component("UiLayout", function(c, type, padding, spacing, align, justify, wrap)
-	c.type = type or "vertical" -- vertical, horizontal
-	c.padding = padding or Vector2.new(0, 0)
-	c.spacing = spacing or 0
-	c.align = align or "begin"  -- begin, center, end
-	c.justify = justify or "begin" -- begin, center, end, stretch
-	c.wrap = wrap or false      -- whether to wrap children to next line/column
+local uiConstraint = ecs.component("UiConstraint", function(c, parent)
+	c.parent = parent or nlay  -- parent constraint (defaults to root)
+	c.top = nil
+	c.left = nil
+	c.bottom = nil
+	c.right = nil
+	c.inTop = false
+	c.inLeft = false
+	c.inBottom = false
+	c.inRight = false
 end)
-LS13.ECS.Components.UiLayout = uiLayout
+LS13.ECS.Components.UiConstraint = uiConstraint
 
-local uiFlexItem = ecs.component("UiFlexItem", function(c, grow, shrink, basis)
-	c.grow = grow or 0     -- flex-grow: how much to grow relative to siblings
-	c.shrink = shrink or 1 -- flex-shrink: how much to shrink relative to siblings
-	c.basis = basis or "auto" -- flex-basis: initial size before growing/shrinking
+local uiSize = ecs.component("UiSize", function(c, width, height, widthMode, heightMode)
+	c.width = width or -1
+	c.height = height or -1
+	c.widthMode = widthMode or "pixel" -- pixel, percent
+	c.heightMode = heightMode or "pixel"
 end)
-LS13.ECS.Components.UiFlexItem = uiFlexItem
+LS13.ECS.Components.UiSize = uiSize
+
+local uiMargin = ecs.component("UiMargin", function(c, top, left, bottom, right)
+	c.top = top or 0
+	c.left = left or 0
+	c.bottom = bottom or 0
+	c.right = right or 0
+end)
+LS13.ECS.Components.UiMargin = uiMargin
+
+local uiPadding = ecs.component("UiPadding", function(c, top, left, bottom, right)
+	c.top = top or 0
+	c.left = left or 0
+	c.bottom = bottom or 0
+	c.right = right or 0
+end)
+LS13.ECS.Components.UiPadding = uiPadding
+
+-- Bias component (for centering)
+local uiBias = ecs.component("UiBias", function(c, horizontal, vertical)
+	c.horizontal = horizontal or 0.5  -- 0.0 = left/top, 0.5 = center, 1.0 = right/bottom
+	c.vertical = vertical or 0.5
+end)
+LS13.ECS.Components.UiBias = uiBias
 
 local uiTarget = ecs.component("UiTarget", function(c, toggle)
 	c.hovered = false
