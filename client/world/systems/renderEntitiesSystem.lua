@@ -5,13 +5,13 @@ function renderEntitiesSystem:draw(z)
 		local trans = ent.Transform
 
 		if trans.z ~= z then
-			goto continue -- im sorry, blame lua 5.1
+			continue
 		end
 
 		local rend = ent.Renderer
 
 		if not rend.visible then
-			goto continue -- again, im sorry, blame lua 5.1
+			continue
 		end
 
 		if ent.Graphic then
@@ -31,8 +31,6 @@ function renderEntitiesSystem:draw(z)
 				origin.y
 			)
 		end
-
-		::continue::
 	end
 end
 
