@@ -102,7 +102,7 @@ messageHandlers[networking.Protocol.MessageType.HANDSHAKE] = function(peer, mess
 	local name = message.data.playerName
 
 	local clientId = clientIdCounter
-	clientIdCounter = clientIdCounter + 1
+	clientIdCounter += 1
 
 	clients[clientId] = {
 		id = clientId,
@@ -111,7 +111,7 @@ messageHandlers[networking.Protocol.MessageType.HANDSHAKE] = function(peer, mess
 		clientVersion = clientVersion,
 		lastHeartbeat = love.timer.getTime(),
 		connected = true,
-		worldId = nil
+		worldId = nil,
 	}
 
 	LS13.Logging.LogInfo("Client %s (%s) connected with version %s", clientId, name, clientVersion)
@@ -196,7 +196,9 @@ messageHandlers[networking.Protocol.MessageType.CHUNK_REQUEST] = function(peer, 
 	local chunkKey = chunkX .. "," .. chunkY
 
 	local world = LS13.WorldManager.worlds[client.worldId]
-	if not world then return end
+	if not world then
+		return
+	end
 
 	local worldEnt = world:getEntities()[1]
 	if worldEnt and worldEnt.World then

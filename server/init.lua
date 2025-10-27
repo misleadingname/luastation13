@@ -23,7 +23,7 @@ function server.load()
 end
 
 function server.preframe()
-	nextTime = nextTime + minDt
+	nextTime += minDt
 end
 
 function server.update(dt)

@@ -61,7 +61,7 @@ local function calculateContentSize(entity, availableSize)
 		contentWidth = font:getWidth(text)
 
 		local _, numLines = string.gsub(text, "\n", "\n")
-		numLines = numLines + 1
+		numLines += 1
 		contentHeight = font:getHeight() * numLines
 	end
 
@@ -83,12 +83,12 @@ local function calculateContentSize(entity, availableSize)
 				for _, child in pairs(children) do
 					-- pass down availableSize so ratio/content sizes are relative to parent's content area
 					local _, csize = resolveTransform(child.UiTransform, availableSize, child)
-					totalHeight = totalHeight + csize.y
+					totalHeight += csize.y
 					maxWidth = math.max(maxWidth, csize.x)
 				end
 
 				if #children > 1 then
-					totalHeight = totalHeight + layout.spacing * (#children - 1)
+					totalHeight += layout.spacing * (#children - 1)
 				end
 
 				contentWidth = math.max(contentWidth, maxWidth + layout.padding.x * 2)
@@ -100,12 +100,12 @@ local function calculateContentSize(entity, availableSize)
 
 				for _, child in pairs(children) do
 					local _, csize = resolveTransform(child.UiTransform, availableSize, child)
-					totalWidth = totalWidth + csize.x
+					totalWidth += csize.x
 					maxHeight = math.max(maxHeight, csize.y)
 				end
 
 				if #children > 1 then
-					totalWidth = totalWidth + layout.spacing * (#children - 1)
+					totalWidth += layout.spacing * (#children - 1)
 				end
 
 				contentWidth = math.max(contentWidth, totalWidth + layout.padding.x * 2)
@@ -173,10 +173,10 @@ local function processLayoutEntity(parent)
 		local totalSize = 0
 		for _, child in pairs(children) do
 			local _, csize = resolveTransform(child.UiTransform, availableSize, child)
-			totalSize = totalSize + csize.y
+			totalSize += csize.y
 		end
 		if #children > 1 then
-			totalSize = totalSize + layout.spacing * (#children - 1)
+			totalSize += layout.spacing * (#children - 1)
 		end
 
 		local offset
@@ -225,7 +225,7 @@ local function processLayoutEntity(parent)
 			ctrans.cpos = applyAnchor(ctrans.cpos, ctrans.csize, ctrans.anchor)
 
 			local spacing = (layout.justify == "stretch" and stretchSpacing > 0) and stretchSpacing or layout.spacing
-			offset = offset + csize.y + spacing
+			offset += csize.y + spacing
 		end
 
 		-- Apply auto-sizing if enabled
@@ -259,13 +259,13 @@ local function processLayoutEntity(parent)
 				shrink = shrink,
 			})
 
-			totalBaseSize = totalBaseSize + csize.x
-			totalGrow = totalGrow + grow
-			totalShrink = totalShrink + shrink
+			totalBaseSize += csize.x
+			totalGrow += grow
+			totalShrink += shrink
 		end
 
 		if #children > 1 then
-			totalBaseSize = totalBaseSize + layout.spacing * (#children - 1)
+			totalBaseSize += layout.spacing * (#children - 1)
 		end
 
 		-- Calculate flex grow/shrink
@@ -279,7 +279,7 @@ local function processLayoutEntity(parent)
 		elseif remainingSpace < 0 and totalShrink > 0 then
 			for _, data in ipairs(childData) do
 				if data.shrink > 0 then
-					local shrinkAmount = (-remainingSpace) * (data.shrink / totalShrink)
+					local shrinkAmount = -remainingSpace * (data.shrink / totalShrink)
 					data.finalSize = math.max(0, data.finalSize - shrinkAmount)
 				end
 			end
@@ -288,10 +288,10 @@ local function processLayoutEntity(parent)
 		-- Recalculate total size after flex
 		local totalFinalSize = 0
 		for _, data in ipairs(childData) do
-			totalFinalSize = totalFinalSize + data.finalSize
+			totalFinalSize += data.finalSize
 		end
 		if #children > 1 then
-			totalFinalSize = totalFinalSize + layout.spacing * (#children - 1)
+			totalFinalSize += layout.spacing * (#children - 1)
 		end
 
 		-- Calculate initial offset based on justify
@@ -339,7 +339,7 @@ local function processLayoutEntity(parent)
 			ctrans.cpos = applyAnchor(ctrans.cpos, ctrans.csize, ctrans.anchor)
 
 			local spacing = (layout.justify == "stretch" and stretchSpacing > 0) and stretchSpacing or layout.spacing
-			offset = offset + data.finalSize + spacing
+			offset += data.finalSize + spacing
 		end
 
 		-- Apply auto-sizing if enabled
@@ -356,7 +356,7 @@ local function getHierarchyDepth(entity)
 	local depth = 0
 	local current = entity.UiElement.parent
 	while current do
-		depth = depth + 1
+		depth += 1
 		current = current.UiElement and current.UiElement.parent
 	end
 	return depth

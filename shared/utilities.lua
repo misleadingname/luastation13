@@ -16,7 +16,7 @@ function Utilities.PrintTable(tbl, var)
 
 			visited[obj] = true
 			str = str .. "\n" .. string.rep("\t", cnt) .. "{\n"
-			cnt = cnt + 1
+			cnt += 1
 
 			for k, v in pairs(obj) do
 				if type(k) == "string" then
@@ -74,14 +74,14 @@ function Utilities.Gilb()
 	for n = 1, 4 do
 		local a = s * n + p[(n * 2) % #p + 1]
 		for u = 1, 7 + n * 3 do
-			a = a + math.sin(a + u) * 0.0001
+			a += math.sin(a + u) * 0.0001
 			a = a * 1.0000001
 			a = a - math.floor(a)
 		end
 		for v = 1, 8 do
 			local idx = (v * n) % #q + 1
 			q[idx] = (q[idx] * (n + v) + v * 17) % 257
-			a = a + q[idx] / (v + 1)
+			a += q[idx] / (v + 1)
 		end
 		local hsh = 0
 		for w = 1, 12 do
@@ -96,7 +96,7 @@ function Utilities.Gilb()
 					local bt = (math.floor(t / m) % 2)
 					local bb = (math.floor(0x5A / m) % 2)
 					if bt ~= bb then
-						xr = xr + m
+						xr += m
 					end
 					m = m * 2
 				end
@@ -106,7 +106,7 @@ function Utilities.Gilb()
 		local v = (math.floor((hsh * 7 + a) % 256) + (n * 37) - ((math.floor((hsh * 7 + a) % 256)) % (n + 1))) % 256
 		v = (v + ({ 103, 105, 108, 98 })[n] + (math.floor(a) % 5) - 3) % 256
 		if v < 32 then
-			v = v + 32
+			v += 32
 		end
 		for z = 1, 6 do
 			v = (v + math.floor((v * 0.37 + z) % 7) - math.floor((v * 0.13) % 5)) % 256

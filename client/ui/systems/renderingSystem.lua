@@ -26,16 +26,16 @@ function renderingSystem:draw()
 				-- quads
 				local quads = {
 					-- corners
-					tl     = love.graphics.newQuad(0, 0, l, t, imgw, imgh),
-					tr     = love.graphics.newQuad(imgw - r, 0, r, t, imgw, imgh),
-					bl     = love.graphics.newQuad(0, imgh - b, l, b, imgw, imgh),
-					br     = love.graphics.newQuad(imgw - r, imgh - b, r, b, imgw, imgh),
+					tl = love.graphics.newQuad(0, 0, l, t, imgw, imgh),
+					tr = love.graphics.newQuad(imgw - r, 0, r, t, imgw, imgh),
+					bl = love.graphics.newQuad(0, imgh - b, l, b, imgw, imgh),
+					br = love.graphics.newQuad(imgw - r, imgh - b, r, b, imgw, imgh),
 
 					-- edges
-					top    = love.graphics.newQuad(l, 0, imgw - l - r, t, imgw, imgh),
+					top = love.graphics.newQuad(l, 0, imgw - l - r, t, imgw, imgh),
 					bottom = love.graphics.newQuad(l, imgh - b, imgw - l - r, b, imgw, imgh),
-					left   = love.graphics.newQuad(0, t, l, imgh - t - b, imgw, imgh),
-					right  = love.graphics.newQuad(imgw - r, t, r, imgh - t - b, imgw, imgh),
+					left = love.graphics.newQuad(0, t, l, imgh - t - b, imgw, imgh),
+					right = love.graphics.newQuad(imgw - r, t, r, imgh - t - b, imgw, imgh),
 
 					-- center
 					center = love.graphics.newQuad(l, t, imgw - l - r, imgh - t - b, imgw, imgh),
@@ -54,15 +54,27 @@ function renderingSystem:draw()
 				love.graphics.draw(img, quads.right, x + w - r, y + t, 0, 1, (h - t - b) / (imgh - t - b))
 
 				-- center
-				love.graphics.draw(img, quads.center, x + l, y + t, 0, (w - l - r) / (imgw - l - r),
-					(h - t - b) / (imgh - t - b))
+				love.graphics.draw(
+					img,
+					quads.center,
+					x + l,
+					y + t,
+					0,
+					(w - l - r) / (imgw - l - r),
+					(h - t - b) / (imgh - t - b)
+				)
 			else
 				love.graphics.setColor(panel.color:toNumbers())
-				love.graphics.draw(graphic.image, trans.cpos.x, trans.cpos.y, trans.rotation, trans.csize.x / imgw,
-					trans.csize.y / imgh)
+				love.graphics.draw(
+					graphic.image,
+					trans.cpos.x,
+					trans.cpos.y,
+					trans.rotation,
+					trans.csize.x / imgw,
+					trans.csize.y / imgh
+				)
 			end
 		end
-
 
 		if ent.UiLabel then
 			local label = ent.UiLabel
@@ -81,15 +93,15 @@ function renderingSystem:draw()
 			end
 
 			local _, numLines = string.gsub(tostring(text), "\n", "\n")
-			numLines = numLines + 1
+			numLines += 1
 
 			local textHeight = font:getHeight() * numLines
 
 			local y = trans.cpos.y
 			if label.vAlign == "center" then
-				y = y + trans.csize.y / 2 - textHeight / 2
+				y += trans.csize.y / 2 - textHeight / 2
 			elseif label.vAlign == "bottom" then
-				y = y + trans.csize.y - textHeight
+				y += trans.csize.y - textHeight
 			end
 
 			love.graphics.setColor(label.color:toNumbers())
@@ -114,7 +126,14 @@ function renderingSystem:draw()
 					love.graphics.rectangle("fill", selectionStartX, y, selectionWidth, font:getHeight())
 				end
 
-				if (time % 1) > 0.5 and (not field.selectionStart or not field.selectionEnd or field.selectionStart == field.selectionEnd) then
+				if
+					(time % 1) > 0.5
+					and (
+						not field.selectionStart
+						or not field.selectionEnd
+						or field.selectionStart == field.selectionEnd
+					)
+				then
 					local textBeforeCursor = field.value:sub(1, field.cursorPosition)
 					local cursorX = trans.cpos.x + font:getWidth(textBeforeCursor)
 
@@ -132,8 +151,13 @@ function renderingSystem:draw()
 
 			if target.focused then
 				love.graphics.setColor(1, 1, 1, apulse * 0.85)
-				love.graphics.rectangle("line", trans.cpos.x - spulse * 2, trans.cpos.y - spulse * 2,
-					trans.csize.x + spulse * 4, trans.csize.y + spulse * 4)
+				love.graphics.rectangle(
+					"line",
+					trans.cpos.x - spulse * 2,
+					trans.cpos.y - spulse * 2,
+					trans.csize.x + spulse * 4,
+					trans.csize.y + spulse * 4
+				)
 			end
 		end
 

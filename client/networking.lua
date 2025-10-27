@@ -24,7 +24,9 @@ function networking.start(ip)
 
 	LS13.Logging.LogInfo("Running lua-enet %s", enet.linked_version())
 	LS13.Logging.LogInfo("Connecting to %s", ip)
-	if host then networking.shutdown() end
+	if host then
+		networking.shutdown()
+	end
 	host = enet.host_create()
 
 	peer = host:connect(ip, 1)
@@ -155,7 +157,9 @@ messageHandlers[networking.Protocol.MessageType.WORLD_INIT] = function(message)
 			end
 
 			local chunkCount = 0
-			for _ in pairs(chunks) do chunkCount = chunkCount + 1 end
+			for _ in pairs(chunks) do
+				chunkCount += 1
+			end
 			LS13.Logging.LogInfo("Received world initialization for world %s with %d chunks", worldId, chunkCount)
 		end
 	end
@@ -208,7 +212,9 @@ messageHandlers[networking.Protocol.MessageType.PONG] = function(message)
 end
 
 function networking.update()
-	if not host or not peer then return end
+	if not host or not peer then
+		return
+	end
 
 	local event = host:service()
 	while event do

@@ -15,7 +15,7 @@ local networkStats = {
 	lastResetTime = 0,
 	verbsProcessed = 0,
 	chunksReceived = 0,
-	connectionTime = 0
+	connectionTime = 0,
 }
 
 local function formatBytes(bytes)
@@ -141,7 +141,9 @@ local lines = {
 			if LS13.VerbSystem then
 				local verbs = LS13.VerbSystem.getAllVerbs()
 				local count = 0
-				for _ in pairs(verbs) do count = count + 1 end
+				for _ in pairs(verbs) do
+					count += 1
+				end
 				return string.format("registered verbs: %d", count)
 			else
 				return "registered verbs: no system"
@@ -198,12 +200,14 @@ local lines = {
 		Text = function()
 			if LS13.ECSManager and LS13.WorldManager.getCurrentWorld() then
 				local ents = LS13.WorldManager.getCurrentWorld():getEntities()
-				if not ents or #ents == 0 then return "tilemap chunks: no world" end
+				if not ents or #ents == 0 then
+					return "tilemap chunks: no world"
+				end
 				local worldEnt = ents[1]
 				if worldEnt and worldEnt.World and worldEnt.World.tilemap then
 					local chunkCount = 0
 					for _ in pairs(worldEnt.World.tilemap.chunks) do
-						chunkCount = chunkCount + 1
+						chunkCount += 1
 					end
 					return string.format("tilemap chunks: %d", chunkCount)
 				else
@@ -222,7 +226,9 @@ local lines = {
 		Text = function()
 			if LS13.ECSManager and LS13.WorldManager.getCurrentWorld() then
 				local ents = LS13.WorldManager.getCurrentWorld():getEntities()
-				if not ents or #ents == 0 then return "total tiles: no world" end
+				if not ents or #ents == 0 then
+					return "total tiles: no world"
+				end
 				local worldEnt = ents[1]
 				if worldEnt and worldEnt.World and worldEnt.World.tilemap then
 					local tilemap = worldEnt.World.tilemap
@@ -230,7 +236,7 @@ local lines = {
 					for _, chunk in pairs(tilemap.chunks) do
 						for i = 1, tilemap.CHUNK_SIZE * tilemap.CHUNK_SIZE do
 							if chunk[i] then
-								tileCount = tileCount + 1
+								tileCount += 1
 							end
 						end
 					end
@@ -251,12 +257,14 @@ local lines = {
 		Text = function()
 			if LS13.ECSManager and LS13.WorldManager.getCurrentWorld() then
 				local ents = LS13.WorldManager.getCurrentWorld():getEntities()
-				if not ents or #ents == 0 then return "dirty chunks: no world" end
+				if not ents or #ents == 0 then
+					return "dirty chunks: no world"
+				end
 				local worldEnt = ents[1]
 				if worldEnt and worldEnt.World and worldEnt.World.tilemap and worldEnt.World.tilemap.dirtyChunks then
 					local dirtyCount = 0
 					for _ in pairs(worldEnt.World.tilemap.dirtyChunks) do
-						dirtyCount = dirtyCount + 1
+						dirtyCount += 1
 					end
 					return string.format("dirty chunks: %d", dirtyCount)
 				else
@@ -269,12 +277,14 @@ local lines = {
 		Color = function()
 			if LS13.ECSManager and LS13.WorldManager.getCurrentWorld() then
 				local ents = LS13.WorldManager.getCurrentWorld():getEntities()
-				if not ents or #ents == 0 then return { 0.5, 0.5, 0.5, 1 } end
+				if not ents or #ents == 0 then
+					return { 0.5, 0.5, 0.5, 1 }
+				end
 				local worldEnt = ents[1]
 				if worldEnt and worldEnt.World and worldEnt.World.tilemap and worldEnt.World.tilemap.dirtyChunks then
 					local dirtyCount = 0
 					for _ in pairs(worldEnt.World.tilemap.dirtyChunks) do
-						dirtyCount = dirtyCount + 1
+						dirtyCount += 1
 					end
 					return dirtyCount > 0 and { 1, 1, 0, 1 } or { 0.5, 0.5, 0.5, 1 }
 				end
@@ -363,8 +373,11 @@ local lines = {
 
 	{
 		Text = function()
-			return string.format("total data: ↓%s ↑%s", formatBytes(networkStats.bytesReceived),
-				formatBytes(networkStats.bytesSent))
+			return string.format(
+				"total data: ↓%s ↑%s",
+				formatBytes(networkStats.bytesReceived),
+				formatBytes(networkStats.bytesSent)
+			)
 		end,
 		Color = function()
 			return { 0.9, 0.7, 1, 1 }
@@ -554,7 +567,9 @@ end
 
 local function getComponentInfo(entity, componentName)
 	local component = entity[componentName]
-	if not component then return nil end
+	if not component then
+		return nil
+	end
 
 	local info = {}
 
@@ -601,17 +616,23 @@ local function drawTreeNode(entity, depth, x, y, lineHeight)
 	local nameColor = { 1, 1, 0.5, 1 }
 	local treeSymbol = depth == 0 and "\\/ " or "|- "
 	shadowText(string.rep("  ", depth) .. treeSymbol .. entityName, x + indent, currentY, "left", nameColor)
-	currentY = currentY + lineHeight
+	currentY += lineHeight
 
 	local components = { "UiTransform", "UiLabel", "UiPanel", "UiLayout", "UiTarget", "UiTextField" }
 	local componentCount = 0
 
 	for _, componentName in ipairs(components) do
 		if entity[componentName] then
-			componentCount = componentCount + 1
+			componentCount += 1
 			local componentColor = { 0.7, 0.9, 1, 1 }
-			shadowText(string.rep("  ", depth + 1) .. "| " .. componentName, x + indent, currentY, "left", componentColor)
-			currentY = currentY + lineHeight
+			shadowText(
+				string.rep("  ", depth + 1) .. "| " .. componentName,
+				x + indent,
+				currentY,
+				"left",
+				componentColor
+			)
+			currentY += lineHeight
 
 			local info = getComponentInfo(entity, componentName)
 			if info then
@@ -619,7 +640,7 @@ local function drawTreeNode(entity, depth, x, y, lineHeight)
 					local detailColor = { 0.8, 0.8, 0.8, 1 }
 					local detailText = string.format("%s|- %s: %s", string.rep("  ", depth + 1), key, value)
 					shadowText(detailText, x + indent, currentY, "left", detailColor)
-					currentY = currentY + lineHeight
+					currentY += lineHeight
 				end
 			end
 		end
@@ -627,19 +648,28 @@ local function drawTreeNode(entity, depth, x, y, lineHeight)
 
 	if componentCount > 0 then
 		local countColor = { 0.6, 0.8, 0.6, 1 }
-		shadowText(string.rep("  ", depth + 1) .. "\\ " .. componentCount .. " components", x + indent, currentY, "left",
-			countColor)
-		currentY = currentY + lineHeight
+		shadowText(
+			string.rep("  ", depth + 1) .. "\\ " .. componentCount .. " components",
+			x + indent,
+			currentY,
+			"left",
+			countColor
+		)
+		currentY += lineHeight
 	end
 
 	return currentY
 end
 
 local function buildUIHierarchy()
-	if not LS13.UI or not LS13.UI.world then return {} end
+	if not LS13.UI or not LS13.UI.world then
+		return {}
+	end
 
 	local entities = LS13.UI.world:getEntities()
-	if not entities then return {} end
+	if not entities then
+		return {}
+	end
 
 	local amount = 0
 	local hierarchy = {}
@@ -649,9 +679,9 @@ local function buildUIHierarchy()
 		if entity.UiElement then
 			entityMap[entity] = {
 				entity = entity,
-				children = {}
+				children = {},
 			}
-			amount = amount + 1
+			amount += 1
 		end
 	end
 
@@ -660,10 +690,10 @@ local function buildUIHierarchy()
 			local parent = entity.UiElement.parent
 			if parent and entityMap[parent] then
 				table.insert(entityMap[parent].children, entityMap[entity])
-				amount = amount + 1
+				amount += 1
 			else
 				table.insert(hierarchy, entityMap[entity])
-				amount = amount + 1
+				amount += 1
 			end
 		end
 	end
@@ -682,7 +712,7 @@ local function drawUITreeRecursive(nodes, depth, x, y, lineHeight)
 		end
 
 		if depth == 0 then
-			currentY = currentY + lineHeight * 0.5
+			currentY += lineHeight * 0.5
 		end
 	end
 
@@ -690,10 +720,14 @@ local function drawUITreeRecursive(nodes, depth, x, y, lineHeight)
 end
 
 function debugOverlay.drawUITree()
-	if not LS13.UI or not LS13.UI.world then return end
+	if not LS13.UI or not LS13.UI.world then
+		return
+	end
 
 	local entities = LS13.UI.world:getEntities()
-	if not entities or #entities == 0 then return end
+	if not entities or #entities == 0 then
+		return
+	end
 
 	local startX = W() - 600
 	local startY = 80
@@ -701,7 +735,7 @@ function debugOverlay.drawUITree()
 
 	local countColor = { 0.8, 1, 0.8, 1 }
 	shadowText(string.format("UI entities: %d", #entities), startX, startY, "left", countColor)
-	startY = startY + lineHeight * 1.5
+	startY += lineHeight * 1.5
 
 	local hierarchy, amount = buildUIHierarchy()
 	if #hierarchy > 0 then

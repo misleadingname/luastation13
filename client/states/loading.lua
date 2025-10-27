@@ -22,7 +22,7 @@ function LoadingState:update(dt)
 		LS13.UI.world:emit("initalize")
 		LS13.StateManager.switchState("Connecting")
 	end
-	frame = frame + 1
+	frame += 1
 end
 
 function LoadingState:draw()

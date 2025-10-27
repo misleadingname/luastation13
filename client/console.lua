@@ -53,7 +53,7 @@ function console.draw()
 		end
 
 		local _, numLines = string.gsub(entry.text, "\n", "\n")
-		numLines = numLines + 1
+		numLines += 1
 
 		local logHeight = font.font:getHeight() * numLines
 
@@ -69,7 +69,7 @@ function console.draw()
 
 		love.graphics.setColor(entry.color.r, entry.color.g, entry.color.b, alpha)
 		love.graphics.print(entry.text, x, y + yy)
-		y = y + logHeight
+		y += logHeight
 	end
 
 	love.graphics.setColor(1, 1, 1, 1)
