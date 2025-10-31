@@ -3,7 +3,7 @@ local enet = require("enet")
 networking.Protocol = require("shared.networking.protocol")
 
 local host
-local clients = {} -- clientId -> {peer, playerName, lastHeartbeat, worldId, etc}
+local clients = {} -- clientId -> {peer, playerName, lastHeartbeat, worldId, connected}
 local clientIdCounter = 1
 
 local messageHandlers = {}
@@ -243,6 +243,17 @@ messageHandlers[networking.Protocol.MessageType.PLAYER_COMMAND] = function(clien
 	end
 end
 
+function networking.disconnect(client, code, force)
+	if client then
+		client.connected = false
+		if force then
+			client.peer:disconnect_now(code or NETWORK_DISCONNECT_KICKED)
+		else
+			client.peer:disconnect_later(code or NETWORK_DISCONNECT_KICKED)
+		end
+	end
+end
+
 function networking.update()
 	if not host then
 		return
@@ -282,6 +293,8 @@ function networking.update()
 					local cmd = networking.Protocol.preparePlayerCommand()
 					world:emit("playerCommand", client.id, cmd)
 				end
+
+				client.connected = false
 			else
 				LS13.Logging.LogDebug("Unknown peer %s disconnected", event.peer)
 			end
@@ -293,9 +306,9 @@ function networking.update()
 	local timeoutThreshold = 30.0
 
 	for clientId, client in pairs(clients) do
-		if currentTime - client.lastHeartbeat > timeoutThreshold then
+		if currentTime - client.lastHeartbeat > timeoutThreshold and client.connected then
 			LS13.Logging.LogInfo("Client %s timed out, disconnecting", clientId)
-			client.peer:disconnect_now()
+			LS13.Networking.disconnect(client, NETWORK_DISCONNECT_TIMEOUT, true)
 		end
 	end
 end
@@ -303,7 +316,7 @@ end
 function networking.shutdown()
 	if host then
 		for clientId, client in pairs(clients) do
-			client.peer:disconnect_now()
+			LS13.Networking.disconnect(client, NETWORK_DISCONNECT_SHUTDOWN, true)
 		end
 
 		host:destroy()
