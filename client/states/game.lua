@@ -20,6 +20,9 @@ function GameState:enter()
 
 	viewportCanvas = love.graphics.newCanvas(VIEWPORT_WIDTH * vpScale, VIEWPORT_HEIGHT * vpScale)
 	worldCanvas = love.graphics.newCanvas(VIEWPORT_WIDTH * vpScale, VIEWPORT_HEIGHT * vpScale)
+
+	viewportCanvas:setFilter("nearest", "nearest")
+	worldCanvas:setFilter("nearest", "nearest")
 	-- END TODO
 
 	self.camX = 0
@@ -116,9 +119,16 @@ function GameState:draw()
 
 	love.graphics.draw(worldCanvas, 0, 0)
 	love.graphics.setCanvas()
-	local w, h = love.graphics.getDimensions()
 
-	love.graphics.draw(viewportCanvas, w / 2 - viewportCanvas:getWidth() / 2, h / 2 - viewportCanvas:getHeight() / 2) -- TODO: move to ui
+	local vw, vh = love.graphics.getDimensions()
+	local w, h = viewportCanvas:getDimensions()
+
+	local scale = math.floor(math.min(vw / w, vh / h))
+
+	local x = (vw - w * scale) / 2
+	local y = (vh - h * scale) / 2
+
+	love.graphics.draw(viewportCanvas, x, y, 0, scale, scale)
 end
 
 function GameState:exit() end
