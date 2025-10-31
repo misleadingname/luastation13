@@ -21,6 +21,10 @@ function GameState:enter()
 	viewportCanvas = love.graphics.newCanvas(VIEWPORT_WIDTH * vpScale, VIEWPORT_HEIGHT * vpScale)
 	worldCanvas = love.graphics.newCanvas(VIEWPORT_WIDTH * vpScale, VIEWPORT_HEIGHT * vpScale)
 	-- END TODO
+
+	self.camX = 0
+	self.camY = 0
+	self.camZ = 0
 end
 
 function GameState:update(dt) end
@@ -36,20 +40,19 @@ function GameState:draw()
 		return
 	end
 
-	-- TODO: this is temporary because there is no world entity on the client currently
+	-- TODO: this is temporarily commented out because there currently is no world entity on the client
 	-- local worldEnt = world:getEntities()[1]
 
 	local zMin = 0
 	local zMax = 0
-	-- END TODO
 
 	local vpWidth, vpHeight = viewportCanvas:getPixelDimensions()
 
 	local vpScale = 1 -- TODO: use setting
 
-	local camX = 0
-	local camY = 0
-	local camZ = 0
+	local camX = self.camX
+	local camY = self.camY
+	local camZ = self.camZ
 	local camZoom = 1
 
 	love.graphics.setCanvas(worldCanvas)
@@ -59,7 +62,7 @@ function GameState:draw()
 	for z = zMin, camZ, 1 do
 		local cameraTransform = love.math.newTransform()
 
-		cameraTransform:translate(vpWidth / 2 - camX, vpHeight / 2 - camY)
+		cameraTransform:translate(vpWidth / 2 - camX * 32, vpHeight / 2 - camY * 32)
 		cameraTransform:scale(camZoom * vpScale, camZoom * vpScale)
 
 		love.graphics.push()
@@ -69,10 +72,12 @@ function GameState:draw()
 
 		if DEBUG then
 			love.graphics.setColor(1, 0, 0)
-			love.graphics.line(0, 0, 32, 0)
+			love.graphics.line(32 * 0, 32 * 0, 32 * 1, 32 * 0)
+			love.graphics.line(32 * 8, 32 * 8, 32 * 7, 32 * 8)
 
 			love.graphics.setColor(0, 1, 0)
-			love.graphics.line(0, 0, 0, 32)
+			love.graphics.line(32 * 0, 32 * 0, 32 * 0, 32 * 1)
+			love.graphics.line(32 * 8, 32 * 8, 32 * 8, 32 * 7)
 		end
 
 		love.graphics.pop()
@@ -88,7 +93,7 @@ function GameState:draw()
 
 	love.graphics.setCanvas(viewportCanvas)
 
-	local bgX, bgY = -camX, -camY
+	local bgX, bgY = camX * 2, camY * 2
 
 	-- TODO: use location prototype based background
 	love.graphics.setColor(1, 1, 1, 1)
