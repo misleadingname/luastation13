@@ -16,7 +16,7 @@ function server.load()
 
 	LS13.StateManager.switchState("Preround")
 
-	LS13.Networking.start(NETWORK_DEFAULT_PORT, 2)
+	LS13.Networking.start(NETWORK_DEFAULT_PORT, 16)
 
 	minDt = 1 / 60
 	nextTime = love.timer.getTime()

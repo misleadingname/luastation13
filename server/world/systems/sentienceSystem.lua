@@ -22,7 +22,7 @@ function basicTempCharSystem:update(dt)
 		local cmd = sentience._playerCommand
 		if not cmd then continue end
 
-		transform.position += cmd.MoveDirection * dt * 4
+		transform.position += cmd.MoveDirection * dt * 16
 	end
 end
 

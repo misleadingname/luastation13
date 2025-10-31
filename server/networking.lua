@@ -16,7 +16,7 @@ function networking.start(port, maxPeers)
 
 	LS13.Logging.LogInfo("Running lua-enet %s", enet.linked_version())
 
-	host = enet.host_create("localhost:" .. port, maxPeers, 1)
+	host = enet.host_create("0.0.0.0:" .. port, maxPeers, 1)
 	if not host then
 		LS13.Logging.LogError("Failed to create host on port %s", port)
 		return false
