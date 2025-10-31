@@ -83,6 +83,17 @@ function Serializer.hasComponentChanged(entity, componentName, lastState)
 	end
 
 	for k, v in pairs(currentData) do
+		if type(v) == "table" then
+			local mt = getmetatable(v)
+			if mt == "Vector2" then
+				return not v:compare(lastData[k])
+			end
+
+			if mt == "Color" then
+				return not v:compare(lastData[k])
+			end
+		end
+
 		if lastData[k] ~= v then
 			return true
 		end

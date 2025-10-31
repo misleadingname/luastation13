@@ -36,14 +36,13 @@ LS13.ECSManager.entity = function(name, ...)
 
 	if SERVER then
 		local origGive = entity.give
+
 		function entity:give(componentName, ...)
 			local result = origGive(self, componentName, ...)
 
 			if componentName == "Transform" and not self.Replicated then
 				origGive(self, "Replicated")
-				self.Replicated.dirty = true
 			elseif self.Replicated then
-				self.Replicated.dirty = true
 			end
 
 			return result

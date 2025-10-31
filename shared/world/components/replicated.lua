@@ -2,7 +2,6 @@ local ecs = LS13.ECSManager
 
 local replicatedComponent = ecs.component("Replicated", function(c, networkId)
 	c.networkId = networkId or nil
-	c.dirty = false
 	c.lastReplicatedState = {}
 end)
 

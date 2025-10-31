@@ -83,6 +83,15 @@ function color:toNumbers()
 	return self.r, self.g, self.b, self.a
 end
 
+function color:toHex()
+	return string.format("#%02X%02X%02X%02X", self.r * 255, self.g * 255, self.b * 255, self.a * 255)
+end
+
+function color:compare(other)
+	if not other then return false end
+	return self.r == other.r and self.g == other.g and self.b == other.b and self.a == other.a
+end
+
 color.white = color.new(1, 1, 1, 1)
 color.black = color.new(0, 0, 0, 1)
 color.red = color.new(1, 0, 0, 1)

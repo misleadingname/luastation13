@@ -23,7 +23,6 @@ function basicTempCharSystem:update(dt)
 		if not cmd then continue end
 
 		transform.position += cmd.MoveDirection * dt * 4
-		replicated.dirty = true
 	end
 end
 
