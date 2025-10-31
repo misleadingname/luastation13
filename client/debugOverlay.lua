@@ -6,6 +6,7 @@ local H = love.graphics.getHeight
 local init = false
 local font
 local showUITree = true
+local showEntityDebug = false
 
 local networkStats = {
 	messagesReceived = 0,
@@ -451,6 +452,15 @@ local lines = {
 			return { 0.7, 0.7, 0.7, 1 }
 		end,
 	},
+
+	{
+		Text = function()
+			return "[E] Toggle entity debug view"
+		end,
+		Color = function()
+			return { 0.7, 0.7, 0.7, 1 }
+		end,
+	},
 }
 
 function debugOverlay.init()
@@ -539,6 +549,14 @@ function debugOverlay.update(dt)
 	elseif not love.keyboard.isDown("u") then
 		debugOverlay.uPressed = false
 	end
+
+	if love.keyboard.isDown("e") and not debugOverlay.ePressed then
+		debugOverlay.ePressed = true
+		showEntityDebug = not showEntityDebug
+		LS13.Logging.LogInfo("Entity debug view %s", showEntityDebug and "enabled" or "disabled")
+	elseif not love.keyboard.isDown("e") then
+		debugOverlay.ePressed = false
+	end
 end
 
 function debugOverlay.draw()
@@ -555,6 +573,11 @@ function debugOverlay.draw()
 	-- UI Debug Tree View
 	if showUITree and LS13.UI and LS13.UI.world then
 		debugOverlay.drawUITree()
+	end
+
+	-- Entity Debug View
+	if showEntityDebug then
+		debugOverlay.drawEntityDebug()
 	end
 end
 
@@ -744,6 +767,72 @@ function debugOverlay.drawUITree()
 	else
 		local noEntitiesColor = { 0.7, 0.7, 0.7, 1 }
 		shadowText("No UI hierarchy found", startX, startY, "left", noEntitiesColor)
+	end
+end
+
+function debugOverlay.drawEntityDebug()
+	if not LS13.WorldManager or not LS13.WorldManager.getCurrentWorld then
+		return
+	end
+
+	local world = LS13.WorldManager.getCurrentWorld()
+	if not world then
+		return
+	end
+
+	local entities = world:getEntities()
+	if not entities or #entities == 0 then
+		return
+	end
+
+	local startX = 16
+	local startY = 80
+	local lineHeight = 14
+	local currentY = startY
+
+	local headerColor = { 0.8, 1, 0.8, 1 }
+	shadowText(string.format("World Entities: %d", #entities), startX, currentY, "left", headerColor)
+	currentY += lineHeight * 1.5
+
+	for _, entity in ipairs(entities) do
+		local entityName = getEntityName(entity)
+		local nameColor = { 1, 1, 0.5, 1 }
+		shadowText(entityName, startX, currentY, "left", nameColor)
+		currentY += lineHeight
+
+		local componentCount = 0
+		for componentName, component in pairs(entity:getComponents()) do
+			componentCount += 1
+			local componentColor = { 0.7, 0.9, 1, 1 }
+			shadowText(string.format("  ├─ %s", componentName), startX, currentY, "left", componentColor)
+			currentY += lineHeight
+
+			for fieldName, fieldValue in pairs(component) do
+				if not fieldName:match("^_") and type(fieldValue) ~= "function" and type(fieldValue) ~= "userdata" then
+					local fieldType = type(fieldValue)
+					local displayValue = fieldValue
+					if fieldType == "number" then
+						displayValue = string.format("%.2f", fieldValue)
+					elseif fieldType == "boolean" then
+						displayValue = fieldValue and "true" or "false"
+					elseif fieldType == "string" then
+						displayValue = string.format('"%s"', fieldValue)
+					elseif fieldType == "table" then
+						displayValue = "table"
+					end
+					local fieldColor = { 0.8, 0.8, 0.8, 1 }
+					shadowText(string.format("    │ %s: %s", fieldName, displayValue), startX, currentY, "left",
+						fieldColor)
+					currentY += lineHeight
+				end
+			end
+		end
+
+		if componentCount > 0 then
+			local countColor = { 0.6, 0.8, 0.6, 1 }
+			shadowText(string.format("  └─ %d components", componentCount), startX, currentY, "left", countColor)
+		end
+		currentY += lineHeight
 	end
 end
 

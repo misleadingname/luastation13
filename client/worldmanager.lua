@@ -16,6 +16,9 @@ function WorldManager.newWorld(name)
 	world:addSystems(LS13.ECS.Systems.RenderEntitiesSystem)
 	world:addSystems(LS13.ECS.Systems.InteractionSystem)
 
+	local EntityReceiver = require("client.networking.entityReceiver")
+	EntityReceiver.clear()
+
 	local worldEntity = LS13.ECSManager.entity("World")
 	worldEntity:give("World")
 	worldEntity.World.worldId = name

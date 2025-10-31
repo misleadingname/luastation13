@@ -32,11 +32,27 @@ function vector2.__sub(a, b)
 end
 
 function vector2.__mul(a, b)
-	return vector2.new(a.x * b.x, a.y * b.y)
+	if type(b) == "number" then
+		return vector2.new(a.x * b, a.y * b)
+	elseif type(b) == "table" and b.x and b.y then
+		return vector2.new(a.x * b.x, a.y * b.y)
+	elseif type(b) == "table" and b.x then
+		return vector2.new(a.x * b.x, a.y * b.y)
+	elseif type(b) == "table" and b.y then
+		return vector2.new(a.x * b.y, a.y * b.y)
+	end
 end
 
 function vector2.__div(a, b)
-	return vector2.new(a.x / b.x, a.y / b.y)
+	if type(b) == "number" then
+		return vector2.new(a.x / b, a.y / b)
+	elseif type(b) == "table" and b.x and b.y then
+		return vector2.new(a.x / b.x, a.y / b.y)
+	elseif type(b) == "table" and b.x then
+		return vector2.new(a.x / b.x, a.y / b.x)
+	elseif type(b) == "table" and b.y then
+		return vector2.new(a.x / b.y, a.y / b.y)
+	end
 end
 
 function vector2:magnitude()
@@ -66,6 +82,11 @@ end
 
 function vector2:toNumbers()
 	return self.x, self.y
+end
+
+function vector2:compare(other)
+	if not other then return false end
+	return self.x == other.x and self.y == other.y
 end
 
 function vector2.intersects(a, b, c, d)

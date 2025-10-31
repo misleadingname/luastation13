@@ -11,8 +11,8 @@ function server.load()
 	LS13.PrototypeManager.ParseAll()
 
 	require("server.states")
-	LS13.WorldManager = require("server.worldmanager")
-	LS13.RoundManager = require("server.roundmanager")
+	LS13.WorldManager = require("server.worldManager")
+	LS13.RoundManager = require("server.roundManager")
 
 	LS13.StateManager.switchState("Preround")
 

@@ -9,12 +9,15 @@ local clientId = nil
 local lastHeartbeat = 0
 local heartbeatInterval = 5.0
 
+local lastPlayerCommand = nil
 local outgoingVerbs = {}
 local pendingChunkRequests = {}
 
+local EntityReceiver = require("client.networking.entityReceiver")
+
 local messageHandlers = {}
 
-networking.ConnectingIp = "127.0.0.1:14700"
+networking.ConnectingIp = string.format("127.0.0.1:%d", NETWORK_DEFAULT_PORT)
 
 function networking.start(ip)
 	if peer then
@@ -54,7 +57,7 @@ function networking.getClientId()
 	return clientId
 end
 
-function networking.sendMessage(message)
+function networking.sendMessage(message, flag)
 	if not peer or connectionState ~= "connected" then
 		LS13.Logging.LogError("Cannot send message: not connected")
 		return false
@@ -65,7 +68,7 @@ function networking.sendMessage(message)
 		return false
 	end
 
-	peer:send(serialized)
+	peer:send(serialized, 0, flag or "reliable")
 
 	if DEBUG and LS13.DebugOverlay and LS13.DebugOverlay.updateNetworkStats then
 		LS13.DebugOverlay.updateNetworkStats(message.type, #serialized, "sent")
@@ -90,6 +93,16 @@ function networking.requestChunk(chunkX, chunkY)
 		pendingChunkRequests[chunkKey] = love.timer.getTime()
 		LS13.Logging.LogDebug("Requested chunk %s", chunkKey)
 	end
+end
+
+function networking.sendPlayerCommand(command)
+	if lastPlayerCommand and lastPlayerCommand:compare(command) then
+		return
+	end
+
+	local message = networking.Protocol.createPlayerCommand(command)
+	networking.sendMessage(message, "unreliable")
+	lastPlayerCommand = command
 end
 
 messageHandlers[networking.Protocol.MessageType.HANDSHAKE_RESPONSE] = function(message)
@@ -211,6 +224,23 @@ messageHandlers[networking.Protocol.MessageType.PONG] = function(message)
 	lastHeartbeat = love.timer.getTime()
 end
 
+messageHandlers[networking.Protocol.MessageType.ENTITY_CREATE] = function(message)
+	local networkId = message.data.networkId
+	local components = message.data.components
+	EntityReceiver.handleEntityCreate(networkId, components)
+end
+
+messageHandlers[networking.Protocol.MessageType.ENTITY_UPDATE] = function(message)
+	local networkId = message.data.networkId
+	local components = message.data.components
+	EntityReceiver.handleEntityUpdate(networkId, components)
+end
+
+messageHandlers[networking.Protocol.MessageType.ENTITY_DESTROY] = function(message)
+	local networkId = message.data.networkId
+	EntityReceiver.handleEntityDestroy(networkId)
+end
+
 function networking.update()
 	if not host or not peer then
 		return
@@ -263,6 +293,12 @@ function networking.update()
 		local ping = networking.Protocol.createMessage(networking.Protocol.MessageType.PING, {})
 		networking.sendMessage(ping)
 		lastHeartbeat = currentTime
+	end
+
+	if connectionState == "connected" then
+		local cmd = networking.Protocol.preparePlayerCommand()
+		cmd.MoveDirection = LS13.Input.getMovementVector()
+		networking.sendPlayerCommand(cmd)
 	end
 end
 

@@ -11,9 +11,11 @@ function WorldManager.newWorld(name)
 	end
 
 	local world = LS13.ECSManager.world()
-	world:addSystems(LS13.ECS.Systems.CommandQueueSystem)
 	world:addSystems(LS13.ECS.Systems.ChunkSyncSystem)
 	world:addSystems(LS13.ECS.Systems.InteractionSystem)
+	world:addSystems(LS13.ECS.Systems.EntitySyncSystem)
+	world:addSystems(LS13.ECS.Systems.SentienceSystem)
+	world:addSystems(LS13.ECS.Systems.BasicTempCharSystem)
 
 	local worldEntity = LS13.ECSManager.entity("World")
 	worldEntity:give("World")
@@ -96,6 +98,23 @@ function WorldManager.getClientsInNoWorld()
 		end
 	end
 	return clientsInNoWorld
+end
+
+function WorldManager.getWorldOfClient(clientId)
+	local client = LS13.Networking.getClientById(clientId)
+	if client then
+		return WorldManager.worlds[client.worldId]
+	end
+	return nil
+end
+
+function WorldManager.getWorld(worldId)
+	if not WorldManager.worlds[worldId] then
+		LS13.Logging.LogWarn("Tried to get world %s, but there's none.", worldId)
+		return nil
+	end
+
+	return WorldManager.worlds[worldId]
 end
 
 function WorldManager.deleteWorld(worldId)

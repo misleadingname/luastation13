@@ -32,6 +32,14 @@ function RoundManager.removeClient(client)
 	end
 end
 
+function RoundManager.getRoundStats()
+	return {
+		RoundTime = roundTime,
+		IdleTime = idleTime,
+		Running = running,
+	}
+end
+
 function RoundManager.getParticipatingClients()
 	return participatingClients
 end
@@ -52,7 +60,7 @@ function RoundManager.startRound()
 	roundTime = 0
 	idleTime = 0
 
-	LS13.WorldManager.deleteWorld("station") -- will just do an error so it's safe to just ignore it
+	LS13.WorldManager.deleteWorld("station") -- will just log an error so it's safe to just ignore it
 	LS13.WorldManager.newWorld("station")
 	local msg = LS13.Networking.Protocol.createMessage(LS13.Networking.Protocol.MessageType.GAME_STATE, {
 		state = "Round",

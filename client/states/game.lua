@@ -110,10 +110,10 @@ function GameState:draw()
 	-- END TODO
 
 	love.graphics.draw(worldCanvas, 0, 0)
-
 	love.graphics.setCanvas()
+	local w, h = love.graphics.getDimensions()
 
-	love.graphics.draw(viewportCanvas, 0, 0) -- TODO: move to ui
+	love.graphics.draw(viewportCanvas, w / 2 - viewportCanvas:getWidth() / 2, h / 2 - viewportCanvas:getHeight() / 2) -- TODO: move to ui
 end
 
 function GameState:exit() end

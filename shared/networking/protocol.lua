@@ -1,4 +1,5 @@
 local bitser = require("lib.bitser.bitser")
+local playerCommand = require("shared.networking.playerCommand")
 
 local Protocol = {}
 Protocol.Version = 1
@@ -16,8 +17,19 @@ Protocol.MessageType = {
 
 	WORLD_INIT = "WORLD_INIT",
 	WORLD_SWITCH = "WORLD_SWITCH",
+
 	CHUNK_UPDATE = "CHUNK_UPDATE",
 	CHUNK_REQUEST = "CHUNK_REQUEST",
+
+	ENTITY_CREATE = "ENTITY_CREATE",
+	ENTITY_UPDATE = "ENTITY_UPDATE",
+	ENTITY_DESTROY = "ENTITY_DESTROY",
+
+	COMPONENT_CREATE = "COMPONENT_CREATE",
+	COMPONENT_DESTROY = "COMPONENT_DESTROY",
+	COMPONENT_UPDATE = "COMPONENT_UPDATE",
+
+	PLAYER_COMMAND = "PLAYER_COMMAND",
 
 	PING = "PING",
 	PONG = "PONG",
@@ -55,7 +67,21 @@ local messageSchemas = {
 	},
 	[Protocol.MessageType.GAME_STATE] = {
 		state = "string",
-	}
+	},
+	[Protocol.MessageType.ENTITY_CREATE] = {
+		networkId = "number",
+		components = "table"
+	},
+	[Protocol.MessageType.ENTITY_UPDATE] = {
+		networkId = "number",
+		components = "table"
+	},
+	[Protocol.MessageType.ENTITY_DESTROY] = {
+		networkId = "number"
+	},
+	[Protocol.MessageType.PLAYER_COMMAND] = {
+		command = "table"
+	},
 }
 
 function Protocol.createMessage(messageType, data)
@@ -235,5 +261,34 @@ function Protocol.createWorldSwitch(worldId)
 	})
 end
 
-return Protocol
+function Protocol.createEntityCreate(networkId, components)
+	return Protocol.createMessage(Protocol.MessageType.ENTITY_CREATE, {
+		networkId = networkId,
+		components = components
+	})
+end
 
+function Protocol.createEntityUpdate(networkId, components)
+	return Protocol.createMessage(Protocol.MessageType.ENTITY_UPDATE, {
+		networkId = networkId,
+		components = components
+	})
+end
+
+function Protocol.createEntityDestroy(networkId)
+	return Protocol.createMessage(Protocol.MessageType.ENTITY_DESTROY, {
+		networkId = networkId
+	})
+end
+
+function Protocol.createPlayerCommand(command)
+	return Protocol.createMessage(Protocol.MessageType.PLAYER_COMMAND, {
+		command = command
+	})
+end
+
+function Protocol.preparePlayerCommand()
+	return playerCommand.new()
+end
+
+return Protocol

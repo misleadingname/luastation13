@@ -5,12 +5,13 @@ function client.load()
 
 	love.window.setTitle(LS13.Info.Name)
 
-	LS13.SoundManager = require("client.soundManager")
+	LS13.SoundManager = require("client.soundmanager")
 	LS13.UI = require("client.ui")
+	LS13.Input = require("client.input")
 	LS13.Console = require("client.console")
 	LS13.Networking = require("client.networking")
 
-	LS13.WorldManager = require("client.worldmanager")
+	LS13.WorldManager = require("client.worldManager")
 
 	require("client.states")
 	LS13.UI.init()

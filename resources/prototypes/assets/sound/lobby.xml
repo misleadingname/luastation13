@@ -173,12 +173,19 @@
 		<Author>Martin Iveson</Author>
 	</Sound>
 
-
 	<Sound Id="Sound.Lobby.WindF" Parent="Sound.BaseLobby">
 		<FileName>resources/sound/lobby/a-windf.it</FileName>
 		<Volume>0.4</Volume>
 
 		<Name>Winds of Fjords</Name>
 		<Author>minomus</Author>
+	</Sound>
+
+	<Sound Id="Sound.Lobby.WonderUnder" Parent="Sound.BaseLobby">
+		<FileName>resources/sound/music/wonder_under.ogg</FileName>
+		<Volume>0.4</Volume>
+
+		<Name>Wonder Under</Name>
+		<Author>Glad Rags</Author>
 	</Sound>
 </LS13>

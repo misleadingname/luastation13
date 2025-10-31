@@ -1,4 +1,4 @@
-local renderEntitiesSystem = LS13.ECSManager.system({ pool = { "Transform", "Renderer" } })
+local renderEntitiesSystem = LS13.ECSManager.system({ pool = { "Transform" } })
 
 function renderEntitiesSystem:draw(z)
 	for _, ent in ipairs(self.pool) do
@@ -8,15 +8,15 @@ function renderEntitiesSystem:draw(z)
 			continue
 		end
 
-		local rend = ent.Renderer
+		-- local rend = ent.Renderer
 
-		if not rend.visible then
-			continue
-		end
+		-- if not rend.visible then
+		-- 	continue
+		-- end
 
 		if ent.Graphic then
 			local graphicId = ent.Graphic.graphicId
-			local graphic = LS13.AssetManager.Get()
+			local graphic = LS13.AssetManager.Get(graphicId)
 			local origin = ent.Graphic.origin
 
 			love.graphics.draw(
