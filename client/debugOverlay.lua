@@ -818,7 +818,7 @@ function debugOverlay.drawEntityDebug()
 					elseif fieldType == "string" then
 						displayValue = string.format('"%s"', fieldValue)
 					elseif fieldType == "table" then
-						displayValue = "table"
+						displayValue = tostring(fieldValue)
 					end
 					local fieldColor = { 0.8, 0.8, 0.8, 1 }
 					shadowText(string.format("    │ %s: %s", fieldName, displayValue), startX, currentY, "left",
