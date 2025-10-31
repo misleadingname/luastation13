@@ -6,8 +6,11 @@
 > Lua Station 13 (LS13) is still in early development. There’s no station, characters, or gameplay yet.
 > Contributions, ideas, and feedback are always welcome.
 
+> [!NOTE]
+> LS13 uses a fork of LÖVE called [RobustLÖVE](https://github.com/misleadingname/robustlove/), this was done to add language support and improve security. Robust Toolbox style!
+
 ## Prerequisites
-- [Love2D](https://love2d.org/) 12.0 or newer
+- [RobustLÖVE](https://github.com/misleadingname/robustlove/) 12.0 or newer
 - [Lua BitOp](https://bitop.luajit.org/)
 
 ## Running Scripts
