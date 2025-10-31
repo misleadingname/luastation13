@@ -49,7 +49,7 @@ local messageSchemas = {
 	[Protocol.MessageType.VERB_BROADCAST] = {
 		verbName = "string",
 		verbData = "table",
-		sourceClient = "string"
+		sourceClient = "number"
 	},
 	[Protocol.MessageType.WORLD_INIT] = {
 		worldId = "string",
