@@ -9,4 +9,9 @@
 		<Looping>false</Looping>
 		<Category>comm</Category>
 	</Sound>
+
+	<Sound Id="Sound.Effoc">
+		<FileName>resources/sound/mob/effoc.ogg</FileName>
+		<Looping>false</Looping>
+	</Sound>
 </LS13>

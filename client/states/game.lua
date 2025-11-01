@@ -30,7 +30,14 @@ function GameState:enter()
 	self.camZ = 0
 end
 
-function GameState:update(dt) end
+local nextEffoc = 0
+function GameState:update(dt)
+	if love.keyboard.isDown("f") and love.timer.getTime() > nextEffoc then
+		nextEffoc = love.timer.getTime() + 4
+		LS13.SoundManager.NewSource("Sound.Effoc"):play()
+	end
+
+end
 
 function GameState:draw()
 	local world
