@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <LS13>
+	<Graphic Id="Graphic.Cursor">
+		<FileName>resources/textures/ui/cursor.png</FileName>
+	</Graphic>
+
 	<Graphic Id="Graphic.UiPanel" Type="NineSlice">
 		<FileName>resources/textures/ui/panel.png</FileName>
 		<Left>11</Left>

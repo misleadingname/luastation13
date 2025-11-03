@@ -14,7 +14,6 @@ function client.load()
 	LS13.WorldManager = require("client.world")
 
 	require("client.states")
-	LS13.UI.init()
 
 	love.window.setIcon(love.image.newImageData(_G.iconPath))
 	if DEBUG then

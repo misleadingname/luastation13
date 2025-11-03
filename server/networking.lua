@@ -12,8 +12,8 @@ local messageHandlers = {}
 
 local function prepareSendMessage(message)
 	local msg = tostring(message)
-	local cmp = lzw.compress(msg)
-	return cmp
+	-- local cmp = lzw.compress(msg)
+	return msg --cmp
 end
 
 function networking.start(port, maxPeers)
@@ -98,15 +98,18 @@ function networking.update()
 	local event = host:service()
 	while event do
 		if event.type == "receive" then
-			local type, message = networking.Protocol.deserialize(event.data)
+			local dcmp = event.data -- lzw.decompress(event.data)
+			local type, timestamp, message = networking.Protocol.deserialize(dcmp)
+			LS13.Logging.LogDebug("Received message: %s", message)
 			local handler = messageHandlers[type]
 			if handler then
+				local data = networking.Protocol.deserializeEx(message, type)
 				local client = networking.getClientByPeer(event.peer)
 				if client then
-					handler(client, message)
+					handler(client, data)
 				else
 					local client = { peer = event.peer } -- New client!
-					handler(client, message)
+					handler(client, data)
 				end
 			else
 				LS13.Logging.LogDebug("No handler for message type: %s", message.type)
@@ -156,9 +159,10 @@ function networking.shutdown()
 	clientIdCounter = 1
 end
 
-messageHandlers[NETWORK_MESSAGE_TYPE.HANDSHAKE] = function(message)
-	local clientVersion = message.data.clientVersion
-	local name = message.data.playerName
+messageHandlers[NETWORK_MESSAGE_TYPE.HANDSHAKE] = function(client, message)
+	local protoVersion = message.protoVersion
+	local clientVersion = message.clientVersion
+	local playerName = message.playerName
 
 	local clientId = clientIdCounter
 	clientIdCounter += 1
@@ -166,18 +170,19 @@ messageHandlers[NETWORK_MESSAGE_TYPE.HANDSHAKE] = function(message)
 	clients[clientId] = {
 		id = clientId,
 		peer = client.peer,
-		name = name,
+		name = playerName,
 		clientVersion = clientVersion,
 		lastHeartbeat = love.timer.getTime(),
 		connected = true,
 		worldId = nil,
 	}
 
-	LS13.Logging.LogInfo("Client %s (%s) connected with version %s", clientId, name, clientVersion)
+	LS13.Logging.LogInfo("Client %s (%s) connected with version %s", clientId, playerName, clientVersion)
 
-	local response = networking.Protocol.createMessageEx(networking.Protocol.MessageType.HANDSHAKE_RESPONSE, {
+	local response = networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.HANDSHAKE_RESPONSE, {
 		serverVersion = LS13.Info.Version,
 		clientId = clientId,
+		gameState = GAMESTATE.PREROUND,
 	})
 
 	networking.sendToClient(clientId, response)

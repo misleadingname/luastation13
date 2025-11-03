@@ -25,7 +25,6 @@ function shared.load()
 	LS13.Util = require("shared.utilities")
 	DEBUG = LS13.Util.GetArgument("debug")
 
-
 	LS13.PrototypeManager = require("shared.prototype")
 	LS13.AssetManager = require("shared.assets.manager")
 	LS13.StateManager = require("shared.states")

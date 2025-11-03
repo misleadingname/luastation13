@@ -27,6 +27,9 @@ function ui.init()
 	ui.world:addSystems(systems.UiTextFieldSystem)
 	ui.world:addSystems(systems.UiRenderingSystem)
 
+	ui.cursor.cursor = love.mouse.newCursor("/resources/textures/ui/cursor.png")
+	love.mouse.setCursor(ui.cursor.cursor)
+
 	manager.init()
 end
 

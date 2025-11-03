@@ -8,6 +8,7 @@ function LoadingState:enter() end
 function LoadingState:update(dt)
 	if frame == 1 then
 		LS13.PrototypeManager.ParseAll()
+		LS13.UI.init()
 
 		if DEBUG then
 			LS13.Console.init()
@@ -20,6 +21,7 @@ function LoadingState:update(dt)
 
 		love.window.setTitle(string.format("%s: %s", title, splash.value))
 		LS13.UI.world:emit("initalize")
+
 		LS13.StateManager.switchState("Connecting")
 	end
 	frame += 1
