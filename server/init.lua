@@ -4,8 +4,6 @@ local minDt
 local nextTime
 
 function server.load()
-	print("just shut the fuck up shared")
-
 	LS13.Networking = require("server.networking")
 	LS13.Networking.Protocol = require("shared.networking.protocol")
 	LS13.PrototypeManager.ParseAll()
@@ -30,7 +28,6 @@ function server.update(dt)
 	-- LS13.Logging.LogDebug("%s", 1 / dt)
 	LS13.Networking.update()
 	LS13.StateManager.update(dt)
-
 	LS13.WorldManager.update(dt)
 end
 

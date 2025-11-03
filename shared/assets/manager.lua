@@ -28,7 +28,7 @@ function AssetManager.Push(asset, id)
 	end
 
 	assets[id] = asset
-	LS13.Logging.LogDebug("Inserted %s as %s ", asset.type, id)
+	LS13.Logging.LogDebug("Inserted %s as %s", asset.type, id)
 end
 
 function AssetManager.GetPrefixed(prefix)

@@ -62,7 +62,7 @@ function love.load(args)
 
 	print(
 		string.format(
-			"Running %s/%s %s@%s %s w/ %s",
+			"%s/%s %s@%s %s w/ %s",
 			LS13.Info.Name,
 			LS13.Info.Ident,
 			LS13.Info.Version,

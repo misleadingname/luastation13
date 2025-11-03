@@ -84,10 +84,15 @@ end
 
 -- Cursor operations
 function buffer:seek(bytePos) self[_IDX_CURSOR] = bytePos end
+
 function buffer:skip(bytes) self[_IDX_CURSOR] = self[_IDX_CURSOR] + bytes end
+
 function buffer:tell() return self[_IDX_CURSOR] end
+
 function buffer:reset() self[_IDX_CURSOR] = 1 end
+
 function buffer:size() return #self[_IDX_CONTENTS] end
+
 function buffer:endOfBuffer() return self[_IDX_CONTENTS][self[_IDX_CURSOR]] == nil end
 
 function buffer.clear(buff)
@@ -412,6 +417,45 @@ end
 function buffer:appendBuffer(src)
 	local s = buffer.toString(src)
 	buffer.writeRaw(self, s)
+end
+
+-- Vectors
+function buffer:writeVector2(vec)
+	buffer.writeFloat(self, vec.x)
+	buffer.writeFloat(self, vec.y)
+end
+
+function buffer:readVector2()
+	local x = buffer.readFloat(self)
+	local y = buffer.readFloat(self)
+	return Vector2.new(x, y)
+end
+
+function buffer:writeVector2i(vec)
+	buffer.writeInt(self, vec.x)
+	buffer.writeInt(self, vec.y)
+end
+
+function buffer:readVector2i()
+	local x = buffer.readInt(self)
+	local y = buffer.readInt(self)
+	return Vector2.new(x, y)
+end
+
+-- Color
+function buffer:writeColor(color)
+	buffer.writeUByte(self, color.r)
+	buffer.writeUByte(self, color.g)
+	buffer.writeUByte(self, color.b)
+	buffer.writeUByte(self, color.a)
+end
+
+function buffer:readColor()
+	local r = buffer.readUByte(self)
+	local g = buffer.readUByte(self)
+	local b = buffer.readUByte(self)
+	local a = buffer.readUByte(self)
+	return Color.new(r, g, b, a)
 end
 
 return buffer

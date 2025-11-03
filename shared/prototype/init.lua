@@ -35,7 +35,7 @@ local function resolveNode(node)
 	if parentId and parentId ~= node._attr.Id then
 		local parent = parsedPrototypes[parentId]
 		if not parent then
-			LS13.Logging.LogWarn("Parent not parsed yet (%s) pushed", parentId)
+			LS13.Logging.LogDebug("Parent not parsed yet (%s) pushed", parentId)
 			return false
 		end
 

@@ -16,13 +16,6 @@
 		</Attribution>
 
 		<Attribution>
-			<Name>Lurker</Name>
-			<License>MIT</License>
-			<Copyright>Copyright (c) 2018 rxi</Copyright>
-			<Link>https://github.com/rxi/lurker/blob/master/LICENSE</Link>
-		</Attribution>
-
-		<Attribution>
 			<Name>LoverNet</Name>
 			<License>zlib/isc</License>
 			<Copyright>Copyright (c) 2016 josefnpat / Copyright (c) 2016, Robin Wellner</Copyright>

@@ -1,6 +1,9 @@
 local serializer = {}
 local buffer = require("shared.networking.buffer")
 
+function serializer.deserializeComponent(componentName)
+end
+
 function serializer.serializeComponentForReplication(component)
 	if not component then
 		return nil
@@ -10,9 +13,7 @@ function serializer.serializeComponentForReplication(component)
 	local data = buffer.new()
 	for k, v in pairs(info) do -- this might be out of order, but technically shouldn't ever be
 		local type = v.type
-		local value = component[k]
-
-		-- lua not having switches is wild
+		local value = component[k] -- lua not having switches is wild
 		if type == NETWORK_TYPE.RAW then
 			buffer:writeRaw(value)
 		elseif type == NETWORK_TYPE.BOOL then
@@ -38,16 +39,11 @@ function serializer.serializeComponentForReplication(component)
 		elseif type == NETWORK_TYPE.DOUBLE then
 			buffer:writeDouble(value)
 		elseif type == NETWORK_TYPE.VECTOR2 then
-			buffer:writeFloat(value.x)
-			buffer:writeFloat(value.y)
+			buffer:writeVector2(value)
 		elseif type == NETWORK_TYPE.VECTOR2I then
-			buffer:writeInt(value.x)
-			buffer:writeInt(value.y)
+			buffer:writeVector2i(value)
 		elseif type == NETWORK_TYPE.COLOR then
-			buffer:writeByte(value.r)
-			buffer:writeByte(value.g)
-			buffer:writeByte(value.b)
-			buffer:writeByte(value.a)
+			buffer:writeColor(value)
 		end
 	end
 

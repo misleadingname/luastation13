@@ -1,6 +1,3 @@
-[submodule "lib/lurker"]
-	path = lib/lurker
-	url = https://github.com/rxi/lurker
 [submodule "lib/lovedbug"]
 	path = lib/lovedbug
 	url = https://github.com/flamendless/lovedebug

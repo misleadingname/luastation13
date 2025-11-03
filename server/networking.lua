@@ -1,5 +1,7 @@
 local networking = {}
 local enet = require("enet")
+local lzw = require("lib.lualzw.lualzw")
+
 networking.Protocol = require("shared.networking.protocol")
 
 local host
@@ -7,6 +9,12 @@ local clients = {} -- clientId -> {peer, playerName, lastHeartbeat, worldId, con
 local clientIdCounter = 1
 
 local messageHandlers = {}
+
+local function prepareSendMessage(message)
+	local msg = tostring(message)
+	local cmp = lzw.compress(msg)
+	return cmp
+end
 
 function networking.start(port, maxPeers)
 	if host then
@@ -47,18 +55,16 @@ function networking.getClientByPeer(peer)
 	return nil, nil
 end
 
-function networking.broadcastMessage(message, excludeClientId)
-	local serialized = networking.Protocol.serialize(message)
-	if not serialized then
-		return false
-	end
+function networking.broadcastMessage(message, exclude)
+	local msg = prepareSendMessage(message)
 
-	for clientId, client in pairs(clients) do
-		if clientId ~= excludeClientId then
-			client.peer:send(serialized)
+	if type(exclude) == "number" then exclude = { exclude } end
+	for _, clientId in ipairs(clients) do
+		local client = clients[clientId]
+		if client and clientId ~= exclude then
+			client.peer:send(msg)
 		end
 	end
-	return true
 end
 
 function networking.sendToClient(clientId, message)
@@ -68,179 +74,9 @@ function networking.sendToClient(clientId, message)
 		return false
 	end
 
-	local serialized = networking.Protocol.serialize(message)
-	if not serialized then
-		return false
-	end
-
-	client.peer:send(serialized)
+	local msg = prepareSendMessage(message)
+	client.peer:send(msg)
 	return true
-end
-
-function networking.broadcastVerb(verbName, verbData, sourceClientId)
-	local message = networking.Protocol.createVerbBroadcast(verbName, verbData, sourceClientId)
-	return networking.broadcastMessage(message, sourceClientId)
-end
-
-function networking.sendChunkToClient(clientId, chunkKey, chunkData)
-	local message = networking.Protocol.createChunkUpdate(chunkKey, chunkData)
-	return networking.sendToClient(clientId, message)
-end
-
-function networking.sendWorldInitToClient(clientId)
-	local client = clients[clientId]
-	if not client then
-		LS13.Logging.LogError("Cannot send world init to unknown client %s", clientId)
-		return false
-	end
-	if client.worldId then
-		return LS13.WorldManager.sendWorldDataToClient(clientId, client.worldId)
-	else
-		LS13.Logging.LogDebug("Client %s not assigned to any world, skipping world init", clientId)
-		return true
-	end
-end
-
-messageHandlers[networking.Protocol.MessageType.HANDSHAKE] = function(client, message)
-	local clientVersion = message.data.clientVersion
-	local name = message.data.playerName
-
-	local clientId = clientIdCounter
-	clientIdCounter += 1
-
-	clients[clientId] = {
-		id = clientId,
-		peer = client.peer,
-		name = name,
-		clientVersion = clientVersion,
-		lastHeartbeat = love.timer.getTime(),
-		connected = true,
-		worldId = nil,
-	}
-
-	LS13.Logging.LogInfo("Client %s (%s) connected with version %s", clientId, name, clientVersion)
-
-	local response = networking.Protocol.createMessage(networking.Protocol.MessageType.HANDSHAKE_RESPONSE, {
-		clientId = clientId,
-		serverVersion = LS13.Info.Version,
-		netVersion = networking.Protocol.Version,
-		gameState = LS13.StateManager.currentState.name,
-	})
-
-	local serialized = networking.Protocol.serialize(response)
-	if serialized then
-		client.peer:send(serialized)
-		networking.sendWorldInitToClient(clientId)
-	end
-end
-
-messageHandlers[networking.Protocol.MessageType.VERB_REQUEST] = function(client, message)
-	local verbName = message.data.verbName
-	local verbData = message.data.verbData
-
-	local serverVerbData = {}
-	for k, v in pairs(verbData) do
-		serverVerbData[k] = v
-	end
-
-	local verb = LS13.VerbSystem.createVerb(verbName, serverVerbData)
-	verb.invoker = client
-
-	if not verb then
-		local errorMsg = networking.Protocol.createVerbError("Unknown verb: " .. verbName, message.data)
-		networking.sendToClient(client.id, errorMsg)
-		return
-	end
-
-	local valid, error = verb:validate()
-	if not valid then
-		local errorMsg =
-			networking.Protocol.createVerbError("Verb validation failed: " .. (error or "Unknown error"), message.data)
-		networking.sendToClient(client.id, errorMsg)
-		return
-	end
-
-	if verb.processOnServer then
-		local success, result = pcall(verb.processOnServer, verb, client.id)
-		if not success then
-			LS13.Logging.LogError("Verb processing failed: %s", result)
-			local errorMsg = networking.Protocol.createVerbError("Verb processing failed", message.data)
-			networking.sendToClient(client.id, errorMsg)
-			return
-		end
-	end
-
-	networking.broadcastVerb(verbName, verbData or {}, client.id)
-end
-
-messageHandlers[networking.Protocol.MessageType.CHUNK_REQUEST] = function(client, message)
-	-- if client is not in any world, send empty chunk
-	if not client.worldId then
-		local chunkX = message.data.chunkX
-		local chunkY = message.data.chunkY
-		local chunkKey = chunkX .. "," .. chunkY
-		networking.sendChunkToClient(client.id, chunkKey, {})
-		return
-	end
-
-	local chunkX = message.data.chunkX
-	local chunkY = message.data.chunkY
-	local chunkKey = chunkX .. "," .. chunkY
-
-	local world = LS13.WorldManager.worlds[client.worldId]
-	if not world then
-		return
-	end
-
-	local worldEnt = world:getEntities()[1]
-	if worldEnt and worldEnt.World then
-		local chunkData = worldEnt.World.tilemap:serializeChunk(chunkKey)
-		if chunkData then
-			networking.sendChunkToClient(client.id, chunkKey, chunkData)
-			LS13.Logging.LogDebug("Sent chunk %s to client %s in world %s", chunkKey, client.id, client.worldId)
-		else
-			networking.sendChunkToClient(client.id, chunkKey, {})
-		end
-	end
-end
-
-messageHandlers[networking.Protocol.MessageType.PING] = function(client, message)
-	client.lastHeartbeat = love.timer.getTime()
-
-	local pong = networking.Protocol.createMessage(networking.Protocol.MessageType.PONG, {})
-	local serialized = networking.Protocol.serialize(pong)
-	if serialized then
-		client.peer:send(serialized)
-	end
-end
-
-messageHandlers[networking.Protocol.MessageType.WORLD_SWITCH] = function(client, message)
-	-- local worldId = message.data.worldId
-	-- LS13.Logging.LogInfo("Switching to world: %s", worldId)
-
-	-- local worldEnt = LS13.World:getEntities()[1]
-	-- if worldEnt and worldEnt.World then
-	-- 	worldEnt.World.tilemap.chunks = {}
-	-- 	worldEnt.World.tilemap.dirtyChunks = {}
-	-- end
-end
-
-messageHandlers[networking.Protocol.MessageType.ENTITY_CREATE] = function(client, message)
-end
-
-messageHandlers[networking.Protocol.MessageType.ENTITY_UPDATE] = function(client, message)
-end
-
-messageHandlers[networking.Protocol.MessageType.ENTITY_DESTROY] = function(client, message)
-end
-
-messageHandlers[networking.Protocol.MessageType.PLAYER_COMMAND] = function(client, message)
-	local cmd = message.data.command
-
-	local world = LS13.WorldManager.getWorldOfClient(client.id)
-	if world then
-		world:emit("playerCommand", client.id, cmd)
-	end
 end
 
 function networking.disconnect(client, code, force)
@@ -262,25 +98,18 @@ function networking.update()
 	local event = host:service()
 	while event do
 		if event.type == "receive" then
-			local message = networking.Protocol.deserialize(event.data)
-			if message then
-				local valid, error = networking.Protocol.validateMessage(message)
-				if valid then
-					local handler = messageHandlers[message.type]
-					if handler then
-						local client = networking.getClientByPeer(event.peer)
-						if client then
-							handler(client, message)
-						else
-							local client = { peer = event.peer }
-							handler(client, message)
-						end
-					else
-						LS13.Logging.LogDebug("No handler for message type: %s", message.type)
-					end
+			local type, message = networking.Protocol.deserialize(event.data)
+			local handler = messageHandlers[type]
+			if handler then
+				local client = networking.getClientByPeer(event.peer)
+				if client then
+					handler(client, message)
 				else
-					LS13.Logging.LogError("Invalid message received: %s", error)
+					local client = { peer = event.peer } -- New client!
+					handler(client, message)
 				end
+			else
+				LS13.Logging.LogDebug("No handler for message type: %s", message.type)
 			end
 		elseif event.type == "connect" then
 			LS13.Logging.LogDebug("Peer %s attempting to connect", event.peer)
@@ -326,5 +155,141 @@ function networking.shutdown()
 	clients = {}
 	clientIdCounter = 1
 end
+
+messageHandlers[NETWORK_MESSAGE_TYPE.HANDSHAKE] = function(message)
+	local clientVersion = message.data.clientVersion
+	local name = message.data.playerName
+
+	local clientId = clientIdCounter
+	clientIdCounter += 1
+
+	clients[clientId] = {
+		id = clientId,
+		peer = client.peer,
+		name = name,
+		clientVersion = clientVersion,
+		lastHeartbeat = love.timer.getTime(),
+		connected = true,
+		worldId = nil,
+	}
+
+	LS13.Logging.LogInfo("Client %s (%s) connected with version %s", clientId, name, clientVersion)
+
+	local response = networking.Protocol.createMessageEx(networking.Protocol.MessageType.HANDSHAKE_RESPONSE, {
+		serverVersion = LS13.Info.Version,
+		clientId = clientId,
+	})
+
+	networking.sendToClient(clientId, response)
+end
+
+-- messageHandlers[networking.Protocol.MessageType.VERB_REQUEST] = function(client, message)
+-- 	local verbName = message.data.verbName
+-- 	local verbData = message.data.verbData
+
+-- 	local serverVerbData = {}
+-- 	for k, v in pairs(verbData) do
+-- 		serverVerbData[k] = v
+-- 	end
+
+-- 	local verb = LS13.VerbSystem.createVerb(verbName, serverVerbData)
+-- 	verb.invoker = client
+
+-- 	if not verb then
+-- 		local errorMsg = networking.Protocol.createVerbError("Unknown verb: " .. verbName, message.data)
+-- 		networking.sendToClient(client.id, errorMsg)
+-- 		return
+-- 	end
+
+-- 	local valid, error = verb:validate()
+-- 	if not valid then
+-- 		local errorMsg =
+-- 			networking.Protocol.createVerbError("Verb validation failed: " .. (error or "Unknown error"), message.data)
+-- 		networking.sendToClient(client.id, errorMsg)
+-- 		return
+-- 	end
+
+-- 	if verb.processOnServer then
+-- 		local success, result = pcall(verb.processOnServer, verb, client.id)
+-- 		if not success then
+-- 			LS13.Logging.LogError("Verb processing failed: %s", result)
+-- 			local errorMsg = networking.Protocol.createVerbError("Verb processing failed", message.data)
+-- 			networking.sendToClient(client.id, errorMsg)
+-- 			return
+-- 		end
+-- 	end
+
+-- 	networking.broadcastVerb(verbName, verbData or {}, client.id)
+-- end
+
+-- messageHandlers[networking.Protocol.MessageType.CHUNK_REQUEST] = function(client, message)
+-- 	-- if client is not in any world, send empty chunk
+-- 	if not client.worldId then
+-- 		local chunkX = message.data.chunkX
+-- 		local chunkY = message.data.chunkY
+-- 		local chunkKey = chunkX .. "," .. chunkY
+-- 		networking.sendChunkToClient(client.id, chunkKey, {})
+-- 		return
+-- 	end
+
+-- 	local chunkX = message.data.chunkX
+-- 	local chunkY = message.data.chunkY
+-- 	local chunkKey = chunkX .. "," .. chunkY
+
+-- 	local world = LS13.WorldManager.worlds[client.worldId]
+-- 	if not world then
+-- 		return
+-- 	end
+
+-- 	local worldEnt = world:getEntities()[1]
+-- 	if worldEnt and worldEnt.World then
+-- 		local chunkData = worldEnt.World.tilemap:serializeChunk(chunkKey)
+-- 		if chunkData then
+-- 			networking.sendChunkToClient(client.id, chunkKey, chunkData)
+-- 			LS13.Logging.LogDebug("Sent chunk %s to client %s in world %s", chunkKey, client.id, client.worldId)
+-- 		else
+-- 			networking.sendChunkToClient(client.id, chunkKey, {})
+-- 		end
+-- 	end
+-- end
+
+-- messageHandlers[networking.Protocol.MessageType.PING] = function(client, message)
+-- 	client.lastHeartbeat = love.timer.getTime()
+
+-- 	local pong = networking.Protocol.createMessage(networking.Protocol.MessageType.PONG, {})
+-- 	local serialized = networking.Protocol.serialize(pong)
+-- 	if serialized then
+-- 		client.peer:send(serialized)
+-- 	end
+-- end
+
+-- messageHandlers[networking.Protocol.MessageType.WORLD_SWITCH] = function(client, message)
+-- 	-- local worldId = message.data.worldId
+-- 	-- LS13.Logging.LogInfo("Switching to world: %s", worldId)
+
+-- 	-- local worldEnt = LS13.World:getEntities()[1]
+-- 	-- if worldEnt and worldEnt.World then
+-- 	-- 	worldEnt.World.tilemap.chunks = {}
+-- 	-- 	worldEnt.World.tilemap.dirtyChunks = {}
+-- 	-- end
+-- end
+
+-- messageHandlers[networking.Protocol.MessageType.ENTITY_CREATE] = function(client, message)
+-- end
+
+-- messageHandlers[networking.Protocol.MessageType.ENTITY_UPDATE] = function(client, message)
+-- end
+
+-- messageHandlers[networking.Protocol.MessageType.ENTITY_DESTROY] = function(client, message)
+-- end
+
+-- messageHandlers[networking.Protocol.MessageType.PLAYER_COMMAND] = function(client, message)
+-- 	local cmd = message.data.command
+
+-- 	local world = LS13.WorldManager.getWorldOfClient(client.id)
+-- 	if world then
+-- 		world:emit("playerCommand", client.id, cmd)
+-- 	end
+-- end
 
 return networking

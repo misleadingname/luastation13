@@ -1,7 +1,6 @@
-_G.lume = require("lib.lume.lume") -- needed for lurker
+_G.lume = require("lib.lume.lume")
 _G.bit = require("bit")
 _G.utf8 = require("utf8")
-local lurker = require("lib.lurker.lurker")
 
 function HandleError(error)
 	if not LS13.Logging then
@@ -14,7 +13,6 @@ end
 local shared = {}
 
 function shared.load()
-	print("whats up im the shared yo")
 	math.randomseed(os.time())
 
 	CLIENT = LS13.Role == "client"
@@ -24,24 +22,21 @@ function shared.load()
 		error("what kind of evil ass magic did you manage to put on this cursed land to make this happen...")
 	end
 
+	LS13.Util = require("shared.utilities")
+	DEBUG = LS13.Util.GetArgument("debug")
+
+
 	LS13.PrototypeManager = require("shared.prototype")
 	LS13.AssetManager = require("shared.assets.manager")
 	LS13.StateManager = require("shared.states")
 	LS13.ECSManager = require("lib.concord")
 	LS13.Logging = require("shared.logging")
-	LS13.Util = require("shared.utilities")
 	LS13.ECS = {
 		Components = {},
 		Systems = {},
 	}
 
 	require("shared.math")
-
-	-- local bitser = require("lib.bitser.bitser")
-	-- bitser.registerClass(Vector2)
-	-- bitser.registerClass(Color)
-	-- FIXME: ^^^
-
 	require("shared.world")
 	require("shared.consts")
 
@@ -51,8 +46,6 @@ function shared.load()
 		LS13.Logging.LogInfo("Source Base Directory: %s", dir)
 
 		local path = dir .. "/resources"
-		local info = love.filesystem.getInfo(path, "directory")
-
 		LS13.Logging.LogDebug("Fused! Mounting resource directory: %s", path)
 		local mounted = love.filesystem.mountFullPath(path, "resources")
 		if not mounted then
@@ -62,17 +55,11 @@ function shared.load()
 	end
 
 	LS13.Logging.LogDebug(LS13.Util.Gilb())
-	DEBUG = LS13.Util.GetArgument("debug")
-
-	LS13.Logging.LogLevel = DEBUG and 0 or 1
 	LS13.Logging.LogInfo("Init done in %ss!", os.clock())
 end
 
 function shared.update(dt)
 	LS13.PrototypeManager.UpdateWatchdog()
-	if DEBUG then
-		lurker.update()
-	end
 end
 
 return shared
