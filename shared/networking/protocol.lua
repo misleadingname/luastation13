@@ -2,6 +2,9 @@ local playerCommand = require("shared.networking.playerCommand")
 local buffer = require("shared.networking.buffer")
 
 local schemas = {
+	[NETWORK_MESSAGE_TYPE.PING] = {},
+	[NETWORK_MESSAGE_TYPE.PONG] = {},
+
 	[NETWORK_MESSAGE_TYPE.HANDSHAKE] = {
 		{ "protoVersion",  NETWORK_TYPE.USHORT },
 		{ "clientVersion", NETWORK_TYPE.STRING },
@@ -23,8 +26,10 @@ local schemas = {
 	}
 }
 
+local Protocol = {}
+
 -- TODO: This is a dupe from serializer.lua !!! Condense into a single function somewhere
-local function write(buf, type, value)
+function Protocol.write(buf, type, value)
 	if type == NETWORK_TYPE.RAW then
 		buf:writeRaw(value)
 	elseif type == NETWORK_TYPE.BOOL then
@@ -58,7 +63,7 @@ local function write(buf, type, value)
 	end
 end
 
-local function read(buf, type)
+function Protocol.read(buf, type)
 	if type == NETWORK_TYPE.RAW then
 		return buf:readRaw()
 	elseif type == NETWORK_TYPE.BOOL then
@@ -92,8 +97,6 @@ local function read(buf, type)
 	end
 end
 
-local Protocol = {}
-
 function Protocol.createMessage(type)
 	local msg = buffer.new()
 	msg:writeByte(type)
@@ -109,7 +112,7 @@ function Protocol.createMessageEx(type, data)
 
 	for i = 1, #sch do
 		local k, v = sch[i][1], sch[i][2]
-		write(buf, v, data[k])
+		Protocol.write(buf, v, data[k])
 	end
 
 	return buf
@@ -131,7 +134,7 @@ function Protocol.deserializeEx(buf, type)
 	local data = {}
 	for i = 1, #sch do
 		local k, v = sch[i][1], sch[i][2]
-		data[k] = read(buf, v)
+		data[k] = Protocol.read(buf, v)
 	end
 
 	return data

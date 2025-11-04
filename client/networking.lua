@@ -147,12 +147,12 @@ function networking.update()
 		event = host:service()
 	end
 
-	-- local currentTime = love.timer.getTime()
-	-- if connectionState == "connected" and currentTime - lastHeartbeat > heartbeatInterval then
-	-- 	local ping = networking.Protocol.createMessage(NETWORK_MESSAGE_TYPE.PING, {})
-	-- 	networking.sendMessage(ping)
-	-- 	lastHeartbeat = currentTime
-	-- end
+	local currentTime = love.timer.getTime()
+	if connectionState == "connected" and currentTime - lastHeartbeat > heartbeatInterval then
+		local ping = networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.PING, {})
+		networking.sendMessage(ping)
+		lastHeartbeat = currentTime
+	end
 
 	if connectionState == "connected" then
 		local cmd = networking.Protocol.preparePlayerCommand()
@@ -173,8 +173,12 @@ function networking.shutdown()
 	end
 
 	connectionState = "disconnected"
-	clientId = nil
 	pendingChunkRequests = {}
+	clientId = nil
+end
+
+messageHandlers[NETWORK_MESSAGE_TYPE.PONG] = function(message)
+	lastHeartbeat = love.timer.getTime()
 end
 
 messageHandlers[NETWORK_MESSAGE_TYPE.HANDSHAKE_RESPONSE] = function(message)

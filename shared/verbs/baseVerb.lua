@@ -1,10 +1,11 @@
 local baseVerb = {}
 baseVerb.__index = baseVerb
+baseVerb.schema = {}
 
 function baseVerb.new(name, data)
 	local action = setmetatable({
 		name = name,
-		data = data or {},
+		data = data,
 		timestamp = love.timer.getTime(),
 	}, baseVerb)
 
@@ -15,12 +16,8 @@ function baseVerb:validate()
 	return true, nil
 end
 
-function baseVerb:serialize()
-	return {
-		name = self.name,
-		data = self.data,
-		timestamp = self.timestamp
-	}
+function baseVerb:serialize(buffer)
+	buffer:writeString(self.name)
 end
 
 function baseVerb.deserialize(serializedData)

@@ -158,6 +158,12 @@ function networking.shutdown()
 	clientIdCounter = 1
 end
 
+messageHandlers[NETWORK_MESSAGE_TYPE.PING] = function(client, message)
+	client.lastHeartbeat = love.timer.getTime()
+	local response = networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.PONG, {})
+	networking.sendToClient(client.id, response)
+end
+
 messageHandlers[NETWORK_MESSAGE_TYPE.HANDSHAKE] = function(client, message)
 	local protoVersion = message.protoVersion
 	local clientVersion = message.clientVersion
