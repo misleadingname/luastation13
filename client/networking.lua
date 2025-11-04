@@ -121,7 +121,6 @@ function networking.update()
 				LS13.DebugOverlay.updateNetworkStats(type, #event.data, "received")
 			end
 
-			print("Received message type:", type, message)
 			local handler = messageHandlers[type]
 			if handler then
 				handler(message)

@@ -100,7 +100,6 @@ function networking.update()
 		if event.type == "receive" then
 			local dcmp = event.data -- lzw.decompress(event.data)
 			local type, timestamp, message = networking.Protocol.deserialize(dcmp)
-			LS13.Logging.LogDebug("Received message: %s", message)
 			local handler = messageHandlers[type]
 			if handler then
 				local data = networking.Protocol.deserializeEx(message, type)
