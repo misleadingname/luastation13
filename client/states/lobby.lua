@@ -2,6 +2,7 @@ local LobbyState = LS13.StateManager.new("Lobby")
 
 local music
 local musicSource
+local backdrop
 
 local lobbyMusic
 local shuffledSongs = {}
@@ -16,7 +17,6 @@ local function rollSong()
 	end
 
 	music = table.remove(shuffledSongs)
-
 	musicSource = LS13.SoundManager.NewSource(music.id)
 
 	LS13.Logging.LogInfo("Rolled on lobby song %s (%s by %s)!", music.id, music.name, music.author)
@@ -26,6 +26,9 @@ end
 function LobbyState:enter()
 	lobbyMusic = LS13.AssetManager.GetPrefixed("Sound.Lobby")
 	rollSong()
+
+	local backdrops = LS13.AssetManager.GetPrefixed("Graphic.Lobby")
+	backdrop = backdrops[math.random(1, #backdrops)]
 
 	LS13.UI.createScene("UI.Markup.TestScene")
 
@@ -48,7 +51,14 @@ function LobbyState:update(dt)
 	end
 end
 
-function LobbyState:draw() end
+function LobbyState:draw()
+	local img = backdrop.image
+	local scale = math.max(love.graphics.getWidth() / img:getWidth(), love.graphics.getHeight() / img:getHeight())
+	local x = (love.graphics.getWidth() - img:getWidth() * scale) / 2
+	local y = (love.graphics.getHeight() - img:getHeight() * scale) / 2
+
+	love.graphics.draw(img, x, y, 0, scale, scale)
+end
 
 function LobbyState:exit()
 	musicSource:stop()

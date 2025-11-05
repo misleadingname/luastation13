@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LS13>
+	<Graphic Id="Graphic.Lobby.Abroad" Type="Static">
+		<FileName>resources/textures/lobby/abroad.png</FileName>
+	</Graphic>
+</LS13>
