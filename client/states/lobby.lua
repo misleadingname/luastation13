@@ -30,8 +30,6 @@ function LobbyState:enter()
 	local backdrops = LS13.AssetManager.GetPrefixed("Graphic.Lobby")
 	backdrop = backdrops[math.random(1, #backdrops)]
 
-	LS13.UI.createScene("UI.Markup.TestScene")
-
 	local dbgStart = LS13.ECSManager.entity("dbgStart")
 	dbgStart:give("UiElement")
 	dbgStart:give("UiTransform", Vector2.new(32, 32), Vector2.new(160, 24))
