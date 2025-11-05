@@ -19,4 +19,3 @@ function InteractionRequestVerb:validate()
 end
 
 return InteractionRequestVerb
-

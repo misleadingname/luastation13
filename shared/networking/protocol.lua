@@ -1,5 +1,4 @@
 local playerCommand = require("shared.networking.playerCommand")
-local buffer = require("shared.networking.buffer")
 
 local schemas = {
 	[NETWORK_MESSAGE_TYPE.PING] = {},
@@ -17,8 +16,32 @@ local schemas = {
 		{ "gameState",     NETWORK_TYPE.BYTE },
 	},
 
+	[NETWORK_MESSAGE_TYPE.PLAYER_COMMAND] = {
+		{ "moveDirection",  NETWORK_TYPE.VECTOR2 },
+		{ "targetPosition", NETWORK_TYPE.VECTOR2 }
+	},
+
+	[NETWORK_MESSAGE_TYPE.VERB_REQUEST] = {
+		{ "verbName", NETWORK_TYPE.STRING },
+		{ "verbData", NETWORK_TYPE.RAW },
+	},
+
+	[NETWORK_MESSAGE_TYPE.VERB_ERROR] = {
+		{ "verbName", NETWORK_TYPE.STRING },
+		{ "error",    NETWORK_TYPE.STRING }
+	},
+
+	[NETWORK_MESSAGE_TYPE.VERB_BROADCAST] = {
+		{ "verbName", NETWORK_TYPE.STRING },
+		{ "verbData", NETWORK_TYPE.RAW },
+	},
+
 	[NETWORK_MESSAGE_TYPE.GAME_STATE] = {
 		{ "gameState", NETWORK_TYPE.BYTE },
+	},
+
+	[NETWORK_MESSAGE_TYPE.WORLD_SWITCH] = {
+		{ "worldId", NETWORK_TYPE.STRING },
 	},
 
 	[NETWORK_MESSAGE_TYPE.CHUNK_REQUEST] = {
@@ -27,6 +50,8 @@ local schemas = {
 }
 
 local Protocol = {}
+Protocol.buffer = require("shared.networking.buffer")
+
 
 -- TODO: This is a dupe from serializer.lua !!! Condense into a single function somewhere
 function Protocol.write(buf, type, value)
@@ -98,7 +123,7 @@ function Protocol.read(buf, type)
 end
 
 function Protocol.createMessage(type)
-	local msg = buffer.new()
+	local msg = Protocol.buffer.new()
 	msg:writeByte(type)
 	-- msg:writeFloat(1) -- TODO: implement networked curtime
 
@@ -112,6 +137,9 @@ function Protocol.createMessageEx(type, data)
 
 	for i = 1, #sch do
 		local k, v = sch[i][1], sch[i][2]
+		if data[k] == nil then
+			LS13.Logging.LogWarn("Missing field \"%s\", expected type %s", k, lume.invert(NETWORK_TYPE)[v])
+		end
 		Protocol.write(buf, v, data[k])
 	end
 
@@ -119,7 +147,7 @@ function Protocol.createMessageEx(type, data)
 end
 
 function Protocol.deserialize(msg)
-	local buf = buffer.fromString(msg)
+	local buf = Protocol.buffer.fromString(msg)
 
 	local type = buf:readByte()
 	local timestamp = 0

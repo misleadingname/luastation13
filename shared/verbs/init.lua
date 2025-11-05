@@ -27,13 +27,13 @@ function VerbSystem.getAllVerbs()
 end
 
 function VerbSystem.createVerb(name, data)
-	local actionClass = verbRegistry[name]
-	if not actionClass then
+	local verb = verbRegistry[name]
+	if not verb then
 		LS13.Logging.LogError("Unknown action type: %s", name)
 		return nil
 	end
 
-	return actionClass.new(name, data)
+	return verb.new(name, data)
 end
 
 function VerbSystem.deserializeVerb(serializedData)

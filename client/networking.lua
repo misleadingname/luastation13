@@ -75,7 +75,16 @@ function networking.sendMessage(message, flag)
 	return true
 end
 
-function networking.sendVerb(verbName, verbData)
+function networking.sendVerb(verb)
+	local name = verb.name
+	local buf = networking.Protocol.buffer.new()
+	verb:serialize(buf)
+
+	local message = networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.VERB_REQUEST, {
+		verbName = name,
+		verbData = tostring(buf)
+	})
+	networking.sendMessage(message)
 end
 
 function networking.requestChunk(chunkX, chunkY)
@@ -92,15 +101,17 @@ function networking.requestChunk(chunkX, chunkY)
 end
 
 function networking.sendPlayerCommand(command)
-	-- if lastPlayerCommand and lastPlayerCommand:compare(command) then
-	-- 	return
-	-- end
+	if lastPlayerCommand and lastPlayerCommand:compare(command) then
+		return
+	end
 
-	-- local message = networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.PLAYER_COMMAND)
-	-- command:serialize(message)
+	local message = networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.PLAYER_COMMAND, {
+		moveDirection = command.moveDirection,
+		targetPosition = command.targetPosition
+	})
 
-	-- networking.sendMessage(message, "unreliable")
-	-- lastPlayerCommand = command
+	networking.sendMessage(message, "unreliable")
+	lastPlayerCommand = command
 end
 
 function networking.update()
@@ -121,9 +132,10 @@ function networking.update()
 				LS13.DebugOverlay.updateNetworkStats(type, #event.data, "received")
 			end
 
+			local data = networking.Protocol.deserializeEx(message, type)
 			local handler = messageHandlers[type]
 			if handler then
-				handler(message)
+				handler(data)
 			else
 				LS13.Logging.LogDebug("No handler for message type: %s", type)
 			end
@@ -156,7 +168,7 @@ function networking.update()
 
 	if connectionState == "connected" then
 		local cmd = networking.Protocol.preparePlayerCommand()
-		cmd.MoveDirection = LS13.Input.getMovementVector()
+		cmd.moveDirection = LS13.Input.getMovementVector()
 		networking.sendPlayerCommand(cmd)
 	end
 end
@@ -182,8 +194,8 @@ messageHandlers[NETWORK_MESSAGE_TYPE.PONG] = function(message)
 end
 
 messageHandlers[NETWORK_MESSAGE_TYPE.HANDSHAKE_RESPONSE] = function(message)
-	connectionState = "connected"
 	clientId = message.clientId
+	connectionState = "connected"
 	LS13.Logging.LogInfo("Connected to server with client ID: %s", clientId)
 
 	if DEBUG and LS13.DebugOverlay and LS13.DebugOverlay.onConnected then
@@ -197,15 +209,27 @@ messageHandlers[NETWORK_MESSAGE_TYPE.HANDSHAKE_RESPONSE] = function(message)
 	LS13.StateManager.switchState("Lobby")
 end
 
--- messageHandlers[NETWORK_MESSAGE_TYPE.VERB_BROADCAST] = function(message)
--- 	local verbName = message.data.verbName
--- 	local verbData = message.data.verbData
+messageHandlers[NETWORK_MESSAGE_TYPE.VERB_BROADCAST] = function(message)
+	local verbName = message.verbName
+	local rawData = networking.Protocol.buffer.fromString(message.verbData)
 
--- 	local verb = LS13.VerbSystem.createVerb(verbName, verbData)
--- 	if verb and verb.processOnClient then
--- 		verb:processOnClient()
--- 	end
--- end
+	local verb = LS13.VerbSystem.getVerb(verbName)
+	if not verb then
+		LS13.Logging.LogError("Unknown verb: %s", verbName)
+		return
+	end
+
+	local data = verb:deserialize(rawData)
+	local verb = verb.new(data)
+	if verb and verb.processOnClient then
+		LS13.Logging.LogDebug("Processing verb %s", verbName)
+		verb:processOnClient()
+	end
+end
+
+messageHandlers[NETWORK_MESSAGE_TYPE.VERB_ERROR] = function(message)
+	LS13.Logging.LogError("Verb %s failed: %s", message.verbName, message.error)
+end
 
 -- messageHandlers[NETWORK_MESSAGE_TYPE.CHUNK_UPDATE] = function(message)
 -- 	local chunkKey = message.data.chunkKey

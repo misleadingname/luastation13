@@ -4,7 +4,7 @@ require("conf")
 local function help()
 	local name = (love.filesystem.getSource()):match("(%w+)/?$")
 
-	print(string.format("%s [help/server/client] [args]", name))
+	print(string.format("%s [--help/server/client] [args]", name))
 	print("argument reference:")
 	print("\t--debug - runs in debug mode")
 
@@ -20,7 +20,7 @@ function love.load(args)
 	local runMode = "client"
 	if args[1] == "server" then
 		runMode = "server"
-	elseif args[1] == "help" then
+	elseif args[1] == "--help" then
 		help()
 		return
 	end

@@ -7,6 +7,7 @@ networking.Protocol = require("shared.networking.protocol")
 local host
 local clients = {} -- clientId -> {peer, playerName, lastHeartbeat, worldId, connected}
 local clientIdCounter = 1
+local timeoutThreshold = 30.0
 
 local messageHandlers = {}
 
@@ -111,7 +112,7 @@ function networking.update()
 					handler(client, data)
 				end
 			else
-				LS13.Logging.LogDebug("No handler for message type: %s", message.type)
+				LS13.Logging.LogDebug("No handler for message type: %s", type)
 			end
 		elseif event.type == "connect" then
 			LS13.Logging.LogDebug("Peer %s attempting to connect", event.peer)
@@ -134,8 +135,6 @@ function networking.update()
 	end
 
 	local currentTime = love.timer.getTime()
-	local timeoutThreshold = 30.0
-
 	for clientId, client in pairs(clients) do
 		if currentTime - client.lastHeartbeat > timeoutThreshold and client.connected then
 			LS13.Logging.LogInfo("Client %s timed out, disconnecting", clientId)
@@ -189,48 +188,68 @@ messageHandlers[NETWORK_MESSAGE_TYPE.HANDSHAKE] = function(client, message)
 		clientId = clientId,
 		gameState = GAMESTATE.PREROUND,
 	})
-
 	networking.sendToClient(clientId, response)
 end
 
--- messageHandlers[networking.Protocol.MessageType.VERB_REQUEST] = function(client, message)
--- 	local verbName = message.data.verbName
--- 	local verbData = message.data.verbData
+messageHandlers[NETWORK_MESSAGE_TYPE.PLAYER_COMMAND] = function(client, message)
+	local world = LS13.WorldManager.getWorldOfClient(client.id)
+	local cmd = networking.Protocol.preparePlayerCommand()
+	cmd.moveDirection = message.moveDirection
+	cmd.targetPosition = message.targetPosition
 
--- 	local serverVerbData = {}
--- 	for k, v in pairs(verbData) do
--- 		serverVerbData[k] = v
--- 	end
+	if world then
+		world:emit("playerCommand", client.id, cmd)
+	end
+end
 
--- 	local verb = LS13.VerbSystem.createVerb(verbName, serverVerbData)
--- 	verb.invoker = client
+messageHandlers[NETWORK_MESSAGE_TYPE.VERB_REQUEST] = function(client, message)
+	local verbName = message.verbName
+	local rawData = networking.Protocol.buffer.fromString(message.verbData)
 
--- 	if not verb then
--- 		local errorMsg = networking.Protocol.createVerbError("Unknown verb: " .. verbName, message.data)
--- 		networking.sendToClient(client.id, errorMsg)
--- 		return
--- 	end
+	local verb = LS13.VerbSystem.getVerb(verbName)
+	if not verb then
+		LS13.Logging.LogError("Unknown verb: %s", verbName)
+		local err = networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.VERB_ERROR, {
+			verb = verbName,
+			error = error or "Unknown error"
+		})
+		networking.sendToClient(client.id, err)
+		return
+	end
 
--- 	local valid, error = verb:validate()
--- 	if not valid then
--- 		local errorMsg =
--- 			networking.Protocol.createVerbError("Verb validation failed: " .. (error or "Unknown error"), message.data)
--- 		networking.sendToClient(client.id, errorMsg)
--- 		return
--- 	end
+	local data = verb:deserialize(rawData)
+	verb.invoker = client
 
--- 	if verb.processOnServer then
--- 		local success, result = pcall(verb.processOnServer, verb, client.id)
--- 		if not success then
--- 			LS13.Logging.LogError("Verb processing failed: %s", result)
--- 			local errorMsg = networking.Protocol.createVerbError("Verb processing failed", message.data)
--- 			networking.sendToClient(client.id, errorMsg)
--- 			return
--- 		end
--- 	end
+	local valid, error = verb:validate()
+	if not valid then
+		LS13.Logging.LogError("Verb validation failed: %s", error)
+		local err = networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.VERB_ERROR, {
+			verbName = verbName,
+			error = error or "Unknown error"
+		})
+		networking.sendToClient(client.id, err)
+		return
+	end
 
--- 	networking.broadcastVerb(verbName, verbData or {}, client.id)
--- end
+	if verb.processOnServer then
+		local success, result = pcall(verb.processOnServer, verb, client.id)
+		if not success then
+			LS13.Logging.LogError("Verb processing failed: %s", result)
+			local err = networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.VERB_ERROR, {
+				verbName = verbName,
+				error = result or "Unknown error"
+			})
+			networking.sendToClient(client.id, err)
+			return
+		end
+	end
+
+	local broadcast = networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.VERB_BROADCAST, {
+		verbName = verbName,
+		verbData = data
+	})
+	networking.broadcastMessage(broadcast)
+end
 
 -- messageHandlers[networking.Protocol.MessageType.CHUNK_REQUEST] = function(client, message)
 -- 	-- if client is not in any world, send empty chunk
@@ -263,16 +282,6 @@ end
 -- 	end
 -- end
 
--- messageHandlers[networking.Protocol.MessageType.PING] = function(client, message)
--- 	client.lastHeartbeat = love.timer.getTime()
-
--- 	local pong = networking.Protocol.createMessage(networking.Protocol.MessageType.PONG, {})
--- 	local serialized = networking.Protocol.serialize(pong)
--- 	if serialized then
--- 		client.peer:send(serialized)
--- 	end
--- end
-
 -- messageHandlers[networking.Protocol.MessageType.WORLD_SWITCH] = function(client, message)
 -- 	-- local worldId = message.data.worldId
 -- 	-- LS13.Logging.LogInfo("Switching to world: %s", worldId)
@@ -291,15 +300,6 @@ end
 -- end
 
 -- messageHandlers[networking.Protocol.MessageType.ENTITY_DESTROY] = function(client, message)
--- end
-
--- messageHandlers[networking.Protocol.MessageType.PLAYER_COMMAND] = function(client, message)
--- 	local cmd = message.data.command
-
--- 	local world = LS13.WorldManager.getWorldOfClient(client.id)
--- 	if world then
--- 		world:emit("playerCommand", client.id, cmd)
--- 	end
 -- end
 
 return networking

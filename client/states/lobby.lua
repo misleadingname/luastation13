@@ -37,7 +37,8 @@ function LobbyState:enter()
 	dbgStart:give("UiTarget")
 	dbgStart:give("UiLabel", "start round", Color.white, "Font.Default", "center", "center")
 	dbgStart.UiTarget.onClick = function()
-		LS13.Networking.sendVerb("DebugStartRound")
+		local v = LS13.VerbSystem.createVerb("DebugStartRound")
+		LS13.Networking.sendVerb(v)
 	end
 
 	LS13.UI.world:addEntity(dbgStart)
