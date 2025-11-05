@@ -2,5 +2,11 @@
 <LS13>
 	<Graphic Id="Graphic.Lobby.Abroad" Type="Static">
 		<FileName>resources/textures/lobby/abroad.png</FileName>
+		<Linear>true</Linear>
+	</Graphic>
+
+	<Graphic Id="Graphic.Lobby.Delta" Type="Static">
+		<FileName>resources/textures/lobby/delta.png</FileName>
+		<Linear>true</Linear>
 	</Graphic>
 </LS13>
