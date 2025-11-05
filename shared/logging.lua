@@ -89,7 +89,7 @@ local function makeLogger(loggerType)
 end
 
 Logging.Logs = logs
-Logging.PrintLevel = 0
+Logging.PrintLevel = DEBUG and 0 or 1
 
 Logging.LogDebug = makeLogger(LOGGER_TYPE_DEBUG)
 Logging.LogInfo = makeLogger(LOGGER_TYPE_INFO)

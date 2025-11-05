@@ -1,20 +1,20 @@
 local networking = {}
 local enet = require("enet")
+local lzw = require("lib.lualzw.lualzw")
+
 networking.Protocol = require("shared.networking.protocol")
 
 local host
 local peer
-local connectionState = "disconnected" -- disconnected, connecting, connected
+local connectionState = "disconnected" -- disconnected, connecting, handshake, connected
 local clientId = nil
 local lastHeartbeat = 0
 local heartbeatInterval = 5.0
 
 local lastPlayerCommand = nil
-local outgoingVerbs = {}
 local pendingChunkRequests = {}
 
 local EntityReceiver = require("client.networking.entityReceiver")
-
 local messageHandlers = {}
 
 networking.ConnectingIp = string.format("127.0.0.1:%d", NETWORK_DEFAULT_PORT)
@@ -30,6 +30,7 @@ function networking.start(ip)
 	if host then
 		networking.shutdown()
 	end
+
 	host = enet.host_create()
 
 	peer = host:connect(ip, 1)
@@ -58,28 +59,32 @@ function networking.getClientId()
 end
 
 function networking.sendMessage(message, flag)
-	if not peer or connectionState ~= "connected" then
+	if not peer or (connectionState ~= "connected" and connectionState ~= "handshake") then
 		LS13.Logging.LogError("Cannot send message: not connected")
 		return false
 	end
 
-	local serialized = networking.Protocol.serialize(message)
-	if not serialized then
-		return false
-	end
-
-	peer:send(serialized, 0, flag or "reliable")
+	local msg = tostring(message)
+	local cmp = msg -- lzw.compress(msg)
+	peer:send(cmp, 0, flag or "reliable")
 
 	if DEBUG and LS13.DebugOverlay and LS13.DebugOverlay.updateNetworkStats then
-		LS13.DebugOverlay.updateNetworkStats(message.type, #serialized, "sent")
+		LS13.DebugOverlay.updateNetworkStats(message.type, #cmp, "sent")
 	end
 
 	return true
 end
 
-function networking.sendVerb(verbName, verbData)
-	local message = networking.Protocol.createVerbRequest(verbName, verbData or {})
-	return networking.sendMessage(message)
+function networking.sendVerb(verb)
+	local name = verb.name
+	local buf = networking.Protocol.buffer.new()
+	verb:serialize(buf)
+
+	local message = networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.VERB_REQUEST, {
+		verbName = name,
+		verbData = tostring(buf)
+	})
+	networking.sendMessage(message)
 end
 
 function networking.requestChunk(chunkX, chunkY)
@@ -100,145 +105,13 @@ function networking.sendPlayerCommand(command)
 		return
 	end
 
-	local message = networking.Protocol.createPlayerCommand(command)
+	local message = networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.PLAYER_COMMAND, {
+		moveDirection = command.moveDirection,
+		targetPosition = command.targetPosition
+	})
+
 	networking.sendMessage(message, "unreliable")
 	lastPlayerCommand = command
-end
-
-messageHandlers[networking.Protocol.MessageType.HANDSHAKE_RESPONSE] = function(message)
-	connectionState = "connected"
-	clientId = message.data.clientId
-	LS13.Logging.LogInfo("Connected to server with client ID: %s", clientId)
-
-	if DEBUG and LS13.DebugOverlay and LS13.DebugOverlay.onConnected then
-		LS13.DebugOverlay.onConnected()
-	end
-
-	if messageHandlers.onConnected then
-		messageHandlers.onConnected()
-	end
-
-	LS13.StateManager.switchState("Lobby")
-end
-
-messageHandlers[networking.Protocol.MessageType.VERB_BROADCAST] = function(message)
-	local verbName = message.data.verbName
-	local verbData = message.data.verbData
-
-	local verb = LS13.VerbSystem.createVerb(verbName, verbData)
-	if verb and verb.processOnClient then
-		verb:processOnClient()
-	end
-end
-
-messageHandlers[networking.Protocol.MessageType.CHUNK_UPDATE] = function(message)
-	local chunkKey = message.data.chunkKey
-	local chunkData = message.data.chunkData
-
-	pendingChunkRequests[chunkKey] = nil
-
-	local currentWorld = LS13.WorldManager.getCurrentWorld()
-	if currentWorld then
-		local worldEnt = currentWorld:getEntities()[1]
-		if worldEnt and worldEnt.World then
-			worldEnt.World.tilemap:deserializeChunk(chunkKey, chunkData)
-			LS13.Logging.LogDebug("Updated chunk %s in world %s", chunkKey, LS13.WorldManager.getCurrentWorldId())
-		end
-	end
-end
-
-messageHandlers[networking.Protocol.MessageType.WORLD_INIT] = function(message)
-	local chunks = message.data.chunks
-	local worldId = message.data.metadata and message.data.metadata.worldId or "default"
-
-	if not LS13.WorldManager.worlds[worldId] then
-		LS13.WorldManager.newWorld(worldId)
-	end
-
-	LS13.WorldManager.switchToWorld(worldId)
-
-	local currentWorld = LS13.WorldManager.getCurrentWorld()
-	if currentWorld then
-		local worldEnt = currentWorld:getEntities()[1]
-		if worldEnt and worldEnt.World then
-			local tilemap = worldEnt.World.tilemap
-
-			tilemap.chunks = {}
-
-			for chunkKey, chunkData in pairs(chunks) do
-				tilemap:deserializeChunk(chunkKey, chunkData)
-			end
-
-			local chunkCount = 0
-			for _ in pairs(chunks) do
-				chunkCount += 1
-			end
-			LS13.Logging.LogInfo("Received world initialization for world %s with %d chunks", worldId, chunkCount)
-		end
-	end
-end
-
-messageHandlers[networking.Protocol.MessageType.GAME_STATE] = function(message)
-	local state = message.data.state
-	local welcomeSnd = LS13.SoundManager.NewSource("Sound.CommWelcome")
-	welcomeSnd:play()
-
-	LS13.Logging.LogDebug("Received game state %s", state)
-	if state == "Round" then
-		LS13.StateManager.switchState("Game")
-	else
-		LS13.StateManager.switchState("Lobby")
-	end
-end
-
-messageHandlers[networking.Protocol.MessageType.VERB_ERROR] = function(message)
-	LS13.Logging.LogError("Verb error from server: %s", message.data.error)
-end
-
-messageHandlers[networking.Protocol.MessageType.WORLD_SWITCH] = function(message)
-	local worldId = message.data.worldId
-
-	if not worldId then
-		LS13.Logging.LogInfo("Switching to no world")
-		LS13.WorldManager.switchToWorld(nil)
-		return
-	end
-
-	if not LS13.WorldManager.worlds[worldId] then
-		LS13.WorldManager.newWorld(worldId)
-	end
-
-	LS13.WorldManager.switchToWorld(worldId)
-
-	local currentWorld = LS13.WorldManager.getCurrentWorld()
-	if currentWorld then
-		local worldEnt = currentWorld:getEntities()[1]
-		if worldEnt and worldEnt.World then
-			worldEnt.World.tilemap.chunks = {}
-			worldEnt.World.tilemap.dirtyChunks = {}
-		end
-	end
-end
-
-messageHandlers[networking.Protocol.MessageType.PONG] = function(message)
-	lastHeartbeat = love.timer.getTime()
-end
-
-messageHandlers[networking.Protocol.MessageType.ENTITY_CREATE] = function(message)
-	local networkId = message.data.networkId
-	local components = message.data.components
-	EntityReceiver.handleEntityCreate(networkId, components)
-end
-
-messageHandlers[networking.Protocol.MessageType.ENTITY_UPDATE] = function(message)
-	local networkId = message.data.networkId
-	local components = message.data.components
-	EntityReceiver.handleEntityUpdate(networkId, components)
-end
-
-messageHandlers[networking.Protocol.MessageType.ENTITY_DESTROY] = function(message)
-	local networkId = message.data.networkId
-	EntityReceiver.handleEntityDestroy(networkId)
 end
 
 function networking.update()
@@ -253,31 +126,29 @@ function networking.update()
 				LS13.DebugOverlay.updateNetworkStats("unknown", #event.data, "received")
 			end
 
-			local message = networking.Protocol.deserialize(event.data)
-			if message then
-				local valid, error = networking.Protocol.validateMessage(message)
-				if valid then
-					if DEBUG and LS13.DebugOverlay and LS13.DebugOverlay.updateNetworkStats then
-						LS13.DebugOverlay.updateNetworkStats(message.type, #event.data, "received")
-					end
+			local dcmp = event.data -- lzw.decompress(event.data)
+			local type, timestamp, message = networking.Protocol.deserialize(dcmp)
+			if DEBUG and LS13.DebugOverlay and LS13.DebugOverlay.updateNetworkStats then
+				LS13.DebugOverlay.updateNetworkStats(type, #event.data, "received")
+			end
 
-					local handler = messageHandlers[message.type]
-					if handler then
-						handler(message)
-					else
-						LS13.Logging.LogDebug("No handler for message type: %s", message.type)
-					end
-				else
-					LS13.Logging.LogError("Invalid message received: %s", error)
-				end
+			local data = networking.Protocol.deserializeEx(message, type)
+			local handler = messageHandlers[type]
+			if handler then
+				handler(data)
+			else
+				LS13.Logging.LogDebug("No handler for message type: %s", type)
 			end
 		elseif event.type == "connect" then
 			LS13.Logging.LogDebug("Connected to server, sending handshake")
-			local handshake = networking.Protocol.createHandshake(LS13.Info.Version, networking.playerName)
-			local serialized = networking.Protocol.serialize(handshake)
-			if serialized then
-				event.peer:send(serialized)
-			end
+			connectionState = "handshake"
+			local handshake = networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.HANDSHAKE, {
+				protoVersion = NETWORK_PROTOCOL_VERSION,
+				clientVersion = LS13.Info.Version,
+				playerName = networking.playerName
+			})
+
+			networking.sendMessage(handshake)
 		elseif event.type == "disconnect" then
 			LS13.Logging.LogInfo("Disconnected from server")
 			connectionState = "disconnected"
@@ -290,20 +161,16 @@ function networking.update()
 
 	local currentTime = love.timer.getTime()
 	if connectionState == "connected" and currentTime - lastHeartbeat > heartbeatInterval then
-		local ping = networking.Protocol.createMessage(networking.Protocol.MessageType.PING, {})
+		local ping = networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.PING, {})
 		networking.sendMessage(ping)
 		lastHeartbeat = currentTime
 	end
 
 	if connectionState == "connected" then
 		local cmd = networking.Protocol.preparePlayerCommand()
-		cmd.MoveDirection = LS13.Input.getMovementVector()
+		cmd.moveDirection = LS13.Input.getMovementVector()
 		networking.sendPlayerCommand(cmd)
 	end
-end
-
-function networking.onConnected(callback)
-	messageHandlers.onConnected = callback
 end
 
 function networking.shutdown()
@@ -318,8 +185,160 @@ function networking.shutdown()
 	end
 
 	connectionState = "disconnected"
-	clientId = nil
 	pendingChunkRequests = {}
+	clientId = nil
 end
+
+messageHandlers[NETWORK_MESSAGE_TYPE.PONG] = function(message)
+	lastHeartbeat = love.timer.getTime()
+end
+
+messageHandlers[NETWORK_MESSAGE_TYPE.HANDSHAKE_RESPONSE] = function(message)
+	clientId = message.clientId
+	connectionState = "connected"
+	LS13.Logging.LogInfo("Connected to server with client ID: %s", clientId)
+
+	if DEBUG and LS13.DebugOverlay and LS13.DebugOverlay.onConnected then
+		LS13.DebugOverlay.onConnected()
+	end
+
+	if messageHandlers.onConnected then
+		messageHandlers.onConnected()
+	end
+
+	LS13.StateManager.switchState("Lobby")
+end
+
+messageHandlers[NETWORK_MESSAGE_TYPE.VERB_BROADCAST] = function(message)
+	local verbName = message.verbName
+	local rawData = networking.Protocol.buffer.fromString(message.verbData)
+
+	local verb = LS13.VerbSystem.getVerb(verbName)
+	if not verb then
+		LS13.Logging.LogError("Unknown verb: %s", verbName)
+		return
+	end
+
+	local data = verb:deserialize(rawData)
+	local verb = verb.new(data)
+	if verb and verb.processOnClient then
+		LS13.Logging.LogDebug("Processing verb %s", verbName)
+		verb:processOnClient()
+	end
+end
+
+messageHandlers[NETWORK_MESSAGE_TYPE.VERB_ERROR] = function(message)
+	LS13.Logging.LogError("Verb %s failed: %s", message.verbName, message.error)
+end
+
+-- messageHandlers[NETWORK_MESSAGE_TYPE.CHUNK_UPDATE] = function(message)
+-- 	local chunkKey = message.data.chunkKey
+-- 	local chunkData = message.data.chunkData
+
+-- 	pendingChunkRequests[chunkKey] = nil
+
+-- 	local currentWorld = LS13.WorldManager.getCurrentWorld()
+-- 	if currentWorld then
+-- 		local worldEnt = currentWorld:getEntities()[1]
+-- 		if worldEnt and worldEnt.World then
+-- 			worldEnt.World.tilemap:deserializeChunk(chunkKey, chunkData)
+-- 			LS13.Logging.LogDebug("Updated chunk %s in world %s", chunkKey, LS13.WorldManager.getCurrentWorldId())
+-- 		end
+-- 	end
+-- end
+
+-- messageHandlers[NETWORK_MESSAGE_TYPE.WORLD_INIT] = function(message)
+-- 	local chunks = message.data.chunks
+-- 	local worldId = message.data.metadata and message.data.metadata.worldId or "default"
+
+-- 	if not LS13.WorldManager.worlds[worldId] then
+-- 		LS13.WorldManager.newWorld(worldId)
+-- 	end
+
+-- 	LS13.WorldManager.switchToWorld(worldId)
+
+-- 	local currentWorld = LS13.WorldManager.getCurrentWorld()
+-- 	if currentWorld then
+-- 		local worldEnt = currentWorld:getEntities()[1]
+-- 		if worldEnt and worldEnt.World then
+-- 			local tilemap = worldEnt.World.tilemap
+
+-- 			tilemap.chunks = {}
+
+-- 			for chunkKey, chunkData in pairs(chunks) do
+-- 				tilemap:deserializeChunk(chunkKey, chunkData)
+-- 			end
+
+-- 			local chunkCount = 0
+-- 			for _ in pairs(chunks) do
+-- 				chunkCount += 1
+-- 			end
+-- 			LS13.Logging.LogInfo("Received world initialization for world %s with %d chunks", worldId, chunkCount)
+-- 		end
+-- 	end
+-- end
+
+-- messageHandlers[NETWORK_MESSAGE_TYPE.GAME_STATE] = function(message)
+-- 	local state = message.data.state
+-- 	local welcomeSnd = LS13.SoundManager.NewSource("Sound.CommWelcome")
+-- 	welcomeSnd:play()
+
+-- 	LS13.Logging.LogDebug("Received game state %s", state)
+-- 	if state == "Round" then
+-- 		LS13.StateManager.switchState("Game")
+-- 	else
+-- 		LS13.StateManager.switchState("Lobby")
+-- 	end
+-- end
+
+-- messageHandlers[NETWORK_MESSAGE_TYPE.VERB_ERROR] = function(message)
+-- 	LS13.Logging.LogError("Verb error from server: %s", message.data.error)
+-- end
+
+-- messageHandlers[NETWORK_MESSAGE_TYPE.WORLD_SWITCH] = function(message)
+-- 	local worldId = message.data.worldId
+
+-- 	if not worldId then
+-- 		LS13.Logging.LogInfo("Switching to no world")
+-- 		LS13.WorldManager.switchToWorld(nil)
+-- 		return
+-- 	end
+
+-- 	if not LS13.WorldManager.worlds[worldId] then
+-- 		LS13.WorldManager.newWorld(worldId)
+-- 	end
+
+-- 	LS13.WorldManager.switchToWorld(worldId)
+
+-- 	local currentWorld = LS13.WorldManager.getCurrentWorld()
+-- 	if currentWorld then
+-- 		local worldEnt = currentWorld:getEntities()[1]
+-- 		if worldEnt and worldEnt.World then
+-- 			worldEnt.World.tilemap.chunks = {}
+-- 			worldEnt.World.tilemap.dirtyChunks = {}
+-- 		end
+-- 	end
+-- end
+
+-- messageHandlers[NETWORK_MESSAGE_TYPE.PONG] = function(message)
+-- 	lastHeartbeat = love.timer.getTime()
+-- end
+
+-- messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_CREATE] = function(message)
+-- 	local networkId = message.data.networkId
+-- 	local components = message.data.components
+-- 	EntityReceiver.handleEntityCreate(networkId, components)
+-- end
+
+-- messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_UPDATE] = function(message)
+-- 	local networkId = message.data.networkId
+-- 	local components = message.data.components
+-- 	EntityReceiver.handleEntityUpdate(networkId, components)
+-- end
+
+-- messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_DESTROY] = function(message)
+-- 	local networkId = message.data.networkId
+-- 	EntityReceiver.handleEntityDestroy(networkId)
+-- end
 
 return networking

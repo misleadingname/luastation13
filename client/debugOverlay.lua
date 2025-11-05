@@ -349,10 +349,20 @@ local lines = {
 	{
 		Text = function()
 			local currentTime = love.timer.getTime()
-			local timeSinceReset = currentTime - networkStats.lastResetTime
-			if timeSinceReset > 0 then
-				local rateIn = networkStats.bytesReceived / timeSinceReset
-				local rateOut = networkStats.bytesSent / timeSinceReset
+			local deltaTime = currentTime - (networkStats.lastUpdateTime or currentTime)
+			networkStats.lastUpdateTime = currentTime
+
+			if deltaTime > 0 then
+				local bytesInDiff = networkStats.bytesReceived -
+					(networkStats.lastBytesReceived or networkStats.bytesReceived)
+				local bytesOutDiff = networkStats.bytesSent - (networkStats.lastBytesSent or networkStats.bytesSent)
+
+				local rateIn = bytesInDiff / deltaTime
+				local rateOut = bytesOutDiff / deltaTime
+
+				networkStats.lastBytesReceived = networkStats.bytesReceived
+				networkStats.lastBytesSent = networkStats.bytesSent
+
 				return string.format("traffic: ↓%s/s ↑%s/s", formatBytes(rateIn), formatBytes(rateOut))
 			else
 				return "traffic: calculating..."

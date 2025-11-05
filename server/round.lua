@@ -62,8 +62,8 @@ function RoundManager.startRound()
 
 	LS13.WorldManager.deleteWorld("station") -- will just log an error so it's safe to just ignore it
 	LS13.WorldManager.newWorld("station")
-	local msg = LS13.Networking.Protocol.createMessage(LS13.Networking.Protocol.MessageType.GAME_STATE, {
-		state = "Round",
+	local msg = LS13.Networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.GAME_STATE, {
+		gameState = GAMESTATE.ROUND,
 	})
 
 	for _, client in ipairs(participatingClients) do

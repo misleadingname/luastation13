@@ -1,132 +1,82 @@
-local Serializer = {}
+local serializer = {}
+local buffer = require("shared.networking.buffer")
 
-function Serializer.serializeComponentForReplication(component)
+function serializer.deserializeComponent(componentName)
+end
+
+function serializer.serializeComponentForReplication(component)
 	if not component then
 		return nil
 	end
 
-	local data
-	if component.getReplicatedData then
-		data = component:getReplicatedData()
-	else
-		data = {}
-		for k, v in pairs(component) do
-			if not k:match("^_") and type(v) ~= "userdata" and type(v) ~= "function" then
-				data[k] = v
-			end
+	local info = component.replicationInfo
+	local data = buffer.new()
+	for k, v in pairs(info) do -- this might be out of order, but technically shouldn't ever be
+		local type = v.type
+		local value = component[k] -- lua not having switches is wild
+		if type == NETWORK_TYPE.RAW then
+			buffer:writeRaw(value)
+		elseif type == NETWORK_TYPE.BOOL then
+			buffer:writeBool(value)
+		elseif type == NETWORK_TYPE.BYTE then
+			buffer:writeByte(value)
+		elseif type == NETWORK_TYPE.STRING then
+			buffer:writeString(value)
+		elseif type == NETWORK_TYPE.USHORT then
+			buffer:writeUShort(value)
+		elseif type == NETWORK_TYPE.SHORT then
+			buffer:writeShort(value)
+		elseif type == NETWORK_TYPE.UINT then
+			buffer:writeUInt(value)
+		elseif type == NETWORK_TYPE.INT then
+			buffer:writeInt(value)
+		elseif type == NETWORK_TYPE.ULONG then
+			buffer:writeULong(value)
+		elseif type == NETWORK_TYPE.LONG then
+			buffer:writeLong(value)
+		elseif type == NETWORK_TYPE.FLOAT then
+			buffer:writeFloat(value)
+		elseif type == NETWORK_TYPE.DOUBLE then
+			buffer:writeDouble(value)
+		elseif type == NETWORK_TYPE.VECTOR2 then
+			buffer:writeVector2(value)
+		elseif type == NETWORK_TYPE.VECTOR2I then
+			buffer:writeVector2i(value)
+		elseif type == NETWORK_TYPE.COLOR then
+			buffer:writeColor(value)
 		end
 	end
 
 	return data
 end
 
-function Serializer.serializeEntityForReplication(entity)
+function serializer.serializeEntityForReplication(entity)
 	if not entity or not entity.Replicated then
 		return nil
 	end
 
-	local serialized = {
-		networkId = entity.Replicated.networkId,
-		components = {}
-	}
+	local data = buffer.new()
+	data:writeUInt(entity.Replicated.networkId) -- network ID
 
+	local components = {}
 	for componentName, component in pairs(entity:getComponents()) do
-		if componentName ~= "Replicated" and type(component) == "table" then
-			LS13.Logging.LogDebug("Serializing component: " .. componentName)
-			local replicatedData = Serializer.serializeComponentForReplication(component)
+		if componentName ~= "Replicated" and type(component) == "table" and component.replicationInfo then
+			local replicatedData = serializer.serializeComponentForReplication(component)
 			if replicatedData then
-				serialized.components[componentName] = replicatedData
+				components[componentName] = replicatedData
 			end
 		end
 	end
 
-	return serialized
+	local count = lume.count(components)
+	data:writeUShort(count) -- replicatable component count
+
+	for componentName, replicatedData in pairs(components) do
+		data:writeString(componentName)
+		data:appendBuffer(replicatedData)
+	end
+
+	return data
 end
 
-function Serializer.serializeEntityForReplication(entity)
-	if not entity or not entity.Replicated then
-		return nil
-	end
-
-	local serialized = {
-		networkId = entity.Replicated.networkId,
-		components = {}
-	}
-
-	for componentName, component in pairs(entity:getComponents()) do
-		if componentName ~= "Replicated" and type(component) == "table" then
-			local replicatedData = Serializer.serializeComponentForReplication(component)
-			if replicatedData then
-				serialized.components[componentName] = replicatedData
-			end
-		end
-	end
-
-	return serialized
-end
-
-function Serializer.hasComponentChanged(entity, componentName, lastState)
-	local component = entity[componentName]
-	if not component then
-		return false
-	end
-
-	local currentData = Serializer.serializeComponentForReplication(component)
-	local lastData = lastState[componentName]
-
-	if not lastData then
-		return true
-	end
-
-	if not currentData then
-		return lastData ~= nil
-	end
-
-	for k, v in pairs(currentData) do
-		if type(v) == "table" then
-			local mt = getmetatable(v)
-			if mt == "Vector2" then
-				return not v:compare(lastData[k])
-			end
-
-			if mt == "Color" then
-				return not v:compare(lastData[k])
-			end
-		end
-
-		if lastData[k] ~= v then
-			return true
-		end
-	end
-
-	for k in pairs(lastData) do
-		if currentData[k] == nil then
-			return true
-		end
-	end
-
-	return false
-end
-
-function Serializer.getChangedComponents(entity, lastState)
-	if not entity or not entity.Replicated then
-		return {}
-	end
-
-	local changed = {}
-
-	for componentName, component in pairs(entity:getComponents()) do
-		if componentName ~= "Replicated" and type(component) == "table" then
-			if Serializer.hasComponentChanged(entity, componentName, lastState) then
-				local replicatedData = Serializer.serializeComponentForReplication(component)
-				if replicatedData then
-					changed[componentName] = replicatedData
-				end
-			end
-		end
-	end
-
-	return changed
-end
-
-return Serializer
+return serializer
