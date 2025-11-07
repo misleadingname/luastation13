@@ -9,7 +9,10 @@
 			"LS13"
 		],
 		"disable": [
-			"duplicate-set-field"
+			"duplicate-set-field",
+			"undefined-global",
+			"duplicate-set-field",
+			"undefined-field"
 		]
 	},
 	"runtime": {

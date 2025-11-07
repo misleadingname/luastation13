@@ -62,12 +62,13 @@ function love.load(args)
 
 	print(
 		string.format(
-			"%s/%s %s@%s %s w/ %s",
+			"%s/%s %s@%s RL %s %s w/ %s",
 			LS13.Info.Name,
 			LS13.Info.Ident,
 			LS13.Info.Version,
 			branch and "(" .. branch .. "/" .. head .. ")" or "off-git, release",
-			"(find out love2d version somehow)",
+			love._version,
+			love._version_codename,
 			_VERSION
 		)
 	)

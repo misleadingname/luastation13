@@ -34,39 +34,65 @@ function ui.init()
 end
 
 function ui.update(dt)
+	if not ui.world then
+		return
+	end
 	cursor.position.x, cursor.position.y = love.mouse.getPosition()
 	ui.world:emit("update", dt)
 end
 
 function ui.draw()
+	if not ui.world then
+		return
+	end
 	ui.world:emit("draw")
 end
 
 function ui.mousePressed(x, y, button)
+	if not ui.world then
+		return
+	end
+
 	cursor.position.x, cursor.position.y = x, y
 	cursor.activeButtons[button] = true
 	ui.world:emit("press", button)
 end
 
 function ui.mouseReleased(x, y, button)
+	if not ui.world then
+		return
+	end
+
 	cursor.position.x, cursor.position.y = x, y
 	cursor.activeButtons[button] = false
 	ui.world:emit("release", button)
 end
 
 function ui.keyPressed(key, scancode, isrepeat)
+	if not ui.world then
+		return
+	end
 	ui.world:emit("keyPressed", key, scancode, isrepeat)
 end
 
 function ui.keyReleased(key, scancode)
+	if not ui.world then
+		return
+	end
 	ui.world:emit("keyReleased", key, scancode)
 end
 
 function ui.textInput(text)
+	if not ui.world then
+		return
+	end
 	ui.world:emit("textInput", text)
 end
 
 function ui.clear()
+	if not ui.world then
+		return
+	end
 	if ui.currentScene then
 		ui.currentScene:destroy(ui.world)
 		ui.currentScene = nil
@@ -75,6 +101,9 @@ function ui.clear()
 end
 
 function ui.createScene(sceneId)
+	if not ui.world then
+		return
+	end
 	if ui.currentScene then
 		ui.currentScene:destroy(ui.world)
 	end
@@ -90,10 +119,16 @@ function ui.createScene(sceneId)
 end
 
 function ui.getCurrentScene()
+	if not ui.world then
+		return
+	end
 	return ui.currentScene
 end
 
 function ui.getElementById(id)
+	if not ui.world then
+		return
+	end
 	if ui.currentScene then
 		return ui.currentScene:getElementById(id)
 	end
@@ -101,6 +136,9 @@ function ui.getElementById(id)
 end
 
 function ui.test_scene()
+	if not ui.world then
+		return
+	end
 	local root = LS13.ECSManager.entity("root")
 	root:give("UiElement")
 	root:give(
