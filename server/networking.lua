@@ -293,13 +293,16 @@ end
 -- 	-- end
 -- end
 
--- messageHandlers[networking.Protocol.MessageType.ENTITY_CREATE] = function(client, message)
--- end
+ messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_CREATE] = function(client, message)
+	 LS13.Logging.LogWarn("Client %s sent a dubious packet type.", client.id)
+ end
 
--- messageHandlers[networking.Protocol.MessageType.ENTITY_UPDATE] = function(client, message)
--- end
+ messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_UPDATE] = function(client, message)
+	 LS13.Logging.LogWarn("Client %s sent a dubious packet type.", client.id)
+ end
 
--- messageHandlers[networking.Protocol.MessageType.ENTITY_DESTROY] = function(client, message)
--- end
+ messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_DESTROY] = function(client, message)
+	 LS13.Logging.LogWarn("Client %s sent a dubious packet type.", client.id)
+ end
 
 return networking
