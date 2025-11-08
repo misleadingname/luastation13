@@ -186,9 +186,16 @@ messageHandlers[NETWORK_MESSAGE_TYPE.HANDSHAKE] = function(client, message)
 	local response = networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.HANDSHAKE_RESPONSE, {
 		serverVersion = LS13.Info.Version,
 		clientId = clientId,
-		gameState = GAMESTATE.PREROUND,
 	})
+
+	local round = LS13.RoundManager.getRoundStats()
+	local state = networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.GAME_STATE, {
+		gameState = round.State,
+		stateTimer = round.TimeRemaining
+	})
+
 	networking.sendToClient(clientId, response)
+	networking.sendToClient(clientId, round)
 end
 
 messageHandlers[NETWORK_MESSAGE_TYPE.PLAYER_COMMAND] = function(client, message)

@@ -5,19 +5,18 @@ local schemas = {
 	[NETWORK_MESSAGE_TYPE.PONG] = {},
 
 	[NETWORK_MESSAGE_TYPE.HANDSHAKE] = {
-		{ "protoVersion",  NETWORK_TYPE.USHORT },
+		{ "protoVersion", NETWORK_TYPE.USHORT },
 		{ "clientVersion", NETWORK_TYPE.STRING },
-		{ "playerName",    NETWORK_TYPE.STRING }
+		{ "playerName", NETWORK_TYPE.STRING }
 	},
 
 	[NETWORK_MESSAGE_TYPE.HANDSHAKE_RESPONSE] = {
 		{ "serverVersion", NETWORK_TYPE.STRING },
-		{ "clientId",      NETWORK_TYPE.USHORT },
-		{ "gameState",     NETWORK_TYPE.BYTE },
+		{ "clientId", NETWORK_TYPE.USHORT },
 	},
 
 	[NETWORK_MESSAGE_TYPE.PLAYER_COMMAND] = {
-		{ "moveDirection",  NETWORK_TYPE.VECTOR2 },
+		{ "moveDirection", NETWORK_TYPE.VECTOR2 },
 		{ "targetPosition", NETWORK_TYPE.VECTOR2 }
 	},
 
@@ -28,7 +27,7 @@ local schemas = {
 
 	[NETWORK_MESSAGE_TYPE.VERB_ERROR] = {
 		{ "verbName", NETWORK_TYPE.STRING },
-		{ "error",    NETWORK_TYPE.STRING }
+		{ "error", NETWORK_TYPE.STRING }
 	},
 
 	[NETWORK_MESSAGE_TYPE.VERB_BROADCAST] = {
@@ -38,6 +37,7 @@ local schemas = {
 
 	[NETWORK_MESSAGE_TYPE.GAME_STATE] = {
 		{ "gameState", NETWORK_TYPE.BYTE },
+		{ "stateTimer", NETWORK_TYPE.FLOAT }
 	},
 
 	[NETWORK_MESSAGE_TYPE.WORLD_SWITCH] = {
@@ -132,7 +132,9 @@ end
 
 function Protocol.createMessageEx(type, data)
 	local sch = schemas[type]
-	if not sch then error("Invalid message type") end
+	if not sch then
+		error("Invalid message type " .. type)
+	end
 	local buf = Protocol.createMessage(type)
 
 	for i = 1, #sch do
@@ -157,7 +159,9 @@ end
 
 function Protocol.deserializeEx(buf, type)
 	local sch = schemas[type]
-	if not sch then error("Invalid message type") end
+	if not sch then
+		error("Invalid message type " .. type)
+	end
 
 	local data = {}
 	for i = 1, #sch do

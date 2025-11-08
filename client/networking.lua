@@ -231,6 +231,25 @@ messageHandlers[NETWORK_MESSAGE_TYPE.VERB_ERROR] = function(message)
 	LS13.Logging.LogError("Verb %s failed: %s", message.verbName, message.error)
 end
 
+messageHandlers[NETWORK_MESSAGE_TYPE.GAME_STATE] = function(message)
+	local state = message.gameState
+
+	LS13.Logging.LogDebug("Received game state %s", state)
+	if state == GAMESTATE.ROUND then
+		LS13.StateManager.switchState("Game")
+		local welcomeSnd = LS13.SoundManager.NewSource("Sound.CommWelcome")
+		welcomeSnd:play()
+	elseif state == GAMESTATE.PREROUND then
+		LS13.StateManager.switchState("Lobby")
+	elseif state == GAMESTATE.POSTROUND then
+		local snds = LS13.AssetManager.GetPrefixed("Sound.PostRound")
+		local snd = snds[math.random(1, #snds)]
+		if snd then
+			LS13.SoundManager.NewSource(snd):play()
+		end
+	end
+end
+
 -- messageHandlers[NETWORK_MESSAGE_TYPE.CHUNK_UPDATE] = function(message)
 -- 	local chunkKey = message.data.chunkKey
 -- 	local chunkData = message.data.chunkData
@@ -275,19 +294,6 @@ end
 -- 			end
 -- 			LS13.Logging.LogInfo("Received world initialization for world %s with %d chunks", worldId, chunkCount)
 -- 		end
--- 	end
--- end
-
--- messageHandlers[NETWORK_MESSAGE_TYPE.GAME_STATE] = function(message)
--- 	local state = message.data.state
--- 	local welcomeSnd = LS13.SoundManager.NewSource("Sound.CommWelcome")
--- 	welcomeSnd:play()
-
--- 	LS13.Logging.LogDebug("Received game state %s", state)
--- 	if state == "Round" then
--- 		LS13.StateManager.switchState("Game")
--- 	else
--- 		LS13.StateManager.switchState("Lobby")
 -- 	end
 -- end
 

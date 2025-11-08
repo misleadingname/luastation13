@@ -13,8 +13,8 @@ function server.load()
 	LS13.RoundManager = require("server.round")
 
 	LS13.StateManager.switchState("Preround")
-
 	LS13.Networking.start(NETWORK_DEFAULT_PORT, 16)
+	LS13.RoundManager.start()
 
 	minDt = 1 / 60
 	nextTime = love.timer.getTime()

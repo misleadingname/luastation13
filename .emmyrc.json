@@ -4,10 +4,6 @@
 		"library": "${3rd}/love2d/library"
 	},
 	"diagnostics": {
-		"globals": [
-			"love",
-			"LS13"
-		],
 		"disable": [
 			"duplicate-set-field",
 			"undefined-global",
