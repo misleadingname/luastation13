@@ -1,7 +1,7 @@
 local DebugStartRound = {}
 
 function DebugStartRound:processOnServer()
-	if LS13.RoundManager.getRoundStats().Running then
+	if LS13.RoundManager.getRoundStats().State ~= GAMESTATE.PREROUND then
 		return false
 	end
 
@@ -9,6 +9,7 @@ function DebugStartRound:processOnServer()
 		LS13.RoundManager.addClient(client)
 	end
 
+	LS13.Logging.LogInfo("starting round!")
 	LS13.RoundManager.startRound()
 
 	local world = LS13.WorldManager.getWorld("station")

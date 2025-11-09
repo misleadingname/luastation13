@@ -18,6 +18,10 @@ local EntityReceiver = require("client.networking.entityReceiver")
 local messageHandlers = {}
 
 networking.ConnectingIp = string.format("127.0.0.1:%d", NETWORK_DEFAULT_PORT)
+networking.Disconnect = {
+	code = NETWORK_DISCONNECT.UNKNOWN,
+	reason = "No reason specified."
+}
 
 function networking.start(ip)
 	if peer then
@@ -41,8 +45,6 @@ function networking.start(ip)
 
 	networking.ConnectingIp = ip
 	connectionState = "connecting"
-
-	networking.playerName = "Guest"
 	return true
 end
 
@@ -150,6 +152,8 @@ function networking.update()
 
 			networking.sendMessage(handshake)
 		elseif event.type == "disconnect" then
+			networking.Disconnect.code = event.data
+
 			LS13.Logging.LogInfo("Disconnected from server")
 			connectionState = "disconnected"
 			clientId = nil
@@ -191,6 +195,10 @@ end
 
 messageHandlers[NETWORK_MESSAGE_TYPE.PONG] = function(message)
 	lastHeartbeat = love.timer.getTime()
+end
+
+messageHandlers[NETWORK_MESSAGE_TYPE.DISCONNECT] = function(message)
+	networking.Disconnect.reason = message.reason
 end
 
 messageHandlers[NETWORK_MESSAGE_TYPE.HANDSHAKE_RESPONSE] = function(message)
@@ -295,10 +303,6 @@ end
 -- 			LS13.Logging.LogInfo("Received world initialization for world %s with %d chunks", worldId, chunkCount)
 -- 		end
 -- 	end
--- end
-
--- messageHandlers[NETWORK_MESSAGE_TYPE.VERB_ERROR] = function(message)
--- 	LS13.Logging.LogError("Verb error from server: %s", message.data.error)
 -- end
 
 -- messageHandlers[NETWORK_MESSAGE_TYPE.WORLD_SWITCH] = function(message)

@@ -14,8 +14,9 @@ local function setState(state, time)
 
 	local msg = LS13.Networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.GAME_STATE, {
 		gameState = state,
-		stateTimer = stateTimer
 	})
+
+	LS13.Networking.broadcastMessage(msg)
 end
 
 function RoundManager.update(dt)

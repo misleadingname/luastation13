@@ -3,6 +3,9 @@ local playerCommand = require("shared.networking.playerCommand")
 local schemas = {
 	[NETWORK_MESSAGE_TYPE.PING] = {},
 	[NETWORK_MESSAGE_TYPE.PONG] = {},
+	[NETWORK_MESSAGE_TYPE.DISCONNECT] = {
+		{ "reason", NETWORK_TYPE.STRING },
+	},
 
 	[NETWORK_MESSAGE_TYPE.HANDSHAKE] = {
 		{ "protoVersion", NETWORK_TYPE.USHORT },
@@ -37,7 +40,6 @@ local schemas = {
 
 	[NETWORK_MESSAGE_TYPE.GAME_STATE] = {
 		{ "gameState", NETWORK_TYPE.BYTE },
-		{ "stateTimer", NETWORK_TYPE.FLOAT }
 	},
 
 	[NETWORK_MESSAGE_TYPE.WORLD_SWITCH] = {
@@ -51,7 +53,6 @@ local schemas = {
 
 local Protocol = {}
 Protocol.buffer = require("shared.networking.buffer")
-
 
 -- TODO: This is a dupe from serializer.lua !!! Condense into a single function somewhere
 function Protocol.write(buf, type, value)

@@ -13,7 +13,12 @@ function server.load()
 	LS13.RoundManager = require("server.round")
 
 	LS13.StateManager.switchState("Preround")
-	LS13.Networking.start(NETWORK_DEFAULT_PORT, 16)
+	if not LS13.Networking.start(NETWORK_DEFAULT_PORT, 16) then
+		LS13.Logging.LogFatal("Failed to create host, bail!")
+		love.event.quit()
+		return
+	end
+
 	LS13.RoundManager.start()
 
 	minDt = 1 / 60

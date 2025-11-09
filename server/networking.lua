@@ -5,7 +5,7 @@ local lzw = require("lib.lualzw.lualzw")
 networking.Protocol = require("shared.networking.protocol")
 
 local host
-local clients = {} -- clientId -> {peer, playerName, lastHeartbeat, worldId, connected}
+local clients = {} -- clientId -> {peer, playerName, lastHeartbeat, worldId, connected, warnings}
 local clientIdCounter = 1
 local timeoutThreshold = 30.0
 
@@ -60,9 +60,8 @@ function networking.broadcastMessage(message, exclude)
 	local msg = prepareSendMessage(message)
 
 	if type(exclude) == "number" then exclude = { exclude } end
-	for _, clientId in ipairs(clients) do
-		local client = clients[clientId]
-		if client and clientId ~= exclude then
+	for clientId, client in ipairs(clients) do
+		if client and not (exclude and lume.find(exclude, clientId)) then
 			client.peer:send(msg)
 		end
 	end
@@ -80,13 +79,19 @@ function networking.sendToClient(clientId, message)
 	return true
 end
 
-function networking.disconnect(client, code, force)
+function networking.disconnect(client, code, force, reason)
 	if client then
+		local msg = networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.DISCONNECT, {
+			reason = reason or "No reason specified."
+		})
+
+		networking.sendToClient(client.id, msg)
+
 		client.connected = false
 		if force then
-			client.peer:disconnect_now(code or NETWORK_DISCONNECT_KICKED)
+			client.peer:disconnect_now(code or NETWORK_DISCONNECT.KICKED)
 		else
-			client.peer:disconnect_later(code or NETWORK_DISCONNECT_KICKED)
+			client.peer:disconnect_later(code or NETWORK_DISCONNECT.KICKED)
 		end
 	end
 end
@@ -138,7 +143,13 @@ function networking.update()
 	for clientId, client in pairs(clients) do
 		if currentTime - client.lastHeartbeat > timeoutThreshold and client.connected then
 			LS13.Logging.LogInfo("Client %s timed out, disconnecting", clientId)
-			LS13.Networking.disconnect(client, NETWORK_DISCONNECT_TIMEOUT, true)
+			LS13.Networking.disconnect(client, NETWORK_DISCONNECT.TIMEOUT, true)
+		end
+
+		if client.warnings >= 5 and not client.adminNotified then
+			client.adminNotified = true
+			LS13.Logging.LogInfo("Client %s has too many warnings, notifying!")
+			-- TODO: admin notice logic, aka chat
 		end
 	end
 end
@@ -146,7 +157,7 @@ end
 function networking.shutdown()
 	if host then
 		for clientId, client in pairs(clients) do
-			LS13.Networking.disconnect(client, NETWORK_DISCONNECT_SHUTDOWN, true)
+			LS13.Networking.disconnect(client, NETWORK_DISCONNECT.SHUTDOWN, true)
 		end
 
 		host:destroy()
@@ -178,6 +189,7 @@ messageHandlers[NETWORK_MESSAGE_TYPE.HANDSHAKE] = function(client, message)
 		clientVersion = clientVersion,
 		lastHeartbeat = love.timer.getTime(),
 		connected = true,
+		warnings = 0,
 		worldId = nil,
 	}
 
@@ -195,7 +207,7 @@ messageHandlers[NETWORK_MESSAGE_TYPE.HANDSHAKE] = function(client, message)
 	})
 
 	networking.sendToClient(clientId, response)
-	networking.sendToClient(clientId, round)
+	networking.sendToClient(clientId, state)
 end
 
 messageHandlers[NETWORK_MESSAGE_TYPE.PLAYER_COMMAND] = function(client, message)
@@ -302,14 +314,17 @@ end
 
  messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_CREATE] = function(client, message)
 	 LS13.Logging.LogWarn("Client %s sent a dubious packet type.", client.id)
+	 client.warnings += 1
  end
 
  messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_UPDATE] = function(client, message)
 	 LS13.Logging.LogWarn("Client %s sent a dubious packet type.", client.id)
+	 client.warnings += 1
  end
 
  messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_DESTROY] = function(client, message)
 	 LS13.Logging.LogWarn("Client %s sent a dubious packet type.", client.id)
+	 client.warnings += 1
  end
 
 return networking
