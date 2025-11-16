@@ -1,16 +1,16 @@
-local Serializer = require("shared.replication.serializer")
+local serializer = require("shared.replication.serializer")
 
-local entitySyncSystem = LS13.ECSManager.system({ pool = { "Replicated" } })
+local replicationSystem = LS13.ECSManager.system({ pool = { "Replicated" } })
 
 local syncInterval = 1 / 20
 local nextNetworkId = 1
 
-function entitySyncSystem:init(world)
+function replicationSystem:init(world)
 	self.world = world
 	self.lastSync = 0
 end
 
-function entitySyncSystem:update()
+function replicationSystem:update()
 	local currentTime = love.timer.getTime()
 	if currentTime - self.lastSync < syncInterval then
 		return
@@ -22,62 +22,66 @@ function entitySyncSystem:update()
 	end
 end
 
-function entitySyncSystem:syncEntity(entity)
+function replicationSystem:syncEntity(entity)
 	local replicated = entity.Replicated
-	local currentState = self:getCurrentState(entity)
 
-	-- first time replication
 	if not replicated.networkId then
 		replicated.networkId = nextNetworkId
 		nextNetworkId += 1
-		replicated.lastReplicatedState = currentState
+
+		replicated.lastReplicatedState = {}
 		self:broadcastEntityCreate(entity)
 		return
 	end
 
-	-- detect differences since last replication
-	local changedComponents = Serializer.getChangedComponents(entity, replicated.lastReplicatedState)
+	-- Diff check against last replication
+	local changedComponents = serializer.getChangedComponents(entity, replicated.lastReplicatedState)
 	if next(changedComponents) then
 		self:broadcastEntityUpdate(entity, changedComponents)
-		replicated.lastReplicatedState = currentState
+		replicated.lastReplicatedState = changedComponents
 	end
 end
 
--- Builds a serializable snapshot of all components (except Replicated)
-function entitySyncSystem:getCurrentState(entity)
-	local state = {}
-	for name, component in pairs(entity:getComponents()) do
-		if name ~= "Replicated" and type(component) == "table" then
-			state[name] = Serializer.serializeComponentForReplication(component)
-		end
-	end
-	return state
-end
+function replicationSystem:broadcastEntityCreate(entity)
+	local data = serializer.serializeEntityForReplication(entity)
 
-function entitySyncSystem:broadcastEntityCreate(entity)
-	local serialized = Serializer.serializeEntityForReplication(entity)
-	if serialized then
-		local message = LS13.Networking.Protocol.createEntityCreate(
-			serialized.networkId,
-			serialized.components
-		)
+	if data then
+		local message = LS13.Networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.ENTITY_CREATE, {
+			id = entity.Replicated.networkId,
+			data = tostring(data)
+		})
+
 		LS13.Networking.broadcastMessage(message)
 	end
 end
 
-function entitySyncSystem:broadcastEntityUpdate(entity, changedComponents)
-	local message = LS13.Networking.Protocol.createEntityUpdate(
-		entity.Replicated.networkId,
-		changedComponents
-	)
+function replicationSystem:broadcastEntityUpdate(entity, changedComponents)
+	local buf = LS13.Networking.Protocol.buffer.new()
+
+	local count = 0
+	for _, _ in pairs(changedComponents) do
+		count += 1
+	end
+
+	buf:writeUShort(count)
+	for name, componentData in pairs(changedComponents) do
+		buf:writeString(name)
+		buf:appendBuffer(componentData)
+	end
+
+	local message = LS13.Networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.ENTITY_UPDATE, {
+		id = entity.Replicated.networkId,
+		data = tostring(buf),
+	})
+
 	LS13.Networking.broadcastMessage(message)
 end
 
-function entitySyncSystem:broadcastEntityDestroy(entity)
+function replicationSystem:broadcastEntityDestroy(entity)
 	if entity.Replicated and entity.Replicated.networkId then
 		local message = LS13.Networking.Protocol.createEntityDestroy(entity.Replicated.networkId)
 		LS13.Networking.broadcastMessage(message)
 	end
 end
 
-LS13.ECS.Systems.EntitySyncSystem = entitySyncSystem
+LS13.ECS.Systems.ReplicationSystem = replicationSystem

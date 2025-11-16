@@ -22,7 +22,6 @@ function DebugStartRound:processOnServer()
 		ent:give("Sentience", ply.id)
 
 		world:addEntity(ent)
-
 		LS13.Logging.LogDebug("Created ghost entity for player %s", ply.id)
 	end
 

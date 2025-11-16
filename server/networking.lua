@@ -56,13 +56,22 @@ function networking.getClientByPeer(peer)
 	return nil, nil
 end
 
-function networking.broadcastMessage(message, exclude)
+function networking.broadcastMessage(message, list, whitelist)
 	local msg = prepareSendMessage(message)
 
-	if type(exclude) == "number" then exclude = { exclude } end
+	if type(list) == "number" then
+		list = { list }
+	end
+
 	for clientId, client in ipairs(clients) do
-		if client and not (exclude and lume.find(exclude, clientId)) then
-			client.peer:send(msg)
+		if not whitelist then
+			if client and not (list and lume.find(list, clientId)) then
+				client.peer:send(msg)
+			end
+		else
+			if client and (list and lume.find(list, clientId)) then
+				client.peer:send(msg)
+			end
 		end
 	end
 end
@@ -301,30 +310,24 @@ end
 -- 	end
 -- end
 
--- messageHandlers[networking.Protocol.MessageType.WORLD_SWITCH] = function(client, message)
--- 	-- local worldId = message.data.worldId
--- 	-- LS13.Logging.LogInfo("Switching to world: %s", worldId)
+messageHandlers[NETWORK_MESSAGE_TYPE.WORLD_SWITCH] = function(client, message)
+	LS13.Logging.LogWarn("Client %s sent a dubvious packet type.", client.id)
+	client.warnings += 1
+end
 
--- 	-- local worldEnt = LS13.World:getEntities()[1]
--- 	-- if worldEnt and worldEnt.World then
--- 	-- 	worldEnt.World.tilemap.chunks = {}
--- 	-- 	worldEnt.World.tilemap.dirtyChunks = {}
--- 	-- end
--- end
+messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_CREATE] = function(client, message)
+	LS13.Logging.LogWarn("Client %s sent a dubious packet type.", client.id)
+	client.warnings += 1
+end
 
- messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_CREATE] = function(client, message)
-	 LS13.Logging.LogWarn("Client %s sent a dubious packet type.", client.id)
-	 client.warnings += 1
- end
+messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_UPDATE] = function(client, message)
+	LS13.Logging.LogWarn("Client %s sent a dubious packet type.", client.id)
+	client.warnings += 1
+end
 
- messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_UPDATE] = function(client, message)
-	 LS13.Logging.LogWarn("Client %s sent a dubious packet type.", client.id)
-	 client.warnings += 1
- end
-
- messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_DESTROY] = function(client, message)
-	 LS13.Logging.LogWarn("Client %s sent a dubious packet type.", client.id)
-	 client.warnings += 1
- end
+messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_DESTROY] = function(client, message)
+	LS13.Logging.LogWarn("Client %s sent a dubious packet type.", client.id)
+	client.warnings += 1
+end
 
 return networking

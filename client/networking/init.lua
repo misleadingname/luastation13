@@ -14,7 +14,7 @@ local heartbeatInterval = 5.0
 local lastPlayerCommand = nil
 local pendingChunkRequests = {}
 
-local EntityReceiver = require("client.networking.entityReceiver")
+local EntityReceiver = require("client.networking.entities")
 local messageHandlers = {}
 
 networking.ConnectingIp = string.format("127.0.0.1:%d", NETWORK_DEFAULT_PORT)
@@ -305,50 +305,51 @@ end
 -- 	end
 -- end
 
--- messageHandlers[NETWORK_MESSAGE_TYPE.WORLD_SWITCH] = function(message)
--- 	local worldId = message.data.worldId
+messageHandlers[NETWORK_MESSAGE_TYPE.WORLD_SWITCH] = function(message)
+	local worldId = message.worldId
 
--- 	if not worldId then
--- 		LS13.Logging.LogInfo("Switching to no world")
--- 		LS13.WorldManager.switchToWorld(nil)
--- 		return
--- 	end
+	if not worldId then
+		LS13.Logging.LogInfo("Switching to no world")
+		LS13.WorldManager.switchToWorld(nil)
+		return
+	end
 
--- 	if not LS13.WorldManager.worlds[worldId] then
--- 		LS13.WorldManager.newWorld(worldId)
--- 	end
+	if not LS13.WorldManager.worlds[worldId] then
+		LS13.WorldManager.newWorld(worldId)
+	end
 
--- 	LS13.WorldManager.switchToWorld(worldId)
+	LS13.WorldManager.switchToWorld(worldId)
 
--- 	local currentWorld = LS13.WorldManager.getCurrentWorld()
--- 	if currentWorld then
--- 		local worldEnt = currentWorld:getEntities()[1]
--- 		if worldEnt and worldEnt.World then
--- 			worldEnt.World.tilemap.chunks = {}
--- 			worldEnt.World.tilemap.dirtyChunks = {}
--- 		end
--- 	end
--- end
+	local currentWorld = LS13.WorldManager.getCurrentWorld()
+	if currentWorld then
+		local worldEnt = currentWorld:getEntities()[1]
+		if worldEnt and worldEnt.World then
+			worldEnt.World.tilemap.chunks = {}
+			worldEnt.World.tilemap.dirtyChunks = {}
+		end
+	end
+end
 
--- messageHandlers[NETWORK_MESSAGE_TYPE.PONG] = function(message)
--- 	lastHeartbeat = love.timer.getTime()
--- end
+messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_CREATE] = function(message)
+	local id = message.id
+	local data = message.data
 
--- messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_CREATE] = function(message)
--- 	local networkId = message.data.networkId
--- 	local components = message.data.components
--- 	EntityReceiver.handleEntityCreate(networkId, components)
--- end
+	local buf = networking.Protocol.buffer.fromString(data)
+	EntityReceiver.handleEntityCreate(id, buf)
+end
 
--- messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_UPDATE] = function(message)
--- 	local networkId = message.data.networkId
--- 	local components = message.data.components
--- 	EntityReceiver.handleEntityUpdate(networkId, components)
--- end
+messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_UPDATE] = function(message)
+	local id = message.id
+	local data = message.data
+	local components = {}
 
--- messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_DESTROY] = function(message)
--- 	local networkId = message.data.networkId
--- 	EntityReceiver.handleEntityDestroy(networkId)
--- end
+	local buf = networking.Protocol.buffer.fromString(data)
+	EntityReceiver.handleEntityUpdate(id, buf)
+end
+
+messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_DESTROY] = function(message)
+	local id = message.id
+	EntityReceiver.handleEntityDestroy(id)
+end
 
 return networking

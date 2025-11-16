@@ -415,7 +415,7 @@ end
 
 -- Append another buffer's contents
 function buffer:appendBuffer(src)
-	local s = buffer.toString(src)
+	local s = tostring(src)
 	buffer.writeRaw(self, s)
 end
 
@@ -432,8 +432,8 @@ function buffer:readVector2()
 end
 
 function buffer:writeVector2i(vec)
-	buffer.writeInt(self, vec.x)
-	buffer.writeInt(self, vec.y)
+	buffer.writeLong(self, vec.x)
+	buffer.writeLong(self, vec.y)
 end
 
 function buffer:readVector2i()

@@ -35,13 +35,14 @@ function shared.load()
 	LS13.ECSManager = require("lib.concord")
 	LS13.Logging = require("shared.logging")
 	LS13.ECS = {
+		Replication = {},
 		Components = {},
 		Systems = {},
 	}
 
+	require("shared.consts")
 	require("shared.math")
 	require("shared.world")
-	require("shared.consts")
 
 	if love.filesystem.isFused() then
 		local dir = love.filesystem.getSourceBaseDirectory()

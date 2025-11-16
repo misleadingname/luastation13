@@ -14,16 +14,16 @@ LS13.ECS.Systems.SentienceSystem = sentienceSystem
 local basicTempCharSystem = LS13.ECSManager.system({ pool = { "BasicTempCharacter", "Transform", "Sentience", "Replicated" } })
 
 function basicTempCharSystem:update(dt)
-	for _, ent in ipairs(self.pool) do
-		local transform = ent.Transform
-		local sentience = ent.Sentience
-		local replicated = ent.Replicated
-
-		local cmd = sentience._playerCommand
-		if not cmd then continue end
-
-		transform.position += cmd.MoveDirection * dt * 16
-	end
+	--for _, ent in ipairs(self.pool) do
+	--	local transform = ent.Transform
+	--	local sentience = ent.Sentience
+	--	local replicated = ent.Replicated
+	--
+	--	local cmd = sentience._playerCommand
+	--	if not cmd then continue end
+	--
+	--	transform.position += cmd.MoveDirection * dt * 16
+	--end
 end
 
 LS13.ECS.Systems.BasicTempCharSystem = basicTempCharSystem

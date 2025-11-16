@@ -48,13 +48,26 @@ local schemas = {
 
 	[NETWORK_MESSAGE_TYPE.CHUNK_REQUEST] = {
 		{ "chunk", NETWORK_TYPE.VECTOR2I },
-	}
+	},
+
+	[NETWORK_MESSAGE_TYPE.ENTITY_CREATE] = {
+		{ "id", NETWORK_TYPE.USHORT },
+		{ "data", NETWORK_TYPE.RAW}
+	},
+
+	[NETWORK_MESSAGE_TYPE.ENTITY_DESTROY] = {
+		{ "id", NETWORK_TYPE.USHORT },
+	},
+
+	[NETWORK_MESSAGE_TYPE.ENTITY_UPDATE] = {
+		{ "id", NETWORK_TYPE.USHORT },
+		{ "data", NETWORK_TYPE.RAW }
+	},
 }
 
 local Protocol = {}
 Protocol.buffer = require("shared.networking.buffer")
 
--- TODO: This is a dupe from serializer.lua !!! Condense into a single function somewhere
 function Protocol.write(buf, type, value)
 	if type == NETWORK_TYPE.RAW then
 		buf:writeRaw(value)
@@ -68,10 +81,6 @@ function Protocol.write(buf, type, value)
 		buf:writeUShort(value)
 	elseif type == NETWORK_TYPE.SHORT then
 		buf:writeShort(value)
-	elseif type == NETWORK_TYPE.UINT then
-		buf:writeUInt(value)
-	elseif type == NETWORK_TYPE.INT then
-		buf:writeInt(value)
 	elseif type == NETWORK_TYPE.ULONG then
 		buf:writeULong(value)
 	elseif type == NETWORK_TYPE.LONG then
@@ -102,10 +111,6 @@ function Protocol.read(buf, type)
 		return buf:readUShort()
 	elseif type == NETWORK_TYPE.SHORT then
 		return buf:readShort()
-	elseif type == NETWORK_TYPE.UINT then
-		return buf:readUInt()
-	elseif type == NETWORK_TYPE.INT then
-		return buf:readInt()
 	elseif type == NETWORK_TYPE.ULONG then
 		return buf:readULong()
 	elseif type == NETWORK_TYPE.LONG then

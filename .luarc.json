@@ -6,7 +6,6 @@
 	"diagnostics": {
 		"globals": [
 			"love",
-			"LS13"
 		],
 		"disable": [
 			"duplicate-set-field"
