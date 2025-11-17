@@ -1,4 +1,8 @@
-# Lua Station 13
+<!--# Lua Station 13-->
+<p align="center">
+	<img src="/resources/textures/core/splash.png">
+</p>
+
 ###### A BYONDless remake of the classic, satanist, DreamSMP, award-winning space game [Space Station 13](https://spacestation13.com).
 (Currently inspired mostly by [/tg/station 13](https://tgstation13.org))
 

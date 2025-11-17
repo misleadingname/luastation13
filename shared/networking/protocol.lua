@@ -1,290 +1,181 @@
-local bitser = require("lib.bitser.bitser")
 local playerCommand = require("shared.networking.playerCommand")
 
+local schemas = {
+	[NETWORK_MESSAGE_TYPE.PING] = {},
+	[NETWORK_MESSAGE_TYPE.PONG] = {},
+	[NETWORK_MESSAGE_TYPE.DISCONNECT] = {
+		{ "reason", NETWORK_TYPE.STRING },
+	},
+
+	[NETWORK_MESSAGE_TYPE.HANDSHAKE] = {
+		{ "protoVersion", NETWORK_TYPE.USHORT },
+		{ "clientVersion", NETWORK_TYPE.STRING },
+		{ "playerName", NETWORK_TYPE.STRING }
+	},
+
+	[NETWORK_MESSAGE_TYPE.HANDSHAKE_RESPONSE] = {
+		{ "serverVersion", NETWORK_TYPE.STRING },
+		{ "clientId", NETWORK_TYPE.USHORT },
+	},
+
+	[NETWORK_MESSAGE_TYPE.PLAYER_COMMAND] = {
+		{ "moveDirection", NETWORK_TYPE.VECTOR2 },
+		{ "targetPosition", NETWORK_TYPE.VECTOR2 }
+	},
+
+	[NETWORK_MESSAGE_TYPE.VERB_REQUEST] = {
+		{ "verbName", NETWORK_TYPE.STRING },
+		{ "verbData", NETWORK_TYPE.RAW },
+	},
+
+	[NETWORK_MESSAGE_TYPE.VERB_ERROR] = {
+		{ "verbName", NETWORK_TYPE.STRING },
+		{ "error", NETWORK_TYPE.STRING }
+	},
+
+	[NETWORK_MESSAGE_TYPE.VERB_BROADCAST] = {
+		{ "verbName", NETWORK_TYPE.STRING },
+		{ "verbData", NETWORK_TYPE.RAW },
+	},
+
+	[NETWORK_MESSAGE_TYPE.GAME_STATE] = {
+		{ "gameState", NETWORK_TYPE.BYTE },
+	},
+
+	[NETWORK_MESSAGE_TYPE.WORLD_SWITCH] = {
+		{ "worldId", NETWORK_TYPE.STRING },
+	},
+
+	[NETWORK_MESSAGE_TYPE.CHUNK_REQUEST] = {
+		{ "chunk", NETWORK_TYPE.VECTOR2I },
+	},
+
+	[NETWORK_MESSAGE_TYPE.ENTITY_CREATE] = {
+		{ "id", NETWORK_TYPE.USHORT },
+		{ "data", NETWORK_TYPE.RAW}
+	},
+
+	[NETWORK_MESSAGE_TYPE.ENTITY_DESTROY] = {
+		{ "id", NETWORK_TYPE.USHORT },
+	},
+
+	[NETWORK_MESSAGE_TYPE.ENTITY_UPDATE] = {
+		{ "id", NETWORK_TYPE.USHORT },
+		{ "data", NETWORK_TYPE.RAW }
+	},
+}
+
 local Protocol = {}
-Protocol.Version = 1
+Protocol.buffer = require("shared.networking.buffer")
 
-Protocol.MessageType = {
-	HANDSHAKE = "HANDSHAKE",
-	HANDSHAKE_RESPONSE = "HANDSHAKE_RESPONSE",
-	DISCONNECT = "DISCONNECT",
-
-	GAME_STATE = "GAME_STATE",
-
-	VERB_REQUEST = "VERB_REQUEST",
-	VERB_BROADCAST = "VERB_BROADCAST",
-	VERB_ERROR = "VERB_ERROR",
-
-	WORLD_INIT = "WORLD_INIT",
-	WORLD_SWITCH = "WORLD_SWITCH",
-
-	CHUNK_UPDATE = "CHUNK_UPDATE",
-	CHUNK_REQUEST = "CHUNK_REQUEST",
-
-	ENTITY_CREATE = "ENTITY_CREATE",
-	ENTITY_UPDATE = "ENTITY_UPDATE",
-	ENTITY_DESTROY = "ENTITY_DESTROY",
-
-	COMPONENT_CREATE = "COMPONENT_CREATE",
-	COMPONENT_DESTROY = "COMPONENT_DESTROY",
-	COMPONENT_UPDATE = "COMPONENT_UPDATE",
-
-	PLAYER_COMMAND = "PLAYER_COMMAND",
-
-	PING = "PING",
-	PONG = "PONG",
-	HEARTBEAT = "HEARTBEAT"
-}
-
-local messageSchemas = {
-	[Protocol.MessageType.HANDSHAKE] = {
-		networkProtocolVersion = "number",
-		clientVersion = "string",
-		playerName = "string"
-	},
-	[Protocol.MessageType.VERB_REQUEST] = {
-		verbName = "string",
-		verbData = "table"
-	},
-	[Protocol.MessageType.VERB_BROADCAST] = {
-		verbName = "string",
-		verbData = "table",
-		sourceClient = "number"
-	},
-	[Protocol.MessageType.WORLD_INIT] = {
-		worldId = "string",
-	},
-	[Protocol.MessageType.WORLD_SWITCH] = {
-		worldId = "string",
-	},
-	[Protocol.MessageType.CHUNK_REQUEST] = {
-		chunkX = "number",
-		chunkY = "number"
-	},
-	[Protocol.MessageType.CHUNK_UPDATE] = {
-		chunkKey = "string",
-		chunkData = "table"
-	},
-	[Protocol.MessageType.GAME_STATE] = {
-		state = "string",
-	},
-	[Protocol.MessageType.ENTITY_CREATE] = {
-		networkId = "number",
-		components = "table"
-	},
-	[Protocol.MessageType.ENTITY_UPDATE] = {
-		networkId = "number",
-		components = "table"
-	},
-	[Protocol.MessageType.ENTITY_DESTROY] = {
-		networkId = "number"
-	},
-	[Protocol.MessageType.PLAYER_COMMAND] = {
-		command = "table"
-	},
-}
-
-function Protocol.createMessage(messageType, data)
-	local message = {
-		type = messageType,
-		timestamp = love.timer.getTime(),
-		data = data or {}
-	}
-
-	return message
+function Protocol.write(buf, type, value)
+	if type == NETWORK_TYPE.RAW then
+		buf:writeRaw(value)
+	elseif type == NETWORK_TYPE.BOOL then
+		buf:writeBool(value)
+	elseif type == NETWORK_TYPE.BYTE then
+		buf:writeByte(value)
+	elseif type == NETWORK_TYPE.STRING then
+		buf:writeString(value)
+	elseif type == NETWORK_TYPE.USHORT then
+		buf:writeUShort(value)
+	elseif type == NETWORK_TYPE.SHORT then
+		buf:writeShort(value)
+	elseif type == NETWORK_TYPE.ULONG then
+		buf:writeULong(value)
+	elseif type == NETWORK_TYPE.LONG then
+		buf:writeLong(value)
+	elseif type == NETWORK_TYPE.FLOAT then
+		buf:writeFloat(value)
+	elseif type == NETWORK_TYPE.DOUBLE then
+		buf:writeDouble(value)
+	elseif type == NETWORK_TYPE.VECTOR2 then
+		buf:writeVector2(value)
+	elseif type == NETWORK_TYPE.VECTOR2I then
+		buf:writeVector2i(value)
+	elseif type == NETWORK_TYPE.COLOR then
+		buf:writeColor(value)
+	end
 end
 
-function Protocol.sanitizeData(data)
-	if type(data) ~= "table" then
-		return data
+function Protocol.read(buf, type)
+	if type == NETWORK_TYPE.RAW then
+		return buf:readRaw()
+	elseif type == NETWORK_TYPE.BOOL then
+		return buf:readBool()
+	elseif type == NETWORK_TYPE.BYTE then
+		return buf:readByte()
+	elseif type == NETWORK_TYPE.STRING then
+		return buf:readString()
+	elseif type == NETWORK_TYPE.USHORT then
+		return buf:readUShort()
+	elseif type == NETWORK_TYPE.SHORT then
+		return buf:readShort()
+	elseif type == NETWORK_TYPE.ULONG then
+		return buf:readULong()
+	elseif type == NETWORK_TYPE.LONG then
+		return buf:readLong()
+	elseif type == NETWORK_TYPE.FLOAT then
+		return buf:readFloat()
+	elseif type == NETWORK_TYPE.DOUBLE then
+		return buf:readDouble()
+	elseif type == NETWORK_TYPE.VECTOR2 then
+		return buf:readVector2()
+	elseif type == NETWORK_TYPE.VECTOR2I then
+		return buf:readVector2i()
+	elseif type == NETWORK_TYPE.COLOR then
+		return buf:readColor()
 	end
+end
 
-	local sanitized = {}
-	for k, v in pairs(data) do
-		local valueType = type(v)
-		if valueType == "table" then
-			local metatable = getmetatable(v)
-			if metatable == "Vector2" then
-				sanitized[k] = { x = v.x, y = v.y, _type = "Vector2" }
-			elseif metatable == "Color" then
-				sanitized[k] = { r = v.r, g = v.g, b = v.b, a = v.a, _type = "Color" }
-			else
-				sanitized[k] = Protocol.sanitizeData(v)
-			end
-		elseif valueType == "userdata" or valueType == "function" or valueType == "thread" then
-			LS13.Logging.LogWarning("Skipping non-serializable %s in verb data: %s", valueType, tostring(k))
-		else
-			sanitized[k] = v
+function Protocol.createMessage(type)
+	local msg = Protocol.buffer.new()
+	msg:writeByte(type)
+	-- msg:writeFloat(1) -- TODO: implement networked curtime
+
+	return msg
+end
+
+function Protocol.createMessageEx(type, data)
+	local sch = schemas[type]
+	if not sch then
+		error("Invalid message type " .. type)
+	end
+	local buf = Protocol.createMessage(type)
+
+	for i = 1, #sch do
+		local k, v = sch[i][1], sch[i][2]
+		if data[k] == nil then
+			LS13.Logging.LogWarn("Missing field \"%s\", expected type %s", k, lume.invert(NETWORK_TYPE)[v])
 		end
-	end
-	return sanitized
-end
-
-function Protocol.restoreData(data)
-	if type(data) ~= "table" then
-		return data
+		Protocol.write(buf, v, data[k])
 	end
 
-	local restored = {}
-	for k, v in pairs(data) do
-		if type(v) == "table" and v._type then
-			if v._type == "Vector2" then
-				restored[k] = Vector2.new(v.x, v.y)
-			elseif v._type == "Color" then
-				restored[k] = Color.new(v.r, v.g, v.b, v.a)
-			else
-				restored[k] = v
-			end
-		elseif type(v) == "table" then
-			restored[k] = Protocol.restoreData(v)
-		else
-			restored[k] = v
-		end
-	end
-	return restored
+	return buf
 end
 
-function Protocol.serialize(message)
-	local sanitizedMessage = {
-		type = message.type,
-		timestamp = message.timestamp,
-		data = Protocol.sanitizeData(message.data)
-	}
+function Protocol.deserialize(msg)
+	local buf = Protocol.buffer.fromString(msg)
 
-	local success, serialized = pcall(bitser.dumps, sanitizedMessage)
-	if not success then
-		LS13.Logging.LogError("Failed to serialize message: %s", serialized)
-		LS13.Logging.LogError("Message type: %s", message.type)
-		if DEBUG then
-			LS13.Util.PrintTable(sanitizedMessage)
-		end
-		return nil
-	end
-	return serialized
+	local type = buf:readByte()
+	local timestamp = 0
+
+	return type, timestamp, buf
 end
 
-function Protocol.deserialize(data)
-	local success, message = pcall(bitser.loads, data)
-	if not success then
-		LS13.Logging.LogError("Failed to deserialize message: %s", message)
-		return nil
+function Protocol.deserializeEx(buf, type)
+	local sch = schemas[type]
+	if not sch then
+		error("Invalid message type " .. type)
 	end
 
-	-- Restore sanitized data
-	if message and message.data then
-		message.data = Protocol.restoreData(message.data)
+	local data = {}
+	for i = 1, #sch do
+		local k, v = sch[i][1], sch[i][2]
+		data[k] = Protocol.read(buf, v)
 	end
 
-	return message
-end
-
-function Protocol.validateMessage(message)
-	if type(message) ~= "table" then
-		return false, "Message must be a table"
-	end
-
-	if not message.type then
-		return false, "Message missing type field"
-	end
-
-	if not Protocol.MessageType[message.type] then
-		return false, "Unknown message type: " .. tostring(message.type)
-	end
-
-	local schema = messageSchemas[message.type]
-	if schema and message.data then
-		for field, expectedType in pairs(schema) do
-			local actualType = type(message.data[field])
-			if actualType ~= expectedType then
-				return false, string.format("Field '%s' expected %s, got %s", field, expectedType, actualType)
-			end
-		end
-	end
-
-	return true, nil
-end
-
-function Protocol.createHandshake(clientVersion, playerName)
-	return Protocol.createMessage(Protocol.MessageType.HANDSHAKE, {
-		networkProtocolVersion = Protocol.Version,
-		clientVersion = clientVersion,
-		playerName = playerName
-	})
-end
-
-function Protocol.createVerbRequest(verbName, verbData)
-	return Protocol.createMessage(Protocol.MessageType.VERB_REQUEST, {
-		verbName = verbName,
-		verbData = verbData
-	})
-end
-
-function Protocol.createVerbBroadcast(verbName, verbData, sourceClient)
-	return Protocol.createMessage(Protocol.MessageType.VERB_BROADCAST, {
-		verbName = verbName,
-		verbData = verbData,
-		sourceClient = sourceClient or "server"
-	})
-end
-
-function Protocol.createChunkRequest(chunkX, chunkY)
-	return Protocol.createMessage(Protocol.MessageType.CHUNK_REQUEST, {
-		chunkX = chunkX,
-		chunkY = chunkY
-	})
-end
-
-function Protocol.createChunkUpdate(chunkKey, chunkData)
-	return Protocol.createMessage(Protocol.MessageType.CHUNK_UPDATE, {
-		chunkKey = chunkKey,
-		chunkData = chunkData
-	})
-end
-
-function Protocol.createWorldInit(worldData)
-	return Protocol.createMessage(Protocol.MessageType.WORLD_INIT, {
-		chunks = worldData.chunks or {},
-		metadata = worldData.metadata or {}
-	})
-end
-
-function Protocol.createVerbError(errorMessage, originalVerb)
-	return Protocol.createMessage(Protocol.MessageType.VERB_ERROR, {
-		error = errorMessage,
-		originalVerb = originalVerb
-	})
-end
-
-function Protocol.createWorldSwitch(worldId)
-	return Protocol.createMessage(Protocol.MessageType.WORLD_SWITCH, {
-		worldId = worldId
-	})
-end
-
-function Protocol.createEntityCreate(networkId, components)
-	return Protocol.createMessage(Protocol.MessageType.ENTITY_CREATE, {
-		networkId = networkId,
-		components = components
-	})
-end
-
-function Protocol.createEntityUpdate(networkId, components)
-	return Protocol.createMessage(Protocol.MessageType.ENTITY_UPDATE, {
-		networkId = networkId,
-		components = components
-	})
-end
-
-function Protocol.createEntityDestroy(networkId)
-	return Protocol.createMessage(Protocol.MessageType.ENTITY_DESTROY, {
-		networkId = networkId
-	})
-end
-
-function Protocol.createPlayerCommand(command)
-	return Protocol.createMessage(Protocol.MessageType.PLAYER_COMMAND, {
-		command = command
-	})
+	return data
 end
 
 function Protocol.preparePlayerCommand()

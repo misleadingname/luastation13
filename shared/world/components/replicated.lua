@@ -6,3 +6,6 @@ local replicatedComponent = ecs.component("Replicated", function(c, networkId)
 end)
 
 LS13.ECS.Components.Replicated = replicatedComponent
+LS13.ECS.Replication.Replicated = {
+	{ name = "networkId", type = NETWORK_TYPE.USHORT }
+}

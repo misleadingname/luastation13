@@ -4,11 +4,11 @@
 		"library": "${3rd}/love2d/library"
 	},
 	"diagnostics": {
-		"globals": [
-			"love",
-		],
 		"disable": [
-			"duplicate-set-field"
+			"duplicate-set-field",
+			"undefined-global",
+			"duplicate-set-field",
+			"undefined-field"
 		]
 	},
 	"runtime": {

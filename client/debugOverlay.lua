@@ -349,10 +349,20 @@ local lines = {
 	{
 		Text = function()
 			local currentTime = love.timer.getTime()
-			local timeSinceReset = currentTime - networkStats.lastResetTime
-			if timeSinceReset > 0 then
-				local rateIn = networkStats.bytesReceived / timeSinceReset
-				local rateOut = networkStats.bytesSent / timeSinceReset
+			local deltaTime = currentTime - (networkStats.lastUpdateTime or currentTime)
+			networkStats.lastUpdateTime = currentTime
+
+			if deltaTime > 0 then
+				local bytesInDiff = networkStats.bytesReceived -
+					(networkStats.lastBytesReceived or networkStats.bytesReceived)
+				local bytesOutDiff = networkStats.bytesSent - (networkStats.lastBytesSent or networkStats.bytesSent)
+
+				local rateIn = bytesInDiff / deltaTime
+				local rateOut = bytesOutDiff / deltaTime
+
+				networkStats.lastBytesReceived = networkStats.bytesReceived
+				networkStats.lastBytesSent = networkStats.bytesSent
+
 				return string.format("traffic: ↓%s/s ↑%s/s", formatBytes(rateIn), formatBytes(rateOut))
 			else
 				return "traffic: calculating..."
@@ -801,10 +811,10 @@ function debugOverlay.drawEntityDebug()
 		currentY += lineHeight
 
 		local componentCount = 0
-		for componentName, component in pairs(entity:getComponents()) do
+		for name, component in pairs(entity:getComponents()) do
 			componentCount += 1
 			local componentColor = { 0.7, 0.9, 1, 1 }
-			shadowText(string.format("  ├─ %s", componentName), startX, currentY, "left", componentColor)
+			shadowText(string.format("  ├─ %s", name), startX, currentY, "left", componentColor)
 			currentY += lineHeight
 
 			for fieldName, fieldValue in pairs(component) do

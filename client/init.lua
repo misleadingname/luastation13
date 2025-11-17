@@ -1,8 +1,6 @@
 local client = {}
 
 function client.load()
-	print("ey shared im the client")
-
 	love.window.setTitle(LS13.Info.Name)
 
 	LS13.SoundManager = require("client.sound")
@@ -14,7 +12,6 @@ function client.load()
 	LS13.WorldManager = require("client.world")
 
 	require("client.states")
-	LS13.UI.init()
 
 	love.window.setIcon(love.image.newImageData(_G.iconPath))
 	if DEBUG then

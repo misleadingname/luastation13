@@ -10,7 +10,7 @@
 				<UiLayout Type="Vertical" Align="left" Justify="begin" Spacing="2" Padding="0,0" />
 
 				<UILabel Text="Disconnected!" Font="Font.DefaultLarge" HAlign="left" />
-				<UILabel Text="You have been disconnected from the server." HAlign="left" />
+				<UILabel Id="ReasonLabel" Text="You have been disconnected from the server." HAlign="left" />
 			</UIElement>
 
 			<UIElement Id="ButtonContainer">

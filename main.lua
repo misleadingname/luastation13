@@ -4,7 +4,7 @@ require("conf")
 local function help()
 	local name = (love.filesystem.getSource()):match("(%w+)/?$")
 
-	print(string.format("%s [help/server/client] [args]", name))
+	print(string.format("%s [--help/server/client] [args]", name))
 	print("argument reference:")
 	print("\t--debug - runs in debug mode")
 
@@ -20,7 +20,7 @@ function love.load(args)
 	local runMode = "client"
 	if args[1] == "server" then
 		runMode = "server"
-	elseif args[1] == "help" then
+	elseif args[1] == "--help" then
 		help()
 		return
 	end
@@ -62,12 +62,13 @@ function love.load(args)
 
 	print(
 		string.format(
-			"Running %s/%s %s@%s %s w/ %s",
+			"%s/%s %s@%s RL %s %s w/ %s",
 			LS13.Info.Name,
 			LS13.Info.Ident,
 			LS13.Info.Version,
 			branch and "(" .. branch .. "/" .. head .. ")" or "off-git, release",
-			"(find out love2d version somehow)",
+			love._version,
+			love._version_codename,
 			_VERSION
 		)
 	)

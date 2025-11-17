@@ -11,6 +11,10 @@ local sentienceComponent = ecs.component("Sentience", function(c, clientId)
 	c._playerCommand = nil
 end)
 LS13.ECS.Components.Sentience = sentienceComponent
+LS13.ECS.Replication.Sentience = {
+	{ name = "clientId", NETWORK_TYPE.USHORT }
+}
 
 local basicTempCharacter = ecs.component("BasicTempCharacter", function(c) end)
 LS13.ECS.Components.BasicTempCharacter = basicTempCharacter
+LS13.ECS.Replication.BasicTempCharacter = {}

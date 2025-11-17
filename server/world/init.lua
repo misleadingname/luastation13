@@ -13,7 +13,7 @@ function WorldManager.newWorld(name)
 	local world = LS13.ECSManager.world()
 	world:addSystems(LS13.ECS.Systems.ChunkSyncSystem)
 	world:addSystems(LS13.ECS.Systems.InteractionSystem)
-	world:addSystems(LS13.ECS.Systems.EntitySyncSystem)
+	world:addSystems(LS13.ECS.Systems.ReplicationSystem)
 	world:addSystems(LS13.ECS.Systems.SentienceSystem)
 	world:addSystems(LS13.ECS.Systems.BasicTempCharSystem)
 
@@ -42,12 +42,16 @@ function WorldManager.switchWorld(client, worldId)
 	client.worldId = worldId
 
 	if worldId then
-		local message = LS13.Networking.Protocol.createWorldSwitch(worldId)
+		local message = LS13.Networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.WORLD_SWITCH, {
+			worldId = worldId
+		})
 		LS13.Networking.sendToClient(client.id, message)
 		WorldManager.sendWorldDataToClient(client.id, worldId)
 		LS13.Logging.LogInfo("Switched client %s to world %s", client.id, worldId)
 	else
-		local message = LS13.Networking.Protocol.createWorldSwitch("nil")
+		local message = LS13.Networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.WORLD_SWITCH, {
+			worldId = nil
+		})
 		LS13.Networking.sendToClient(client.id, message)
 		LS13.Logging.LogInfo("Switched client %s to no world", client.id)
 	end

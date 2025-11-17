@@ -166,6 +166,8 @@ function renderingSystem:draw()
 			love.graphics.rectangle("line", trans.cpos.x, trans.cpos.y, trans.csize.x, trans.csize.y)
 		end
 	end
+
+	love.graphics.setColor(1, 1, 1, 1)
 end
 
 LS13.ECS.Systems.UiRenderingSystem = renderingSystem

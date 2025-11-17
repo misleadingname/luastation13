@@ -1,42 +1,81 @@
 local RoundManager = {}
-
 local participatingClients = {}
 
-local postRound = false
-
+RoundManager.State = GAMESTATE.PREROUND
+local stateTimer = 0
 local running = false
-local roundTime = 0
-local idleTime = 0
+
+local PREROUND_TIME = 180
+local POSTROUND_TIME = 20
+
+local function setState(state, time)
+	RoundManager.State = state
+	stateTimer = time
+
+	local msg = LS13.Networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.GAME_STATE, {
+		gameState = state,
+	})
+
+	LS13.Networking.broadcastMessage(msg)
+end
 
 function RoundManager.update(dt)
-	if roundTime > 0 then
-		roundTime = roundTime - dt
-	elseif idleTime > 0 then
-		idleTime = idleTime - dt
-	elseif running then
-		RoundManager.endRound()
+	if not running then return end
+
+	if RoundManager.State ~= GAMESTATE.ROUND then
+		stateTimer = stateTimer - dt
+		if stateTimer <= 0 then
+			RoundManager.advanceState()
+		end
 	end
 end
 
+function RoundManager.advanceState()
+	if RoundManager.State == GAMESTATE.PREROUND then
+		RoundManager.startRound()
+	elseif RoundManager.State == GAMESTATE.ROUND then
+		RoundManager.endRound()
+	elseif RoundManager.State == GAMESTATE.POSTROUND then
+		RoundManager.resetToPreRound()
+	end
+end
+
+function RoundManager.start()
+	if running then
+		LS13.Logging.LogWarn("RoundManager already running, ignoring start")
+		return
+	end
+	running = true
+	setState(GAMESTATE.PREROUND, PREROUND_TIME)
+
+	LS13.Logging.LogInfo("RoundManager started, entering PREROUND for %ds", PREROUND_TIME)
+end
+
 function RoundManager.addClient(client)
-	table.insert(participatingClients, client)
-	LS13.Logging.LogDebug("Client %s added to participating players", client.name)
+	if not lume.find(participatingClients, client) then
+		table.insert(participatingClients, client)
+		LS13.Logging.LogDebug("Client %s added to participating players", client.name)
+	else
+		LS13.Logging.LogWarn("Client %s already participating", client.name)
+	end
 end
 
 function RoundManager.removeClient(client)
 	local index = lume.find(participatingClients, client)
 	if index then
 		table.remove(participatingClients, index)
+		LS13.Logging.LogDebug("Client %s removed from participating players", client.name)
 	else
-		LS13.Logging.LogError("Cannot roundremove, client %s not found in participating players", client.name)
+		LS13.Logging.LogError("Cannot remove client %s, not found in participating players", client.name)
 	end
 end
 
 function RoundManager.getRoundStats()
 	return {
-		RoundTime = roundTime,
-		IdleTime = idleTime,
+		State = RoundManager.State,
+		TimeRemaining = stateTimer,
 		Running = running,
+		Players = #participatingClients,
 	}
 end
 
@@ -44,43 +83,33 @@ function RoundManager.getParticipatingClients()
 	return participatingClients
 end
 
-function RoundManager.roundTimeout()
-	postRound = true
-end
-
 function RoundManager.startRound()
-	LS13.Logging.LogDebug("Starting round")
-	if running then
-		LS13.Logging.LogWarn("Cannot restart round, already running")
-		return
-	end
+	setState(GAMESTATE.ROUND)
 
-	postRound = false
-	running = true
-	roundTime = 0
-	idleTime = 0
+	LS13.Logging.LogInfo("Starting round!")
 
-	LS13.WorldManager.deleteWorld("station") -- will just log an error so it's safe to just ignore it
+	LS13.WorldManager.deleteWorld("station")
 	LS13.WorldManager.newWorld("station")
-	local msg = LS13.Networking.Protocol.createMessage(LS13.Networking.Protocol.MessageType.GAME_STATE, {
-		state = "Round",
-	})
 
 	for _, client in ipairs(participatingClients) do
 		LS13.WorldManager.switchWorld(client, "station")
-		LS13.Networking.sendToClient(client.id, msg)
 	end
 end
 
 function RoundManager.endRound()
-	postRound = false
-	running = false
-	roundTime = 0
-	idleTime = 0
+	setState(GAMESTATE.POSTROUND, POSTROUND_TIME)
+	LS13.Logging.LogInfo("Round ended, entering POSTROUND for %ds", POSTROUND_TIME)
+end
+
+function RoundManager.resetToPreRound()
+	setState(GAMESTATE.PREROUND, PREROUND_TIME)
+	LS13.Logging.LogInfo("Postround finished, restarting preround")
 
 	for _, client in ipairs(LS13.Networking.getClients()) do
 		LS13.WorldManager.switchWorld(client, nil)
 	end
+
+	table.clear(participatingClients)
 end
 
 return RoundManager
