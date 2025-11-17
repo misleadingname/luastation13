@@ -60,7 +60,17 @@ local schemas = {
 		{ "id", NETWORK_TYPE.USHORT },
 	},
 
+	[NETWORK_MESSAGE_TYPE.ENTITY_ADD] = {
+		{ "id", NETWORK_TYPE.USHORT },
+		{ "data", NETWORK_TYPE.RAW }
+	},
+
 	[NETWORK_MESSAGE_TYPE.ENTITY_UPDATE] = {
+		{ "id", NETWORK_TYPE.USHORT },
+		{ "data", NETWORK_TYPE.RAW }
+	},
+
+	[NETWORK_MESSAGE_TYPE.ENTITY_REMOVE] = {
 		{ "id", NETWORK_TYPE.USHORT },
 		{ "data", NETWORK_TYPE.RAW }
 	},

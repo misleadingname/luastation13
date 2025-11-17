@@ -338,13 +338,25 @@ messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_CREATE] = function(message)
 	EntityReceiver.handleEntityCreate(id, buf)
 end
 
+messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_ADD] = function(message)
+	local id = message.id
+	local data = message.data
+	local buf = buffer.fromString(data)
+	EntityReceiver.handleEntityAdd(id, buf)
+end
+
 messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_UPDATE] = function(message)
 	local id = message.id
 	local data = message.data
-	local components = {}
-
 	local buf = buffer.fromString(data)
 	EntityReceiver.handleEntityUpdate(id, buf)
+end
+
+messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_REMOVE] = function(message)
+	local id = message.id
+	local data = message.data
+	local buf = buffer.fromString(data)
+	EntityReceiver.handleEntityRemove(id, buf)
 end
 
 messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_DESTROY] = function(message)

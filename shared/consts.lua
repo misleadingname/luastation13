@@ -72,9 +72,9 @@ NETWORK_MESSAGE_TYPE = {
 	ENTITY_CREATE = 11,
 	ENTITY_DESTROY = 12,
 
-	ENTITY_ADD = 13,
-	ENTITY_UPDATE = 14,
-	ENTITY_REMOVE = 15,
+	ENTITY_ADD = 13, -- component added
+	ENTITY_UPDATE = 14, -- component(s) updated
+	ENTITY_REMOVE = 15, -- component removed
 
 	PLAYER_COMMAND = 16,
 
