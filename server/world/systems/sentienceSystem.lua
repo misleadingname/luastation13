@@ -3,9 +3,9 @@ local sentienceSystem = LS13.ECSManager.system({ pool = { "Sentience" } })
 function sentienceSystem:playerCommand(id, cmd)
 	for _, ent in ipairs(self.pool) do
 		local sentience = ent.Sentience
-		if sentience.clientId ~= id or not sentience._inputEnabled then continue end
+		if sentience.clientId ~= id or not sentience.inputEnabled then continue end
 
-		sentience._playerCommand = cmd
+		sentience.playerCommand = cmd
 	end
 end
 
@@ -18,7 +18,7 @@ function basicTempCharSystem:update(dt)
 		local transform = ent.Transform
 		local sentience = ent.Sentience
 
-		local cmd = sentience._playerCommand
+		local cmd = sentience.playerCommand
 		if not cmd then continue end
 
 		transform.position += cmd.moveDirection * dt * 16

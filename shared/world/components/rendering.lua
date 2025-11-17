@@ -19,7 +19,7 @@ LS13.ECS.Components.Graphic = graphicComponent
 LS13.ECS.Replication.Graphic = {
 	{ name = "graphicId", type = NETWORK_TYPE.STRING },
 	{ name = "visible",   type = NETWORK_TYPE.BOOL },
-	{ name = "origin",    type = NETWORK_TYPE.VECTOR2 },
+	{ name = "origin",    type = NETWORK_TYPE.VECTOR2I },
 	{ name = "tint",      type = NETWORK_TYPE.COLOR },
 	{ name = "playing",   type = NETWORK_TYPE.BOOL },
 }

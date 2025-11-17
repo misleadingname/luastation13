@@ -17,7 +17,7 @@ function DebugStartRound:processOnServer()
 	for _, ply in ipairs(plys) do
 		local ent = LS13.ECSManager.entity("ghost" .. ply.id)
 		ent:give("Transform")
-		ent:give("Graphic")
+		ent:give("Graphic", "Graphic.Fallback", true, Vector2.new(16, 16))
 		ent:give("BasicTempCharacter")
 		ent:give("Sentience", ply.id)
 

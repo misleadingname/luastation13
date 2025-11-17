@@ -5,7 +5,6 @@
 	},
 	"diagnostics": {
 		"globals": [
-			"love",
 		],
 		"disable": [
 			"duplicate-set-field"

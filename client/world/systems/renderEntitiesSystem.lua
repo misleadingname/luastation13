@@ -25,8 +25,8 @@ function renderEntitiesSystem:draw(z)
 				trans.position.x * 32,
 				trans.position.y * 32,
 				trans.rotation,
-				trans.scaleX,
-				trans.scaleY,
+				trans.scale.x,
+				trans.scale.y,
 				origin.x,
 				origin.y
 			)
