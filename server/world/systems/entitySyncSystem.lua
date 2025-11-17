@@ -56,7 +56,7 @@ function replicationSystem:broadcastEntityCreate(entity)
 end
 
 function replicationSystem:broadcastEntityUpdate(entity, changedComponents)
-	local buf = LS13.Networking.Protocol.buffer.new()
+	local buf = buffer.new()
 
 	local count = 0
 	for _, _ in pairs(changedComponents) do

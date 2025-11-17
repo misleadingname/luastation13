@@ -1,4 +1,5 @@
 local playerCommand = require("shared.networking.playerCommand")
+require("shared.networking.buffer")
 
 local schemas = {
 	[NETWORK_MESSAGE_TYPE.PING] = {},
@@ -66,7 +67,6 @@ local schemas = {
 }
 
 local Protocol = {}
-Protocol.buffer = require("shared.networking.buffer")
 
 function Protocol.write(buf, type, value)
 	if type == NETWORK_TYPE.RAW then
@@ -129,7 +129,7 @@ function Protocol.read(buf, type)
 end
 
 function Protocol.createMessage(type)
-	local msg = Protocol.buffer.new()
+	local msg = buffer.new()
 	msg:writeByte(type)
 	-- msg:writeFloat(1) -- TODO: implement networked curtime
 
@@ -155,7 +155,7 @@ function Protocol.createMessageEx(type, data)
 end
 
 function Protocol.deserialize(msg)
-	local buf = Protocol.buffer.fromString(msg)
+	local buf = buffer.fromString(msg)
 
 	local type = buf:readByte()
 	local timestamp = 0

@@ -232,7 +232,7 @@ end
 
 messageHandlers[NETWORK_MESSAGE_TYPE.VERB_REQUEST] = function(client, message)
 	local verbName = message.verbName
-	local rawData = networking.Protocol.buffer.fromString(message.verbData)
+	local rawData = buffer.fromString(message.verbData)
 
 	local verb = LS13.VerbSystem.getVerb(verbName)
 	if not verb then

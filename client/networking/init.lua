@@ -79,7 +79,7 @@ end
 
 function networking.sendVerb(verb)
 	local name = verb.name
-	local buf = networking.Protocol.buffer.new()
+	local buf = buffer.new()
 	verb:serialize(buf)
 
 	local message = networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.VERB_REQUEST, {
@@ -219,7 +219,7 @@ end
 
 messageHandlers[NETWORK_MESSAGE_TYPE.VERB_BROADCAST] = function(message)
 	local verbName = message.verbName
-	local rawData = networking.Protocol.buffer.fromString(message.verbData)
+	local rawData = buffer.fromString(message.verbData)
 
 	local verb = LS13.VerbSystem.getVerb(verbName)
 	if not verb then
@@ -334,7 +334,7 @@ messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_CREATE] = function(message)
 	local id = message.id
     local data = message.data
 
-	local buf = networking.Protocol.buffer.fromString(data)
+	local buf = buffer.fromString(data)
 	EntityReceiver.handleEntityCreate(id, buf)
 end
 
@@ -343,7 +343,7 @@ messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_UPDATE] = function(message)
 	local data = message.data
 	local components = {}
 
-	local buf = networking.Protocol.buffer.fromString(data)
+	local buf = buffer.fromString(data)
 	EntityReceiver.handleEntityUpdate(id, buf)
 end
 

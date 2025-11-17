@@ -5,7 +5,6 @@ local nextTime
 
 function server.load()
 	LS13.Networking = require("server.networking")
-	LS13.Networking.Protocol = require("shared.networking.protocol")
 	LS13.PrototypeManager.ParseAll()
 
 	require("server.states")

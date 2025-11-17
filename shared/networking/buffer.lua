@@ -458,4 +458,5 @@ function buffer:readColor()
 	return Color.new(r, g, b, a)
 end
 
+_G.buffer = buffer
 return buffer

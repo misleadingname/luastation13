@@ -11,7 +11,7 @@ function serializer.serializeComponentForReplication(component)
 		return nil
 	end
 
-	local buf = LS13.Networking.Protocol.buffer.new()
+	local buf = buffer.new()
 	for _, entry in ipairs(info) do
 		local name = entry.name
 		local type = entry.type
@@ -27,7 +27,7 @@ function serializer.serializeEntityForReplication(entity)
 		return nil
 	end
 
-	local data = LS13.Networking.Protocol.buffer.new()
+	local data = buffer.new()
 
 	local components = {}
 	for name, component in pairs(entity:getComponents()) do
