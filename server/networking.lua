@@ -56,7 +56,7 @@ function networking.getClientByPeer(peer)
 	return nil, nil
 end
 
-function networking.broadcastMessage(message, list, whitelist)
+function networking.broadcastMessage(message, flag, list, whitelist)
 	local msg = prepareSendMessage(message)
 
 	if type(list) == "number" then
@@ -66,17 +66,17 @@ function networking.broadcastMessage(message, list, whitelist)
 	for clientId, client in ipairs(clients) do
 		if not whitelist then
 			if client and not (list and lume.find(list, clientId)) then
-				client.peer:send(msg)
+				client.peer:send(msg clientId, flag)
 			end
 		else
 			if client and (list and lume.find(list, clientId)) then
-				client.peer:send(msg)
+				client.peer:send(msg, clientId, flag)
 			end
 		end
 	end
 end
 
-function networking.sendToClient(clientId, message)
+function networking.sendToClient(clientId, message, flag)
 	local client = clients[clientId]
 	if not client then
 		LS13.Logging.LogError("Cannot send to unknown client: %s", clientId)
@@ -84,7 +84,7 @@ function networking.sendToClient(clientId, message)
 	end
 
 	local msg = prepareSendMessage(message)
-	client.peer:send(msg)
+	client.peer:send(msg, clientId, flag)
 	return true
 end
 
