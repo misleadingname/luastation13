@@ -66,11 +66,11 @@ function networking.broadcastMessage(message, flag, list, whitelist)
 	for clientId, client in ipairs(clients) do
 		if not whitelist then
 			if client and not (list and lume.find(list, clientId)) then
-				client.peer:send(msg, clientId, flag)
+				client.peer:send(msg, 0, flag)
 			end
 		else
 			if client and (list and lume.find(list, clientId)) then
-				client.peer:send(msg, clientId, flag)
+				client.peer:send(msg, 0, flag)
 			end
 		end
 	end
@@ -84,7 +84,7 @@ function networking.sendToClient(clientId, message, flag)
 	end
 
 	local msg = prepareSendMessage(message)
-	client.peer:send(msg, clientId, flag)
+	client.peer:send(msg, 0, flag)
 	return true
 end
 
