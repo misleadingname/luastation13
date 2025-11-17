@@ -2,7 +2,6 @@ local serializer = require("shared.replication.serializer")
 
 local replicationSystem = LS13.ECSManager.system({ pool = { "Replicated" } })
 
-local syncInterval = 1 / 20
 local nextNetworkId = 1
 
 function replicationSystem:init(world)
@@ -12,7 +11,7 @@ end
 
 function replicationSystem:update()
 	local currentTime = love.timer.getTime()
-	if currentTime - self.lastSync < syncInterval then
+	if currentTime - self.lastSync < NETWORK_TICK_RATE then
 		return
 	end
 	self.lastSync = currentTime

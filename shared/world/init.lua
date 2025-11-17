@@ -22,6 +22,7 @@ require("shared.world.systems.interactionSystem")
 if CLIENT then
 	require("client.world.systems.cameraSystem")
 	require("client.world.systems.renderTilemapSystem")
+	require("client.world.systems.interpolationSystem")
 	require("client.world.systems.renderEntitiesSystem")
 elseif SERVER then
 	require("server.world.systems.chunkSyncSystem")

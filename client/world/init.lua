@@ -14,6 +14,7 @@ function WorldManager.newWorld(name)
 	local world = LS13.ECSManager.world()
 	world:addSystems(LS13.ECS.Systems.CameraSystem)
 	world:addSystems(LS13.ECS.Systems.RenderTilemapSystem)
+	world:addSystems(LS13.ECS.Systems.InterpolationSystem)
 	world:addSystems(LS13.ECS.Systems.RenderEntitiesSystem)
 	world:addSystems(LS13.ECS.Systems.InteractionSystem)
 

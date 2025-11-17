@@ -18,6 +18,9 @@ function basicTempCharSystem:update(dt)
 		local transform = ent.Transform
 		local sentience = ent.Sentience
 
+		transform.rotation += dt * 4
+		transform.scale = Vector2.new(math.sin(love.timer.getTime() * 2) + 1, math.cos(love.timer.getTime() * 2) + 2)
+
 		local cmd = sentience.playerCommand
 		if not cmd then continue end
 
