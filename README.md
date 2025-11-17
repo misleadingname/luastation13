@@ -15,7 +15,6 @@
 
 ## Prerequisites
 - [RobustLÖVE](https://github.com/misleadingname/robustlove/) 12.0 or newer
-- [Lua BitOp](https://bitop.luajit.org/)
 
 ## Running Scripts
 Some utility scripts use PowerShell.
