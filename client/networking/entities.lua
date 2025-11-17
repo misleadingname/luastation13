@@ -18,7 +18,6 @@ function EntityReceiver.handleEntityCreate(id, buf)
 
 	local components = {}
 	local count = buf:readUShort()
-	print(count)
 
 	for i = 1, count do
 		local name = buf:readString()
@@ -60,7 +59,6 @@ function EntityReceiver.handleEntityUpdate(networkId, buf)
 
 	local components = {}
 	local count = buf:readUShort()
-	print(count)
 
 	for i = 1, count do
 		local name = buf:readString()

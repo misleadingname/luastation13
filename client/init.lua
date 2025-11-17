@@ -1,8 +1,6 @@
 local client = {}
 
 function client.load()
-	print("ey shared im the client")
-
 	love.window.setTitle(LS13.Info.Name)
 
 	LS13.SoundManager = require("client.sound")

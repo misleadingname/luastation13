@@ -1,16 +1,15 @@
 local serializer = {}
 
-function serializer.deserializeEntity(entity, data)
-
-end
-
 function serializer.serializeComponentForReplication(component)
 	if not component then
+		LS13.Logging.LogError("Tried to serialize nil component")
 		return nil
 	end
 
-	local info = LS13.ECS.Replication[tostring(component)]
-	if not info then return nil end
+	local info = LS13.ECS.Replication[component:getName()]
+	if not info then
+		return nil
+	end
 
 	local buf = LS13.Networking.Protocol.buffer.new()
 	for _, entry in ipairs(info) do
@@ -31,9 +30,8 @@ function serializer.serializeEntityForReplication(entity)
 	local data = LS13.Networking.Protocol.buffer.new()
 
 	local components = {}
-	for component, _ in ipairs(entity:getComponents()) do
-		local name = tostring(component)
-		if name ~= "Replicated" and LS13.ECS.Replication[name] then
+	for name, component in pairs(entity:getComponents()) do
+		if LS13.ECS.Replication[name] then
 			local replicatedData = serializer.serializeComponentForReplication(component)
 			if replicatedData then
 				components[name] = replicatedData
@@ -59,38 +57,7 @@ function serializer.hasComponentChanged(entity, componentName, lastState)
 	local currentData = serializer.serializeComponentForReplication(component)
 	local lastData = lastState[componentName]
 
-	if not lastData then
-		return true
-	end
-
-	if not currentData then
-		return lastData ~= nil
-	end
-
-	for k, v in pairs(currentData) do
-		if type(v) == "table" then
-			local mt = getmetatable(v)
-			if mt == "Vector2" then
-				return not v:compare(lastData[k])
-			end
-
-			if mt == "Color" then
-				return not v:compare(lastData[k])
-			end
-		end
-
-		if lastData[k] ~= v then
-			return true
-		end
-	end
-
-	for k in pairs(lastData) do
-		if currentData[k] == nil then
-			return true
-		end
-	end
-
-	return false
+	return tostring(currentData) ~= tostring(lastData)
 end
 
 function serializer.getChangedComponents(entity, lastState)
@@ -98,14 +65,13 @@ function serializer.getChangedComponents(entity, lastState)
 		return {}
 	end
 
-	local changed = {}
-
-	for componentName, component in pairs(entity:getComponents()) do
-		if componentName ~= "Replicated" and type(component) == "table" then
-			if serializer.hasComponentChanged(entity, componentName, lastState) then
+    local changed = {}
+    for name, component in pairs(entity:getComponents()) do
+		if type(component) == "table" then
+			if serializer.hasComponentChanged(entity, name, lastState) then
 				local replicatedData = serializer.serializeComponentForReplication(component)
 				if replicatedData then
-					changed[componentName] = replicatedData
+					changed[name] = replicatedData
 				end
 			end
 		end

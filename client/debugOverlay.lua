@@ -811,10 +811,10 @@ function debugOverlay.drawEntityDebug()
 		currentY += lineHeight
 
 		local componentCount = 0
-		for componentName, component in pairs(entity:getComponents()) do
+		for name, component in pairs(entity:getComponents()) do
 			componentCount += 1
 			local componentColor = { 0.7, 0.9, 1, 1 }
-			shadowText(string.format("  ├─ %s", componentName), startX, currentY, "left", componentColor)
+			shadowText(string.format("  ├─ %s", name), startX, currentY, "left", componentColor)
 			currentY += lineHeight
 
 			for fieldName, fieldValue in pairs(component) do

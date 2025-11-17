@@ -332,7 +332,7 @@ end
 
 messageHandlers[NETWORK_MESSAGE_TYPE.ENTITY_CREATE] = function(message)
 	local id = message.id
-	local data = message.data
+    local data = message.data
 
 	local buf = networking.Protocol.buffer.fromString(data)
 	EntityReceiver.handleEntityCreate(id, buf)

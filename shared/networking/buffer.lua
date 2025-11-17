@@ -437,24 +437,24 @@ function buffer:writeVector2i(vec)
 end
 
 function buffer:readVector2i()
-	local x = buffer.readInt(self)
-	local y = buffer.readInt(self)
+	local x = buffer.readLong(self)
+	local y = buffer.readLong(self)
 	return Vector2.new(x, y)
 end
 
 -- Color
 function buffer:writeColor(color)
-	buffer.writeUByte(self, color.r)
-	buffer.writeUByte(self, color.g)
-	buffer.writeUByte(self, color.b)
-	buffer.writeUByte(self, color.a)
+	buffer.writeByte(self, color.r)
+	buffer.writeByte(self, color.g)
+	buffer.writeByte(self, color.b)
+	buffer.writeByte(self, color.a)
 end
 
 function buffer:readColor()
-	local r = buffer.readUByte(self)
-	local g = buffer.readUByte(self)
-	local b = buffer.readUByte(self)
-	local a = buffer.readUByte(self)
+	local r = buffer.readByte(self)
+	local g = buffer.readByte(self)
+	local b = buffer.readByte(self)
+	local a = buffer.readByte(self)
 	return Color.new(r, g, b, a)
 end
 
