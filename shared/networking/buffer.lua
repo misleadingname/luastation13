@@ -444,17 +444,17 @@ end
 
 -- Color
 function buffer:writeColor(color)
-	buffer.writeByte(self, color.r)
-	buffer.writeByte(self, color.g)
-	buffer.writeByte(self, color.b)
-	buffer.writeByte(self, color.a)
+	buffer.writeFloat(self, color.r)
+	buffer.writeFloat(self, color.g)
+	buffer.writeFloat(self, color.b)
+	buffer.writeFloat(self, color.a)
 end
 
 function buffer:readColor()
-	local r = buffer.readByte(self)
-	local g = buffer.readByte(self)
-	local b = buffer.readByte(self)
-	local a = buffer.readByte(self)
+	local r = buffer.readFloat(self)
+	local g = buffer.readFloat(self)
+	local b = buffer.readFloat(self)
+	local a = buffer.readFloat(self)
 	return Color.new(r, g, b, a)
 end
 

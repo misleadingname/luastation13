@@ -12,7 +12,7 @@ local graphicComponent = ecs.component("Graphic", function(c, graphicId, visible
 	c.graphicId = graphicId or "Graphic.Fallback"
 	c.visible = visible or true
 	c.origin = origin or Vector2.new(0, 0)
-	c.tint = Color.new(255, 255, 255, 255)
+	c.tint = Color.new(1, 1, 1, 1)
 	c.playing = playing or false
 end)
 LS13.ECS.Components.Graphic = graphicComponent
@@ -20,7 +20,7 @@ LS13.ECS.Replication.Graphic = {
 	{ name = "graphicId", type = NETWORK_TYPE.STRING },
 	{ name = "visible",   type = NETWORK_TYPE.BOOL },
 	{ name = "origin",    type = NETWORK_TYPE.VECTOR2I },
-	{ name = "tint",      type = NETWORK_TYPE.COLOR },
+	{ name = "tint",      type = NETWORK_TYPE.COLOR,   lerp = true },
 	{ name = "playing",   type = NETWORK_TYPE.BOOL },
 }
 

@@ -5,12 +5,41 @@ color.__metatable = "Color"
 function color.new(r, g, b, a)
 	local self = setmetatable({}, color)
 
-	self.r = r or 0
-	self.g = g or 0
-	self.b = b or 0
-	self.a = a or 1
+	self.r = tonumber(r or 0)
+	self.g = tonumber(g or 0)
+	self.b = tonumber(b or 0)
+	self.a = tonumber(a or 1)
 
 	return self
+end
+
+function color.fromHSV(h, s, v)
+    h = h % 360
+
+    local c = v * s
+    local x = c * (1 - math.abs((h / 60) % 2 - 1))
+    local m = v - c
+
+    local r, g, b
+    if h < 60 then
+        r, g, b = c, x, 0
+    elseif h < 120 then
+        r, g, b = x, c, 0
+    elseif h < 180 then
+        r, g, b = 0, c, x
+    elseif h < 240 then
+        r, g, b = 0, x, c
+    elseif h < 300 then
+        r, g, b = x, 0, c
+    else
+        r, g, b = c, 0, x
+    end
+
+    return color.new(
+        lume.clamp(r + m, 0, 1),
+        lume.clamp(g + m, 0, 1),
+        lume.clamp(b + m, 0, 1)
+    )
 end
 
 function color:__index(key)

@@ -18,7 +18,9 @@ function renderEntitiesSystem:draw(z)
 			local graphicId = ent.Graphic.graphicId
 			local graphic = LS13.AssetManager.Get(graphicId)
 			local origin = ent.Graphic.origin
+			local tint = ent.Graphic.tint
 
+			love.graphics.setColor(tint:toNumbers())
 			love.graphics.draw(
 				graphic.image,
 				-- the viewport will use pixels and not world units
