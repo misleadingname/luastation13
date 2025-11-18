@@ -6,14 +6,14 @@ end)
 LS13.ECS.Components.Interactable = interactableComponent
 
 local sentienceComponent = ecs.component("Sentience", function(c, clientId)
-	c.clientId = clientId or nil -- player
+    c.clientId = clientId or nil -- player
 	c.inputEnabled = true
 	c.playerCommand = nil
 end)
 LS13.ECS.Components.Sentience = sentienceComponent
 LS13.ECS.Replication.Sentience = {
+	{ name = "inputEnabled", NETWORK_TYPE.BOOL },
 	{ name = "clientId", NETWORK_TYPE.USHORT },
-	{ name = "inputEnabled", NETWORK_TYPE.BOOL }
 }
 
 local basicTempCharacter = ecs.component("BasicTempCharacter", function(c) end)
