@@ -205,6 +205,7 @@ messageHandlers[NETWORK_MESSAGE_TYPE.HANDSHAKE_RESPONSE] = function(message)
 	clientId = message.clientId
 	connectionState = "connected"
 	LS13.Logging.LogInfo("Connected to server with client ID: %s", clientId)
+	NETWORK_TICK_RATE = message.tickRate
 
 	if DEBUG and LS13.DebugOverlay and LS13.DebugOverlay.onConnected then
 		LS13.DebugOverlay.onConnected()

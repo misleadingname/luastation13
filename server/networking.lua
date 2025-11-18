@@ -207,6 +207,7 @@ messageHandlers[NETWORK_MESSAGE_TYPE.HANDSHAKE] = function(client, message)
 	local response = networking.Protocol.createMessageEx(NETWORK_MESSAGE_TYPE.HANDSHAKE_RESPONSE, {
 		serverVersion = LS13.Info.Version,
 		clientId = clientId,
+		tickRate = NETWORK_TICK_RATE,
 	})
 
 	local round = LS13.RoundManager.getRoundStats()

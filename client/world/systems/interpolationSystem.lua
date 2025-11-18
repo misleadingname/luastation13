@@ -71,7 +71,7 @@ function interpolationSystem.queueLerp(entity, compName, fieldName, from, to, ne
 		from = from,
 		to = to,
 		t = 0,
-		dur = NETWORK_TICK_RATE,
+		dur = 1 / NETWORK_TICK_RATE,
 		networkType = networkType,
 	}
 end

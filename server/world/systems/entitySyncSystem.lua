@@ -11,7 +11,7 @@ end
 
 function replicationSystem:update()
 	local currentTime = love.timer.getTime()
-	if currentTime - self.lastSync < NETWORK_TICK_RATE then
+	if currentTime - self.lastSync < 1 / NETWORK_TICK_RATE then
 		return
 	end
 	self.lastSync = currentTime
