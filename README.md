@@ -1,3 +1,8 @@
+# Migrated
+The project has migrated over to [codeberg.](https://codeberg.org/MoonWizards/LuaStation13)
+
+---
+
 <!--# Lua Station 13-->
 <p align="center">
 	<img src="/resources/textures/core/splash.png">
